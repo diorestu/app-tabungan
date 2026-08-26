@@ -32,6 +32,11 @@ class Nasabah extends Authenticatable
         return $this->hasMany(Transaksi::class, 'nasabah_id')->latest();
     }
 
+    public function targetTabungans(): HasMany
+    {
+        return $this->hasMany(TargetTabungan::class, 'nasabah_id')->latest();
+    }
+
     public function getFormattedSaldoAttribute(): string
     {
         return 'Rp ' . number_format((float) $this->saldo, 0, ',', '.');

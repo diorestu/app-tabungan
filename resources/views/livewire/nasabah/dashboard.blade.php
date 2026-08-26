@@ -105,19 +105,16 @@
             <span class="text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white leading-tight">Mutasi</span>
         </a>
 
-        <!-- 2. Cetak Mutasi -->
-        <button 
-            type="button" 
-            onclick="window.print()" 
-            class="flex flex-col items-center justify-center p-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800/60 active:scale-95 transition-all text-center group cursor-pointer"
+        <!-- 2. Target Impian -->
+        <a 
+            href="{{ route('nasabah.target') }}" 
+            class="flex flex-col items-center justify-center p-2.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800/60 active:scale-95 transition-all text-center group"
         >
             <div class="size-11 rounded-2xl bg-teal-500/10 text-teal-600 dark:text-teal-400 group-hover:bg-teal-600 group-hover:text-white flex items-center justify-center transition-all shadow-sm mb-1.5 border border-teal-500/20">
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                </svg>
+                <x-heroicon-s-sparkles class="size-5" />
             </div>
-            <span class="text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white leading-tight">Cetak</span>
-        </button>
+            <span class="text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-white leading-tight">Target</span>
+        </a>
 
         <!-- 3. Salin ID -->
         <button 
@@ -184,6 +181,64 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Kantong Target Impian Widget -->
+    <div class="bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-4 sm:p-5 shadow-sm transition-colors">
+        <div class="flex items-center justify-between mb-3.5">
+            <div>
+                <h3 class="text-sm sm:text-base font-bold text-zinc-900 dark:text-white tracking-tight flex items-center gap-1.5">
+                    <span>Kantong Impian Saya</span>
+                    @if ($totalTargetTerkumpul > 0)
+                        <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 font-bold">
+                            Rp {{ number_format($totalTargetTerkumpul, 0, ',', '.') }} Terkumpul
+                        </span>
+                    @endif
+                </h3>
+                <p class="text-[11px] text-zinc-500 dark:text-zinc-400">Rencana tabungan khusus Anda</p>
+            </div>
+            <a 
+                href="{{ route('nasabah.target') }}" 
+                class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1"
+            >
+                <span>Kelola Target</span>
+                <x-heroicon-s-chevron-right class="size-3.5" />
+            </a>
+        </div>
+
+        @if ($targetTabungans->isEmpty())
+            <div class="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950/60 border border-dashed border-zinc-200 dark:border-zinc-800 text-center">
+                <p class="text-xs text-zinc-500 dark:text-zinc-400">Belum ada kantong impian aktif.</p>
+                <a 
+                    href="{{ route('nasabah.target') }}"
+                    class="mt-2 inline-flex items-center gap-1 text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline"
+                >
+                    <x-heroicon-s-plus class="size-3.5" />
+                    <span>Buat Target Pertama (Qurban, Pendidikan, Liburan)</span>
+                </a>
+            </div>
+        @else
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                @foreach ($targetTabungans as $tg)
+                    @php $p = $tg->progress_percentage; @endphp
+                    <div class="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950/60 border border-zinc-200 dark:border-zinc-800/80 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between text-[10px] text-zinc-400 font-bold mb-1">
+                                <span>{{ $tg->kategori_nama }}</span>
+                                <span class="{{ $tg->status === 'tercapai' ? 'text-amber-500' : 'text-emerald-600' }}">{{ $p }}%</span>
+                            </div>
+                            <h4 class="text-xs font-bold text-zinc-900 dark:text-white truncate">{{ $tg->nama_target }}</h4>
+                            <div class="text-xs font-black text-emerald-600 dark:text-emerald-400 mt-1 tabular-nums">
+                                {{ $tg->formatted_terkumpul_nominal }}
+                            </div>
+                        </div>
+                        <div class="w-full h-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden mt-2">
+                            <div class="h-full bg-emerald-500 rounded-full" style="width: {{ $p }}%"></div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
     </div>
 
     <!-- Recent Transactions: Mobile Feed / Desktop Table -->

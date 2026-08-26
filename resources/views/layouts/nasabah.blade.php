@@ -76,6 +76,9 @@
                         <a href="{{ route('nasabah.mutasi') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all {{ request()->routeIs('nasabah.mutasi') ? 'bg-emerald-600 text-white shadow' : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white' }}">
                             Buku Mutasi
                         </a>
+                        <a href="{{ route('nasabah.target') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all {{ request()->routeIs('nasabah.target') ? 'bg-emerald-600 text-white shadow' : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white' }}">
+                            Target Impian
+                        </a>
                         <a href="{{ route('nasabah.profil') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all {{ request()->routeIs('nasabah.profil') ? 'bg-emerald-600 text-white shadow' : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white' }}">
                             Profil & Rekening
                         </a>
@@ -107,7 +110,7 @@
         </main>
 
         <!-- Floating Mobile Bottom Navigation Bar (Visible only on mobile) -->
-        <nav class="md:hidden fixed bottom-0 inset-x-0 z-50 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-lg border-t border-zinc-200 dark:border-zinc-800/90 px-4 py-2 shadow-2xl transition-colors">
+        <nav class="md:hidden fixed bottom-0 inset-x-0 z-50 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-lg border-t border-zinc-200 dark:border-zinc-800/90 px-3 py-2 shadow-2xl transition-colors">
             <div class="flex items-center justify-around">
                 <a 
                     href="{{ route('nasabah.dashboard') }}" 
@@ -127,6 +130,16 @@
                         <x-heroicon-s-document-text class="size-5" />
                     </div>
                     <span class="text-[10px]">Mutasi</span>
+                </a>
+
+                <a 
+                    href="{{ route('nasabah.target') }}" 
+                    class="flex flex-col items-center gap-1 transition-all {{ request()->routeIs('nasabah.target') ? 'text-emerald-600 dark:text-emerald-400 font-bold scale-105' : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200' }}"
+                >
+                    <div class="p-1 rounded-xl {{ request()->routeIs('nasabah.target') ? 'bg-emerald-500/10' : '' }}">
+                        <x-heroicon-s-sparkles class="size-5" />
+                    </div>
+                    <span class="text-[10px]">Target</span>
                 </a>
 
                 <a 

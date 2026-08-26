@@ -239,4 +239,42 @@ class MvpFeaturesTest extends TestCase
 
         $response->assertFileDownloaded();
     }
+
+    public function test_landing_page_redirect_buttons_for_guest(): void
+    {
+        $response = $this->get(route('home'));
+        $response->assertStatus(200);
+        $response->assertSee('Login Nasabah');
+        $response->assertSee('Login Petugas');
+    }
+
+    public function test_landing_page_redirect_buttons_for_authenticated_nasabah(): void
+    {
+        $nasabah = Nasabah::create([
+            'nomor_nasabah' => '226080001',
+            'nama' => 'Rahmat Hidayat',
+            'no_hp' => '081298765432',
+            'status' => 'aktif',
+            'saldo' => 500000,
+        ]);
+
+        $this->actingAs($nasabah, 'nasabah');
+
+        $response = $this->get(route('home'));
+        $response->assertStatus(200);
+        $response->assertSee('Dashboard Saya');
+        $response->assertSee('Buka Dashboard Nasabah Saya');
+        $response->assertSee(route('nasabah.dashboard'));
+    }
+
+    public function test_landing_page_redirect_buttons_for_authenticated_petugas(): void
+    {
+        $this->actingAs($this->admin, 'web');
+
+        $response = $this->get(route('home'));
+        $response->assertStatus(200);
+        $response->assertSee('Dashboard Petugas');
+        $response->assertSee('Buka Panel Petugas / Admin');
+        $response->assertSee(route('admin.dashboard'));
+    }
 }

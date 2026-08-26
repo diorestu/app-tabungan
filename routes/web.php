@@ -11,6 +11,7 @@ use App\Livewire\Nasabah\Dashboard as NasabahDashboard;
 use App\Livewire\Nasabah\Login as NasabahLogin;
 use App\Livewire\Nasabah\Mutasi as NasabahMutasi;
 use App\Livewire\Nasabah\Profil as NasabahProfil;
+use App\Livewire\Nasabah\TargetTabungan as NasabahTargetTabungan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -29,23 +30,29 @@ Route::post('/theme', function (\Illuminate\Http\Request $request) {
 })->name('theme.update');
 
 // ==========================================
-// PORTAL NASABAH (ID Nasabah + No HP Auth)
+// PORTAL NASABAH (Prefix: /app)
 // ==========================================
-Route::middleware('guest:nasabah')->group(function () {
-    Route::get('/nasabah/login', NasabahLogin::class)->name('nasabah.login');
-});
+Route::prefix('app')->name('nasabah.')->group(function () {
+    Route::middleware('guest:nasabah')->group(function () {
+        Route::get('/login', NasabahLogin::class)->name('login');
+    });
 
-Route::post('/nasabah/logout', function () {
-    Auth::guard('nasabah')->logout();
-    request()->session()->invalidate();
-    request()->session()->regenerateToken();
-    return redirect()->route('nasabah.login');
-})->name('nasabah.logout');
+    Route::post('/logout', function () {
+        Auth::guard('nasabah')->logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+        return redirect()->route('nasabah.login');
+    })->name('logout');
 
-Route::middleware(['auth.nasabah'])->prefix('nasabah')->name('nasabah.')->group(function () {
-    Route::get('/dashboard', NasabahDashboard::class)->name('dashboard');
-    Route::get('/mutasi', NasabahMutasi::class)->name('mutasi');
-    Route::get('/profil', NasabahProfil::class)->name('profil');
+    Route::middleware(['auth.nasabah'])->group(function () {
+        Route::get('/', function () {
+            return redirect()->route('nasabah.dashboard');
+        });
+        Route::get('/dashboard', NasabahDashboard::class)->name('dashboard');
+        Route::get('/mutasi', NasabahMutasi::class)->name('mutasi');
+        Route::get('/target', NasabahTargetTabungan::class)->name('target');
+        Route::get('/profil', NasabahProfil::class)->name('profil');
+    });
 });
 
 // ==========================================

@@ -59,12 +59,24 @@
 
                 <div class="flex items-center gap-2 sm:gap-3 text-xs font-medium">
                     <x-theme-toggle />
-                    <a href="{{ route('nasabah.login') }}" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold transition-colors shadow-sm">
-                        Login Nasabah
-                    </a>
-                    <a href="{{ route('login') }}" class="px-3.5 py-2 rounded-xl bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 transition-colors border border-zinc-200 dark:border-zinc-700">
-                        Login Petugas
-                    </a>
+                    @if (Auth::guard('nasabah')->check())
+                        <a href="{{ route('nasabah.dashboard') }}" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold transition-colors shadow-sm flex items-center gap-1.5">
+                            <x-heroicon-s-home class="size-4" />
+                            <span>Dashboard Nasabah</span>
+                        </a>
+                    @elseif (Auth::guard('web')->check())
+                        <a href="{{ route('admin.dashboard') }}" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold transition-colors shadow-sm flex items-center gap-1.5">
+                            <x-heroicon-s-squares-2x2 class="size-4" />
+                            <span>Dashboard Petugas</span>
+                        </a>
+                    @else
+                        <a href="{{ route('nasabah.login') }}" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold transition-colors shadow-sm">
+                            Login Nasabah
+                        </a>
+                        <a href="{{ route('login') }}" class="px-3.5 py-2 rounded-xl bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 transition-colors border border-zinc-200 dark:border-zinc-700">
+                            Login Petugas
+                        </a>
+                    @endif
                 </div>
             </div>
         </header>

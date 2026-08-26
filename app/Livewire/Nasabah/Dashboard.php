@@ -36,12 +36,17 @@ class Dashboard extends Component
 
         $countTransaksi = Transaksi::where('nasabah_id', $nasabah->id)->count();
 
+        $targetTabungans = $nasabah->targetTabungans()->take(3)->get();
+        $totalTargetTerkumpul = $nasabah->targetTabungans()->sum('terkumpul_nominal');
+
         return view('livewire.nasabah.dashboard', [
             'nasabah' => $nasabah,
             'recentTransactions' => $recentTransactions,
             'totalSetor' => $totalSetor,
             'totalTarik' => $totalTarik,
             'countTransaksi' => $countTransaksi,
+            'targetTabungans' => $targetTabungans,
+            'totalTargetTerkumpul' => $totalTargetTerkumpul,
         ]);
     }
 }
