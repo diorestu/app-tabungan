@@ -336,8 +336,14 @@ class MvpFeaturesTest extends TestCase
         $loginResponse->assertSee('/manifest.json');
         $loginResponse->assertSee('/serviceworker.js');
         $loginResponse->assertSee('apple-mobile-web-app-capable');
+        $loginResponse->assertDontSee('@laravelPWA');
 
-        // 2. Nasabah Authenticated Group Pages
+        // 2. Landing Page
+        $homeResponse = $this->get(route('home'));
+        $homeResponse->assertStatus(200);
+        $homeResponse->assertDontSee('@laravelPWA');
+
+        // 3. Nasabah Authenticated Group Pages
         $nasabah = Nasabah::create([
             'nomor_nasabah' => '226080001',
             'nama' => 'Rahmat Hidayat',
@@ -353,5 +359,6 @@ class MvpFeaturesTest extends TestCase
         $dashboardResponse->assertSee('/manifest.json');
         $dashboardResponse->assertSee('/serviceworker.js');
         $dashboardResponse->assertSee('apple-mobile-web-app-capable');
+        $dashboardResponse->assertDontSee('@laravelPWA');
     }
 }

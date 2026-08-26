@@ -25,5 +25,9 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('login', function (Request $request) {
             return Limit::perMinute(10)->by($request->ip());
         });
+
+        \Illuminate\Support\Facades\Blade::directive('laravelPWA', function () {
+            return (new \LaravelPWA\Services\MetaService)->render();
+        });
     }
 }
