@@ -2,10 +2,7 @@
     <!-- Header Card -->
     <div class="text-center mb-8">
         <div class="inline-flex size-14 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 items-center justify-center mb-4 border border-emerald-500/30 shadow-md shadow-emerald-600/10">
-            <svg xmlns="http://www.w3.org/2000/svg" class="size-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-28v4m0 8v4m-4-6h8m-8-4h8m-8-4h8" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-            </svg>
+            <x-icon-wallet class="size-7" />
         </div>
         <h1 class="text-2xl font-bold text-zinc-900 dark:text-white tracking-tight">Login Portal Nasabah</h1>
         <p class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 mt-1.5">Masuk dengan <strong>ID Nasabah</strong> dan <strong>Nomor Handphone</strong> terdaftar</p>
@@ -17,9 +14,7 @@
 
         @if ($errorMessage)
             <div class="mb-5 p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800/80 text-rose-700 dark:text-rose-300 text-xs flex items-start gap-2.5">
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0 mt-0.5 text-rose-500 dark:text-rose-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                </svg>
+                <x-heroicon-s-exclamation-triangle class="size-4 shrink-0 mt-0.5 text-rose-500 dark:text-rose-400" />
                 <span>{{ $errorMessage }}</span>
             </div>
         @endif
@@ -32,9 +27,7 @@
                 </label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-400 dark:text-zinc-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd" />
-                        </svg>
+                        <x-heroicon-s-identification class="size-4" />
                     </div>
                     <input 
                         type="text" 
@@ -57,9 +50,7 @@
                 </label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-400 dark:text-zinc-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 4V3z" />
-                        </svg>
+                        <x-heroicon-s-phone class="size-4" />
                     </div>
                     <input 
                         type="tel" 
@@ -124,9 +115,7 @@
         <span>Bukan nasabah? </span>
         <a href="{{ route('login') }}" class="font-semibold text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1">
             <span>Login sebagai Petugas / Teller Tabungan</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
-            </svg>
+            <x-heroicon-s-chevron-right class="size-3.5" />
         </a>
     </div>
 </div>

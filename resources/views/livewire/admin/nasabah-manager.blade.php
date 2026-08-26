@@ -11,9 +11,7 @@
             wire:click="openCreateModal"
             class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer active:scale-95 shrink-0"
         >
-            <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-            </svg>
+            <x-heroicon-s-plus class="size-4" />
             <span>Registrasi Nasabah Baru</span>
         </button>
     </div>
@@ -27,9 +25,7 @@
                 placeholder="Cari nama, ID nasabah, No. HP, NIK..."
                 class="w-full pl-9 pr-4 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700/80 rounded-xl text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
             />
-            <svg xmlns="http://www.w3.org/2000/svg" class="size-4 absolute left-3 top-2.5 text-zinc-400 dark:text-zinc-500" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
-            </svg>
+            <x-heroicon-o-magnifying-glass class="size-4 absolute left-3 top-2.5 text-zinc-400 dark:text-zinc-500" />
         </div>
 
         <div class="flex items-center gap-2 w-full sm:w-auto">
@@ -48,9 +44,7 @@
     <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 sm:p-6 shadow-sm transition-colors">
         @if ($nasabahs->isEmpty())
             <div class="text-center py-12 text-zinc-400 dark:text-zinc-500 text-xs">
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-10 mx-auto text-zinc-400 dark:text-zinc-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
+                <x-heroicon-o-users class="size-10 mx-auto text-zinc-400 dark:text-zinc-600 mb-2" />
                 Tidak ada data nasabah ditemukan.
             </div>
         @else
@@ -104,9 +98,7 @@
                                             title="Setor Tunai"
                                             class="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white transition-colors"
                                         >
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v4.59L7.3 9.39a.75.75 0 10-1.1 1.02l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75z" clip-rule="evenodd" />
-                                            </svg>
+                                            <x-heroicon-s-arrow-down-tray class="size-3.5" />
                                         </a>
 
                                         <!-- Shortcut Tarik -->
@@ -115,9 +107,7 @@
                                             title="Tarik Tunai"
                                             class="p-1.5 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-600 hover:text-white transition-colors"
                                         >
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-4.75a.75.75 0 00-1.5 0v-4.59l-1.95 2.1a.75.75 0 101.1 1.02l3.25-3.5a.75.75 0 000-1.02l-3.25-3.5a.75.75 0 10-1.1 1.02l1.95 2.1v4.59z" clip-rule="evenodd" />
-                                            </svg>
+                                            <x-heroicon-s-arrow-up-tray class="size-3.5" />
                                         </a>
 
                                         <!-- Detail Button -->
@@ -127,10 +117,7 @@
                                             title="Lihat Detail & Mutasi"
                                             class="p-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-700 transition-colors"
                                         >
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                            </svg>
+                                            <x-heroicon-o-eye class="size-3.5" />
                                         </button>
 
                                         <!-- Edit Button -->
@@ -140,9 +127,7 @@
                                             title="Edit Data"
                                             class="p-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-700 transition-colors"
                                         >
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                            </svg>
+                                            <x-heroicon-o-pencil-square class="size-3.5" />
                                         </button>
                                     </div>
                                 </td>
@@ -476,18 +461,14 @@
                             href="{{ route('admin.setor', ['nasabah_id' => $detailNasabah->id]) }}" 
                             class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg shadow-sm flex items-center gap-1.5"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v4.59L7.3 9.39a.75.75 0 10-1.1 1.02l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75z" clip-rule="evenodd" />
-                            </svg>
+                            <x-heroicon-s-arrow-down-tray class="size-3.5" />
                             <span>Setor ke Rekening Ini</span>
                         </a>
                         <a 
                             href="{{ route('admin.tarik', ['nasabah_id' => $detailNasabah->id]) }}" 
                             class="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold rounded-lg shadow-sm flex items-center gap-1.5"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-4.75a.75.75 0 00-1.5 0v-4.59l-1.95 2.1a.75.75 0 101.1 1.02l3.25-3.5a.75.75 0 000-1.02l-3.25-3.5a.75.75 0 10-1.1 1.02l1.95 2.1v4.59z" clip-rule="evenodd" />
-                            </svg>
+                            <x-heroicon-s-arrow-up-tray class="size-3.5" />
                             <span>Tarik dari Rekening Ini</span>
                         </a>
                     </div>

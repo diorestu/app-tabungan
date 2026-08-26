@@ -2,9 +2,7 @@
     <!-- Header Card -->
     <div class="text-center mb-8">
         <div class="inline-flex size-14 rounded-2xl bg-zinc-100 dark:bg-zinc-800 text-emerald-600 dark:text-emerald-400 items-center justify-center mb-4 border border-zinc-200 dark:border-zinc-700 shadow-md shadow-zinc-200 dark:shadow-zinc-950">
-            <svg xmlns="http://www.w3.org/2000/svg" class="size-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
+            <x-heroicon-o-lock-closed class="size-7" />
         </div>
         <h1 class="text-2xl font-bold text-zinc-900 dark:text-white tracking-tight">Login Petugas / Teller</h1>
         <p class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 mt-1.5">Masuk untuk mengelola nasabah & mencatat transaksi tabungan</p>
@@ -16,9 +14,7 @@
 
         @if ($errorMessage)
             <div class="mb-5 p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800/80 text-rose-700 dark:text-rose-300 text-xs flex items-start gap-2.5">
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0 mt-0.5 text-rose-500 dark:text-rose-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                </svg>
+                <x-heroicon-s-exclamation-triangle class="size-4 shrink-0 mt-0.5 text-rose-500 dark:text-rose-400" />
                 <span>{{ $errorMessage }}</span>
             </div>
         @endif
@@ -31,10 +27,7 @@
                 </label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-400 dark:text-zinc-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                        </svg>
+                        <x-heroicon-s-envelope class="size-4" />
                     </div>
                     <input 
                         type="email" 
@@ -57,9 +50,7 @@
                 </label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-400 dark:text-zinc-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
-                        </svg>
+                        <x-heroicon-s-lock-closed class="size-4" />
                     </div>
                     <input 
                         type="password" 
@@ -103,9 +94,7 @@
         <span>Ingin melihat saldo Anda? </span>
         <a href="{{ route('nasabah.login') }}" class="font-semibold text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1">
             <span>Login Portal Nasabah (ID & No HP)</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
-            </svg>
+            <x-heroicon-s-chevron-right class="size-3.5" />
         </a>
     </div>
 </div>

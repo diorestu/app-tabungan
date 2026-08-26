@@ -11,9 +11,7 @@
             class="text-xs px-3 py-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700 transition-colors flex items-center gap-1.5"
         >
             <span>Pindah ke Tarik Tunai</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
-            </svg>
+            <x-heroicon-s-chevron-right class="size-3.5" />
         </a>
     </div>
 
@@ -60,9 +58,7 @@
                                     class="w-full pl-10 pr-4 py-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                     autofocus
                                 />
-                                <svg xmlns="http://www.w3.org/2000/svg" class="size-4 absolute left-3.5 top-3 text-zinc-400 dark:text-zinc-500" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
-                                </svg>
+                                <x-heroicon-o-magnifying-glass class="size-4 absolute left-3.5 top-3 text-zinc-400 dark:text-zinc-500" />
                             </div>
 
                             @if ($searchResults->isNotEmpty())
@@ -81,9 +77,7 @@
                                                 <span class="text-xs font-bold font-mono text-emerald-600 dark:text-emerald-400">{{ $result->formatted_saldo }}</span>
                                                 <span class="text-[10px] text-zinc-400 dark:text-zinc-500 flex items-center justify-end gap-0.5">
                                                     <span>Pilih</span>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="size-3" viewBox="0 0 20 20" fill="currentColor">
-                                                        <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
-                                                    </svg>
+                                                    <x-heroicon-s-chevron-right class="size-3" />
                                                 </span>
                                             </div>
                                         </button>
@@ -212,9 +206,7 @@
                 <!-- Receipt Header -->
                 <div class="p-6 bg-gradient-to-b from-emerald-50 to-white dark:from-emerald-900/50 dark:to-zinc-900 border-b border-zinc-200 dark:border-zinc-800 text-center relative">
                     <div class="size-12 rounded-2xl bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto mb-2.5 border border-emerald-500/30">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="size-6" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                        </svg>
+                        <x-heroicon-s-check-circle class="size-7" />
                     </div>
                     <h3 class="text-lg font-extrabold text-zinc-900 dark:text-white">Setoran Berhasil Dicatat!</h3>
                     <p class="text-xs text-zinc-500 dark:text-zinc-400">Kode Transaksi: <strong class="text-emerald-600 dark:text-emerald-400 font-mono">{{ $lastTransaction->kode_transaksi }}</strong></p>
@@ -255,9 +247,7 @@
                         onclick="window.print()" 
                         class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-md cursor-pointer"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                        </svg>
+                        <x-heroicon-o-printer class="size-4" />
                         Cetak Struk Setor
                     </button>
                     <button 

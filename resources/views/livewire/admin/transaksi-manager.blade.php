@@ -11,9 +11,7 @@
                 onclick="window.print()" 
                 class="px-4 py-2 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-semibold rounded-xl border border-zinc-200 dark:border-zinc-700 transition-all flex items-center gap-2 cursor-pointer"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                </svg>
+                <x-heroicon-o-printer class="size-4" />
                 Cetak Laporan Transaksi
             </button>
         </div>
@@ -46,9 +44,7 @@
                         placeholder="Kode, nama, ID nasabah, HP..."
                         class="w-full pl-8 pr-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700/80 rounded-xl text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                     />
-                    <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5 absolute left-2.5 top-2.5 text-zinc-400 dark:text-zinc-500" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
-                    </svg>
+                    <x-heroicon-o-magnifying-glass class="size-3.5 absolute left-2.5 top-2.5 text-zinc-400 dark:text-zinc-500" />
                 </div>
             </div>
 
@@ -91,9 +87,7 @@
                     title="Reset Filter"
                     class="p-2 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-xl border border-zinc-200 dark:border-zinc-700 transition-colors shrink-0 cursor-pointer"
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                    </svg>
+                    <x-heroicon-o-arrow-path class="size-4" />
                 </button>
             </div>
         </div>
@@ -118,9 +112,7 @@
     <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 sm:p-6 print:bg-transparent print:border-none print:p-0 shadow-sm transition-colors">
         @if ($transaksis->isEmpty())
             <div class="text-center py-12 text-zinc-400 dark:text-zinc-500 text-xs">
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-10 mx-auto text-zinc-400 dark:text-zinc-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
+                <x-heroicon-o-document-text class="size-10 mx-auto text-zinc-400 dark:text-zinc-600 mb-2" />
                 Tidak ada data transaksi yang sesuai filter.
             </div>
         @else
@@ -182,9 +174,7 @@
                                         title="Lihat & Cetak Struk"
                                         class="p-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 transition-colors cursor-pointer"
                                     >
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                                        </svg>
+                                        <x-heroicon-o-printer class="size-3.5" />
                                     </button>
                                 </td>
                             </tr>
@@ -207,9 +197,11 @@
                 <!-- Receipt Header -->
                 <div class="p-6 bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 text-center relative">
                     <div class="size-12 rounded-2xl {{ $selectedReceipt->jenis_transaksi === 'setor' ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400' : 'bg-amber-500/20 text-amber-600 dark:text-amber-400' }} flex items-center justify-center mx-auto mb-2.5 border border-zinc-200 dark:border-zinc-700">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="size-6" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1.581.814L12 14.943l-2.419 1.871A1 1 0 018 16V4z" clip-rule="evenodd" />
-                        </svg>
+                        @if ($selectedReceipt->jenis_transaksi === 'setor')
+                            <x-heroicon-s-arrow-down-tray class="size-6" />
+                        @else
+                            <x-heroicon-s-arrow-up-tray class="size-6" />
+                        @endif
                     </div>
                     <h3 class="text-base font-extrabold text-zinc-900 dark:text-white">Struk Transaksi Tabungan</h3>
                     <p class="text-xs text-zinc-500 dark:text-zinc-400 font-mono mt-0.5">{{ $selectedReceipt->kode_transaksi }}</p>
@@ -260,9 +252,7 @@
                         onclick="window.print()" 
                         class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-md cursor-pointer"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                        </svg>
+                        <x-heroicon-o-printer class="size-4" />
                         Cetak Struk Ini
                     </button>
                     <button 

@@ -12,18 +12,14 @@
                 href="{{ route('admin.setor') }}" 
                 class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl shadow-lg shadow-emerald-600/30 transition-all flex items-center gap-2 cursor-pointer active:scale-95"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v4.59L7.3 9.39a.75.75 0 10-1.1 1.02l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75z" clip-rule="evenodd" />
-                </svg>
+                <x-heroicon-s-arrow-down-tray class="size-4" />
                 <span>Setor Tunai</span>
             </a>
             <a 
                 href="{{ route('admin.tarik') }}" 
                 class="px-4 py-2.5 bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold rounded-xl shadow-lg shadow-amber-600/30 transition-all flex items-center gap-2 cursor-pointer active:scale-95"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-4.75a.75.75 0 00-1.5 0v-4.59l-1.95 2.1a.75.75 0 101.1 1.02l3.25-3.5a.75.75 0 000-1.02l-3.25-3.5a.75.75 0 10-1.1 1.02l1.95 2.1v4.59z" clip-rule="evenodd" />
-                </svg>
+                <x-heroicon-s-arrow-up-tray class="size-4" />
                 <span>Tarik Tunai</span>
             </a>
         </div>
@@ -36,9 +32,7 @@
             <div class="flex items-center justify-between">
                 <span class="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Total Kas Tabungan</span>
                 <div class="size-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    <x-heroicon-o-banknotes class="size-5" />
                 </div>
             </div>
             <div class="mt-4">
@@ -54,9 +48,7 @@
             <div class="flex items-center justify-between">
                 <span class="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Jumlah Nasabah</span>
                 <div class="size-10 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
+                    <x-heroicon-o-users class="size-5" />
                 </div>
             </div>
             <div class="mt-4">
@@ -72,9 +64,7 @@
             <div class="flex items-center justify-between">
                 <span class="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Setoran Hari Ini</span>
                 <div class="size-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 11l5-5m0 0l5 5m-5-5v12" />
-                    </svg>
+                    <x-heroicon-o-arrow-down-tray class="size-5" />
                 </div>
             </div>
             <div class="mt-4">
@@ -90,9 +80,7 @@
             <div class="flex items-center justify-between">
                 <span class="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Penarikan Hari Ini</span>
                 <div class="size-10 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
-                    </svg>
+                    <x-heroicon-o-arrow-up-tray class="size-5" />
                 </div>
             </div>
             <div class="mt-4">
@@ -111,9 +99,7 @@
             class="p-4 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-emerald-500/50 shadow-sm transition-all flex items-center gap-3.5 group cursor-pointer"
         >
             <div class="size-10 rounded-xl bg-zinc-100 dark:bg-zinc-800 group-hover:bg-emerald-600 text-zinc-700 dark:text-zinc-300 group-hover:text-white flex items-center justify-center transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                </svg>
+                <x-heroicon-o-users class="size-5" />
             </div>
             <div>
                 <span class="text-xs font-bold text-zinc-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 block transition-colors">Data Nasabah</span>
@@ -126,9 +112,7 @@
             class="p-4 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-emerald-500/50 shadow-sm transition-all flex items-center gap-3.5 group cursor-pointer"
         >
             <div class="size-10 rounded-xl bg-zinc-100 dark:bg-zinc-800 group-hover:bg-emerald-600 text-zinc-700 dark:text-zinc-300 group-hover:text-white flex items-center justify-center transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                </svg>
+                <x-heroicon-o-arrow-down-tray class="size-5" />
             </div>
             <div>
                 <span class="text-xs font-bold text-zinc-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 block transition-colors">Setor Tunai</span>
@@ -141,9 +125,7 @@
             class="p-4 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-amber-500/50 shadow-sm transition-all flex items-center gap-3.5 group cursor-pointer"
         >
             <div class="size-10 rounded-xl bg-zinc-100 dark:bg-zinc-800 group-hover:bg-amber-600 text-zinc-700 dark:text-zinc-300 group-hover:text-white flex items-center justify-center transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
-                </svg>
+                <x-heroicon-o-arrow-up-tray class="size-5" />
             </div>
             <div>
                 <span class="text-xs font-bold text-zinc-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 block transition-colors">Tarik Tunai</span>
@@ -156,9 +138,7 @@
             class="p-4 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-blue-500/50 shadow-sm transition-all flex items-center gap-3.5 group cursor-pointer"
         >
             <div class="size-10 rounded-xl bg-zinc-100 dark:bg-zinc-800 group-hover:bg-blue-600 text-zinc-700 dark:text-zinc-300 group-hover:text-white flex items-center justify-center transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
+                <x-heroicon-o-document-text class="size-5" />
             </div>
             <div>
                 <span class="text-xs font-bold text-zinc-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 block transition-colors">Buku Transaksi</span>
@@ -178,9 +158,7 @@
                 </div>
                 <a href="{{ route('admin.transaksi') }}" class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1">
                     <span>Semua Transaksi</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
-                    </svg>
+                    <x-heroicon-s-chevron-right class="size-3.5" />
                 </a>
             </div>
 
