@@ -2,12 +2,8 @@
     <!-- Header Banner -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-emerald-50 via-white to-zinc-50 dark:from-emerald-950/70 dark:via-zinc-900 dark:to-zinc-950 border border-emerald-500/20 p-6 rounded-3xl shadow-sm dark:shadow-xl transition-colors">
         <div>
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold border border-emerald-500/20 mb-2">
-                <span class="size-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                Sistem Pencatatan Tabungan Aktif
-            </div>
-            <h1 class="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-white tracking-tight">Panel Administrasi Tabungan</h1>
-            <p class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 mt-1">Kelola data nasabah, input transaksi setor & tarik tunai secara real-time</p>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-white tracking-tight">Dashboard Tabungan</h1>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Ringkasan keuangan dan aktivitas mutasi tabungan nasabah hari ini</p>
         </div>
 
         <!-- Quick CTA buttons -->
@@ -19,7 +15,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v4.59L7.3 9.39a.75.75 0 10-1.1 1.02l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75z" clip-rule="evenodd" />
                 </svg>
-                + Setor Tunai
+                <span>Setor Tunai</span>
             </a>
             <a 
                 href="{{ route('admin.tarik') }}" 
@@ -28,7 +24,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-4.75a.75.75 0 00-1.5 0v-4.59l-1.95 2.1a.75.75 0 101.1 1.02l3.25-3.5a.75.75 0 000-1.02l-3.25-3.5a.75.75 0 10-1.1 1.02l1.95 2.1v4.59z" clip-rule="evenodd" />
                 </svg>
-                - Tarik Tunai
+                <span>Tarik Tunai</span>
             </a>
         </div>
     </div>
@@ -180,8 +176,11 @@
                     <h2 class="text-base font-bold text-zinc-900 dark:text-white tracking-tight">Transaksi Terbaru</h2>
                     <p class="text-xs text-zinc-500 dark:text-zinc-400">Pencatatan setor & tarik paling mutakhir</p>
                 </div>
-                <a href="{{ route('admin.transaksi') }}" class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline">
-                    Semua Transaksi &rarr;
+                <a href="{{ route('admin.transaksi') }}" class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1">
+                    <span>Semua Transaksi</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+                    </svg>
                 </a>
             </div>
 

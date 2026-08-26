@@ -17,6 +17,15 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+// Theme Switcher Session Store
+Route::post('/theme', function (\Illuminate\Http\Request $request) {
+    $theme = $request->input('theme', 'dark');
+    if (in_array($theme, ['light', 'dark'])) {
+        session(['theme' => $theme]);
+    }
+    return response()->json(['status' => 'success', 'theme' => session('theme')]);
+})->name('theme.update');
+
 // ==========================================
 // PORTAL NASABAH (ID Nasabah + No HP Auth)
 // ==========================================

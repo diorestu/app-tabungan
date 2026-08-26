@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ session('theme') === 'light' ? '' : (session('theme') === 'dark' ? 'dark' : '') }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,11 +8,33 @@
         <title>{{ $title ?? 'Sistem Tabungan Nasabah' }} - TabunganKu</title>
 
         <script>
-            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
+            (function() {
+                const sessionTheme = @json(session('theme'));
+                const localTheme = localStorage.getItem('flux.appearance') || localStorage.getItem('theme');
+                const theme = sessionTheme || localTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                
+                if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                    localStorage.setItem('flux.appearance', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                    localStorage.setItem('flux.appearance', 'light');
+                }
+
+                if (!sessionTheme && localTheme) {
+                    fetch('{{ route('theme.update') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({ theme: theme })
+                    }).catch(() => {});
+                }
+            })();
         </script>
 
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -29,10 +51,7 @@
             <div class="flex items-center justify-between px-2 py-3">
                 <div class="flex items-center gap-3">
                     <div class="size-9 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-md shadow-emerald-600/20 font-bold text-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/>
-                            <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>
-                        </svg>
+                        <x-icon-wallet class="size-5" />
                     </div>
                     <div class="flex flex-col">
                         <span class="font-bold text-base tracking-tight text-zinc-900 dark:text-white">TabunganKu</span>
@@ -83,8 +102,11 @@
             <div class="flex items-center gap-2 font-bold text-sm">
                 <span class="text-emerald-600 dark:text-emerald-400">TabunganKu</span> Admin
             </div>
-            <a href="{{ route('admin.setor') }}" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-2.5 py-1.5 rounded-lg">
-                + Transaksi
+            <a href="{{ route('admin.setor') }}" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                <span>Transaksi</span>
             </a>
         </flux:header>
 
