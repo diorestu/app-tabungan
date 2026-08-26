@@ -24,10 +24,14 @@ class NasabahManager extends Component
     #[Url]
     public string $statusFilter = '';
 
-    // Modal Create / Edit states
+    // Modal Create / Edit / Delete states
     public bool $showCreateModal = false;
     public bool $showEditModal = false;
     public bool $showDetailModal = false;
+    public bool $showDeleteModal = false;
+
+    // Delete state
+    public ?Nasabah $deleteNasabah = null;
 
     // Form fields for create/edit
     public ?int $selectedNasabahId = null;
@@ -98,6 +102,63 @@ class NasabahManager extends Component
         $this->detailNasabah = null;
     }
 
+    public function openDeleteModal(int $id): void
+    {
+        $this->deleteNasabah = Nasabah::withCount('transaksis')->findOrFail($id);
+        $this->showDeleteModal = true;
+    }
+
+    public function closeDeleteModal(): void
+    {
+        $this->showDeleteModal = false;
+        $this->deleteNasabah = null;
+    }
+
+    public function confirmDelete(): void
+    {
+        if (!$this->deleteNasabah) {
+            return;
+        }
+
+        $nasabahName = $this->deleteNasabah->nama;
+        $this->deleteNasabah->delete();
+
+        session()->flash('success', 'Nasabah "' . $nasabahName . '" beserta riwayat transaksinya telah berhasil dihapus.');
+        $this->closeDeleteModal();
+        if ($this->showDetailModal && $this->detailNasabah?->id === $this->deleteNasabah?->id) {
+            $this->closeDetailModal();
+        }
+    }
+
+    public function setStatus(int $id, string $status): void
+    {
+        if (!in_array($status, ['aktif', 'dibekukan', 'nonaktif'], true)) {
+            return;
+        }
+
+        $nasabah = Nasabah::findOrFail($id);
+        $nasabah->update(['status' => $status]);
+
+        $statusLabel = match ($status) {
+            'aktif' => 'diaktifkan kembali',
+            'dibekukan' => 'dibekukan (dilarang bertransaksi)',
+            'nonaktif' => 'dinonaktifkan',
+        };
+
+        session()->flash('success', 'Status rekening nasabah ' . $nasabah->nama . ' berhasil ' . $statusLabel . '.');
+
+        if ($this->detailNasabah && $this->detailNasabah->id === $id) {
+            $this->detailNasabah->status = $status;
+        }
+    }
+
+    public function toggleFreeze(int $id): void
+    {
+        $nasabah = Nasabah::findOrFail($id);
+        $newStatus = $nasabah->status === 'dibekukan' ? 'aktif' : 'dibekukan';
+        $this->setStatus($id, $newStatus);
+    }
+
     public function saveNasabah(): void
     {
         $this->validate([
@@ -152,7 +213,7 @@ class NasabahManager extends Component
             'no_hp' => 'required|min:9|max:20',
             'nik' => 'nullable|numeric|digits_between:10,20',
             'alamat' => 'nullable|max:500',
-            'status' => 'required|in:aktif,nonaktif',
+            'status' => 'required|in:aktif,dibekukan,nonaktif',
         ]);
 
         $nasabah = Nasabah::findOrFail($this->selectedNasabahId);

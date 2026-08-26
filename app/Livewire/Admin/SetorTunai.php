@@ -39,7 +39,17 @@ class SetorTunai extends Component
 
     public function selectNasabah(int $id): void
     {
-        $this->selectedNasabah = Nasabah::where('id', $id)->where('status', 'aktif')->first();
+        $nasabah = Nasabah::find($id);
+        if ($nasabah && $nasabah->status === 'dibekukan') {
+            $this->addError('nasabah_id', 'Rekening nasabah ini sedang DIBEKUKAN. Buka blokir terlebih dahulu di menu Data Nasabah untuk dapat menyetor.');
+            return;
+        }
+        if ($nasabah && $nasabah->status !== 'aktif') {
+            $this->addError('nasabah_id', 'Rekening nasabah ini berstatus non-aktif.');
+            return;
+        }
+
+        $this->selectedNasabah = $nasabah;
         if ($this->selectedNasabah) {
             $this->nasabah_id = $this->selectedNasabah->id;
             $this->nasabahSearch = $this->selectedNasabah->nomor_nasabah . ' - ' . $this->selectedNasabah->nama;

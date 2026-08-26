@@ -60,6 +60,12 @@ class Login extends Component
             return;
         }
 
+        if ($nasabah->status === 'dibekukan') {
+            $this->errorMessage = 'Akun tabungan Anda sedang DIBEKUKAN / DIBLOKIR sementara. Silakan hubungi customer service / petugas teller untuk pembukaan blokir.';
+            $this->addError('nomor_nasabah', $this->errorMessage);
+            return;
+        }
+
         if ($nasabah->status !== 'aktif') {
             $this->errorMessage = 'Akun tabungan Anda berstatus non-aktif. Silakan hubungi customer service / teller.';
             $this->addError('nomor_nasabah', $this->errorMessage);

@@ -8,11 +8,20 @@
 
         <div class="flex items-center gap-2">
             <button 
+                type="button"
+                wire:click="exportCsv" 
+                class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl shadow-sm transition-all flex items-center gap-2 cursor-pointer active:scale-95"
+            >
+                <x-heroicon-o-arrow-down-tray class="size-4" />
+                <span>Export Excel / CSV</span>
+            </button>
+            <button 
+                type="button"
                 onclick="window.print()" 
-                class="px-4 py-2 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-semibold rounded-xl border border-zinc-200 dark:border-zinc-700 transition-all flex items-center gap-2 cursor-pointer"
+                class="px-3.5 py-2 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-semibold rounded-xl border border-zinc-200 dark:border-zinc-700 transition-all flex items-center gap-2 cursor-pointer"
             >
                 <x-heroicon-o-printer class="size-4" />
-                Cetak Laporan Transaksi
+                <span>Cetak Laporan</span>
             </button>
         </div>
     </div>
@@ -21,8 +30,10 @@
     <div class="hidden print:block mb-6 p-4 border-b-2 border-black text-black">
         <div class="flex justify-between items-center">
             <div>
-                <h2 class="text-2xl font-black uppercase tracking-wider">TabunganKu</h2>
-                <p class="text-xs">Laporan Rekapitulasi Kas & Mutasi Tabungan</p>
+                <h2 class="text-2xl font-black uppercase tracking-wider">{{ \App\Models\Setting::get('nama_lembaga', 'TabunganKu Digital') }}</h2>
+                <p class="text-xs">{{ \App\Models\Setting::get('slogan_lembaga', 'Layanan Simpanan & Tabungan Terpercaya') }}</p>
+                <p class="text-[10px] text-zinc-600">{{ \App\Models\Setting::get('alamat_lembaga') }} • Telp: {{ \App\Models\Setting::get('telepon_lembaga') }}</p>
+                <p class="text-xs font-bold mt-1">Laporan Rekapitulasi Kas & Mutasi Tabungan</p>
             </div>
             <div class="text-right text-xs">
                 <p><strong>Tanggal Cetak:</strong> {{ now()->format('d/m/Y H:i') }}</p>
@@ -209,6 +220,11 @@
 
                 <!-- Receipt Body -->
                 <div class="p-6 space-y-3 text-xs">
+                    <div class="text-center pb-2.5 mb-2 border-b border-zinc-100 dark:border-zinc-800">
+                        <h4 class="font-bold text-xs text-zinc-900 dark:text-white uppercase">{{ \App\Models\Setting::get('nama_lembaga', 'TabunganKu Digital') }}</h4>
+                        <p class="text-[10px] text-zinc-500">{{ \App\Models\Setting::get('alamat_lembaga') }} • Telp: {{ \App\Models\Setting::get('telepon_lembaga') }}</p>
+                    </div>
+
                     <div class="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800">
                         <span class="text-zinc-500 dark:text-zinc-400">Jenis Transaksi:</span>
                         <span class="font-bold {{ $selectedReceipt->jenis_transaksi === 'setor' ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400' }} uppercase">
@@ -243,6 +259,10 @@
                         <span class="text-zinc-500 dark:text-zinc-400">Petugas:</span>
                         <span class="text-zinc-800 dark:text-zinc-300">{{ $selectedReceipt->user->name ?? 'Teller' }}</span>
                     </div>
+
+                    <p class="text-[10px] text-center text-zinc-400 dark:text-zinc-500 italic pt-2 border-t border-zinc-100 dark:border-zinc-800">
+                        {{ \App\Models\Setting::get('pesan_struk', 'Simpan struk ini sebagai bukti transaksi resmi.') }}
+                    </p>
                 </div>
 
                 <!-- Actions -->

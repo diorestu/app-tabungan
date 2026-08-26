@@ -2,6 +2,7 @@
 
 use App\Livewire\Admin\Dashboard as AdminDashboard;
 use App\Livewire\Admin\NasabahManager;
+use App\Livewire\Admin\Pengaturan;
 use App\Livewire\Admin\SetorTunai;
 use App\Livewire\Admin\TarikTunai;
 use App\Livewire\Admin\TransaksiManager;
@@ -70,6 +71,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/transaksi', TransaksiManager::class)->name('transaksi');
         Route::get('/setor', SetorTunai::class)->name('setor');
         Route::get('/tarik', TarikTunai::class)->name('tarik');
+        Route::get('/pengaturan', Pengaturan::class)->name('pengaturan');
     });
 });
 

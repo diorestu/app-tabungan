@@ -237,6 +237,11 @@
 
                 <!-- Receipt Body -->
                 <div class="p-6 space-y-3.5 text-xs">
+                    <div class="text-center pb-2.5 mb-1 border-b border-zinc-100 dark:border-zinc-800">
+                        <h4 class="font-bold text-xs text-zinc-900 dark:text-white uppercase">{{ \App\Models\Setting::get('nama_lembaga', 'TabunganKu Digital') }}</h4>
+                        <p class="text-[10px] text-zinc-500">{{ \App\Models\Setting::get('alamat_lembaga') }} • Telp: {{ \App\Models\Setting::get('telepon_lembaga') }}</p>
+                    </div>
+
                     <div class="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800/80">
                         <span class="text-zinc-500 dark:text-zinc-400">Waktu:</span>
                         <span class="text-zinc-800 dark:text-zinc-200 font-mono">{{ $lastTransaction->created_at->format('d/m/Y H:i:s') }}</span>
@@ -261,6 +266,10 @@
                         <span class="text-zinc-500 dark:text-zinc-400">Petugas / Teller:</span>
                         <span class="text-zinc-800 dark:text-zinc-300">{{ Auth::guard('web')->user()->name ?? 'Teller' }}</span>
                     </div>
+
+                    <p class="text-[10px] text-center text-zinc-400 dark:text-zinc-500 italic pt-2 border-t border-zinc-100 dark:border-zinc-800">
+                        {{ \App\Models\Setting::get('pesan_struk', 'Simpan struk ini sebagai bukti transaksi resmi.') }}
+                    </p>
                 </div>
 
                 <!-- Actions -->

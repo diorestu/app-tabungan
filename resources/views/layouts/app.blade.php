@@ -72,6 +72,10 @@
                     <flux:navlist.item icon="arrow-up-tray" href="{{ route('admin.tarik') }}" :current="request()->routeIs('admin.tarik')">Tarik Tunai</flux:navlist.item>
                     <flux:navlist.item icon="clock" href="{{ route('admin.transaksi') }}" :current="request()->routeIs('admin.transaksi')">Riwayat Transaksi</flux:navlist.item>
                 </flux:navlist.group>
+
+                <flux:navlist.group heading="Sistem & Konfigurasi" class="mt-4">
+                    <flux:navlist.item icon="cog-6-tooth" href="{{ route('admin.pengaturan') }}" :current="request()->routeIs('admin.pengaturan')">Pengaturan</flux:navlist.item>
+                </flux:navlist.group>
             </flux:navlist>
 
             <flux:spacer />
