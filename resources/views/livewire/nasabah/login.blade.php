@@ -1,0 +1,131 @@
+<div class="w-full max-w-md mx-auto">
+    <!-- Header Card -->
+    <div class="text-center mb-8">
+        <div class="inline-flex size-14 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 items-center justify-center mb-4 border border-emerald-500/30 shadow-md shadow-emerald-600/10">
+            <svg xmlns="http://www.w3.org/2000/svg" class="size-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-28v4m0 8v4m-4-6h8m-8-4h8m-8-4h8" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+        </div>
+        <h1 class="text-2xl font-bold text-zinc-900 dark:text-white tracking-tight">Login Portal Nasabah</h1>
+        <p class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 mt-1.5">Masuk dengan <strong>ID Nasabah</strong> dan <strong>Nomor Handphone</strong> terdaftar</p>
+    </div>
+
+    <!-- Login Card -->
+    <div class="bg-white dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 sm:p-8 shadow-xl dark:shadow-2xl backdrop-blur-xl relative overflow-hidden">
+        <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-500"></div>
+
+        @if ($errorMessage)
+            <div class="mb-5 p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800/80 text-rose-700 dark:text-rose-300 text-xs flex items-start gap-2.5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0 mt-0.5 text-rose-500 dark:text-rose-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+                <span>{{ $errorMessage }}</span>
+            </div>
+        @endif
+
+        <form wire:submit="login" class="space-y-4">
+            <!-- ID Nasabah -->
+            <div>
+                <label for="nomor_nasabah" class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                    Nomor / ID Nasabah <span class="text-emerald-500">*</span>
+                </label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-400 dark:text-zinc-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <input 
+                        type="text" 
+                        id="nomor_nasabah" 
+                        wire:model="nomor_nasabah"
+                        placeholder="Contoh: NAS-2026-0001" 
+                        class="w-full pl-10 pr-4 py-3 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all font-mono"
+                        autofocus
+                    />
+                </div>
+                @error('nomor_nasabah')
+                    <span class="text-[11px] text-rose-500 dark:text-rose-400 mt-1 block">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <!-- Nomor HP -->
+            <div>
+                <label for="no_hp" class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                    Nomor Handphone Terdaftar <span class="text-emerald-500">*</span>
+                </label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-400 dark:text-zinc-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 4V3z" />
+                        </svg>
+                    </div>
+                    <input 
+                        type="tel" 
+                        inputmode="numeric"
+                        autocomplete="tel"
+                        id="no_hp" 
+                        wire:model="no_hp"
+                        placeholder="Contoh: 081234567890" 
+                        class="w-full pl-10 pr-4 py-3 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all font-mono"
+                    />
+                </div>
+                @error('no_hp')
+                    <span class="text-[11px] text-rose-500 dark:text-rose-400 mt-1 block">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <!-- Submit Button -->
+            <button 
+                type="submit" 
+                class="w-full mt-2 py-3 px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm rounded-xl transition-all shadow-lg shadow-emerald-600/25 flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
+                wire:loading.attr="disabled"
+            >
+                <span wire:loading.remove>Masuk ke Buku Tabungan</span>
+                <span wire:loading class="flex items-center gap-2">
+                    <svg class="animate-spin size-4 text-white" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Memverifikasi data...
+                </span>
+            </button>
+        </form>
+
+        <!-- Quick Fill for Demo / Testing -->
+        @if ($sampleNasabahs->isNotEmpty())
+            <div class="mt-6 pt-5 border-t border-zinc-200 dark:border-zinc-800">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Cepat Uji Coba (Akun Demo)</span>
+                    <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">Klik untuk isi otomatis</span>
+                </div>
+                <div class="space-y-1.5">
+                    @foreach ($sampleNasabahs as $sample)
+                        <button 
+                            type="button" 
+                            wire:click="fillSample('{{ $sample->nomor_nasabah }}', '{{ $sample->no_hp }}')"
+                            class="w-full text-left p-2.5 rounded-xl bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-950/60 dark:hover:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-800/80 hover:border-emerald-500/40 text-xs text-zinc-700 dark:text-zinc-300 transition-all flex items-center justify-between group cursor-pointer"
+                        >
+                            <div>
+                                <span class="font-medium text-zinc-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">{{ $sample->nama }}</span>
+                                <span class="font-mono text-zinc-500 text-[11px] ml-1.5">({{ $sample->nomor_nasabah }})</span>
+                            </div>
+                            <span class="font-mono text-[11px] text-zinc-500 dark:text-zinc-400">{{ $sample->no_hp }}</span>
+                        </button>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+    </div>
+
+    <!-- Switch Login -->
+    <div class="mt-6 text-center text-xs text-zinc-500 dark:text-zinc-400">
+        <span>Bukan nasabah? </span>
+        <a href="{{ route('login') }}" class="font-semibold text-emerald-600 dark:text-emerald-400 hover:underline">
+            Login sebagai Petugas / Teller Tabungan &rarr;
+        </a>
+    </div>
+</div>
+
+
