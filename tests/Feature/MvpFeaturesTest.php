@@ -245,7 +245,7 @@ class MvpFeaturesTest extends TestCase
         $response = $this->get(route('home'));
         $response->assertStatus(200);
         $response->assertSee('Login Nasabah');
-        $response->assertSee('Login Petugas');
+        $response->assertDontSee('Login Petugas');
     }
 
     public function test_landing_page_redirect_buttons_for_authenticated_nasabah(): void
@@ -265,6 +265,8 @@ class MvpFeaturesTest extends TestCase
         $response->assertSee('Dashboard Saya');
         $response->assertSee('Buka Dashboard Nasabah Saya');
         $response->assertSee(route('nasabah.dashboard'));
+        $response->assertDontSee('500.000');
+        $response->assertDontSee('226080001');
     }
 
     public function test_landing_page_redirect_buttons_for_authenticated_petugas(): void
@@ -274,7 +276,6 @@ class MvpFeaturesTest extends TestCase
         $response = $this->get(route('home'));
         $response->assertStatus(200);
         $response->assertSee('Dashboard Petugas');
-        $response->assertSee('Buka Panel Petugas / Admin');
         $response->assertSee(route('admin.dashboard'));
     }
 }

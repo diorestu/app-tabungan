@@ -83,31 +83,6 @@
                 </span>
             </button>
         </form>
-
-        <!-- Quick Fill for Demo / Testing -->
-        @if ($sampleNasabahs->isNotEmpty())
-            <div class="mt-6 pt-5 border-t border-zinc-200 dark:border-zinc-800">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Cepat Uji Coba (Akun Demo)</span>
-                    <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">Klik untuk isi otomatis</span>
-                </div>
-                <div class="space-y-1.5">
-                    @foreach ($sampleNasabahs as $sample)
-                        <button 
-                            type="button" 
-                            wire:click="fillSample('{{ $sample->nomor_nasabah }}', '{{ $sample->no_hp }}')"
-                            class="w-full text-left p-2.5 rounded-xl bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-950/60 dark:hover:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-800/80 hover:border-emerald-500/40 text-xs text-zinc-700 dark:text-zinc-300 transition-all flex items-center justify-between group cursor-pointer"
-                        >
-                            <div>
-                                <span class="font-medium text-zinc-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">{{ $sample->nama }}</span>
-                                <span class="text-zinc-500 text-[11px] ml-1.5 font-medium tabular-nums">({{ $sample->nomor_nasabah }})</span>
-                            </div>
-                            <span class="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium tabular-nums">{{ $sample->no_hp }}</span>
-                        </button>
-                    @endforeach
-                </div>
-            </div>
-        @endif
     </div>
 
     <!-- Switch Login & Back to Home -->

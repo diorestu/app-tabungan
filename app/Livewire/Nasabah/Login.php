@@ -81,10 +81,6 @@ class Login extends Component
 
     public function render()
     {
-        $sampleNasabahs = Nasabah::where('status', 'aktif')->take(3)->get();
-
-        return view('livewire.nasabah.login', [
-            'sampleNasabahs' => $sampleNasabahs,
-        ]);
+        return view('livewire.nasabah.login');
     }
 }

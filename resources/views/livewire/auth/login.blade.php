@@ -65,12 +65,6 @@
                 @enderror
             </div>
 
-            <!-- Default Credential Notice -->
-            <div class="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-[11px] text-zinc-600 dark:text-zinc-400">
-                <span class="font-semibold text-emerald-600 dark:text-emerald-400">Akun Petugas Bawaan:</span><br>
-                Email: <span class="text-zinc-800 dark:text-zinc-200 font-mono font-medium">admin@tabungan.test</span> | Pass: <span class="text-zinc-800 dark:text-zinc-200 font-mono font-medium">password</span>
-            </div>
-
             <!-- Submit Button -->
             <button 
                 type="submit" 
