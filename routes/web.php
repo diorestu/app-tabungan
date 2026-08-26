@@ -10,6 +10,7 @@ use App\Livewire\Auth\Login as AdminLogin;
 use App\Livewire\Nasabah\Dashboard as NasabahDashboard;
 use App\Livewire\Nasabah\Login as NasabahLogin;
 use App\Livewire\Nasabah\Mutasi as NasabahMutasi;
+use App\Livewire\Nasabah\Profil as NasabahProfil;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +45,7 @@ Route::post('/nasabah/logout', function () {
 Route::middleware(['auth.nasabah'])->prefix('nasabah')->name('nasabah.')->group(function () {
     Route::get('/dashboard', NasabahDashboard::class)->name('dashboard');
     Route::get('/mutasi', NasabahMutasi::class)->name('mutasi');
+    Route::get('/profil', NasabahProfil::class)->name('profil');
 });
 
 // ==========================================

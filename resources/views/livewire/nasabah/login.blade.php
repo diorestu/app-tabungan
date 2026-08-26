@@ -33,8 +33,8 @@
                         type="text" 
                         id="nomor_nasabah" 
                         wire:model="nomor_nasabah"
-                        placeholder="Contoh: NAS-2026-0001" 
-                        class="w-full pl-10 pr-4 py-3 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all font-mono"
+                        placeholder="Contoh: 226080001" 
+                        class="w-full pl-10 pr-4 py-3 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all font-semibold tabular-nums"
                         autofocus
                     />
                 </div>
@@ -59,7 +59,7 @@
                         id="no_hp" 
                         wire:model="no_hp"
                         placeholder="Contoh: 081234567890" 
-                        class="w-full pl-10 pr-4 py-3 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all font-mono"
+                        class="w-full pl-10 pr-4 py-3 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all font-semibold tabular-nums"
                     />
                 </div>
                 @error('no_hp')
@@ -74,12 +74,12 @@
                 wire:loading.attr="disabled"
             >
                 <span wire:loading.remove>Masuk ke Buku Tabungan</span>
-                <span wire:loading class="flex items-center gap-2">
-                    <svg class="animate-spin size-4 text-white" fill="none" viewBox="0 0 24 24">
+                <span wire:loading.inline-flex class="items-center justify-center gap-2">
+                    <svg class="animate-spin size-4 shrink-0 text-white" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    Memverifikasi data...
+                    <span>Memverifikasi data...</span>
                 </span>
             </button>
         </form>
@@ -100,9 +100,9 @@
                         >
                             <div>
                                 <span class="font-medium text-zinc-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">{{ $sample->nama }}</span>
-                                <span class="font-mono text-zinc-500 text-[11px] ml-1.5">({{ $sample->nomor_nasabah }})</span>
+                                <span class="text-zinc-500 text-[11px] ml-1.5 font-medium tabular-nums">({{ $sample->nomor_nasabah }})</span>
                             </div>
-                            <span class="font-mono text-[11px] text-zinc-500 dark:text-zinc-400">{{ $sample->no_hp }}</span>
+                            <span class="text-[11px] text-zinc-500 dark:text-zinc-400 font-medium tabular-nums">{{ $sample->no_hp }}</span>
                         </button>
                     @endforeach
                 </div>
@@ -110,14 +110,20 @@
         @endif
     </div>
 
-    <!-- Switch Login -->
-    <div class="mt-6 text-center text-xs text-zinc-500 dark:text-zinc-400">
-        <span>Bukan nasabah? </span>
-        <a href="{{ route('login') }}" class="font-semibold text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1">
-            <span>Login sebagai Petugas / Teller Tabungan</span>
-            <x-heroicon-s-chevron-right class="size-3.5" />
-        </a>
+    <!-- Switch Login & Back to Home -->
+    <div class="mt-6 space-y-2 text-center text-xs text-zinc-500 dark:text-zinc-400">
+        <div>
+            <span>Bukan nasabah? </span>
+            <a href="{{ route('login') }}" class="font-semibold text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1">
+                <span>Login sebagai Petugas / Teller Tabungan</span>
+                <x-heroicon-s-chevron-right class="size-3.5" />
+            </a>
+        </div>
+        <div>
+            <a href="{{ route('home') }}" class="inline-flex items-center gap-1 text-zinc-500 hover:text-emerald-600 dark:text-zinc-400 dark:hover:text-emerald-400 transition-colors pt-2">
+                <x-heroicon-s-arrow-left class="size-3.5" />
+                <span>Kembali ke Halaman Utama / Landing Page</span>
+            </a>
+        </div>
     </div>
 </div>
-
-

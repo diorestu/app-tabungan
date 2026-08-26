@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Setting;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
@@ -11,9 +12,12 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[Layout('layouts.app')]
-#[Title('Pengaturan Aplikasi - TabunganKu')]
+#[Title('Pengaturan Aplikasi & Petugas - TabunganKu')]
 class Pengaturan extends Component
 {
+    // Active Tab
+    public string $activeTab = 'lembaga'; // 'lembaga', 'petugas', 'keamanan'
+
     // Institution Settings
     public string $nama_lembaga = '';
     public string $slogan_lembaga = '';
@@ -27,6 +31,21 @@ class Pengaturan extends Component
     public string $current_password = '';
     public string $new_password = '';
     public string $new_password_confirmation = '';
+
+    // Petugas Management State
+    public bool $showCreatePetugasModal = false;
+    public bool $showEditPetugasModal = false;
+    public bool $showDeletePetugasModal = false;
+
+    public ?int $selectedPetugasId = null;
+    public ?User $deletePetugas = null;
+
+    public string $petugas_name = '';
+    public string $petugas_email = '';
+    public string $petugas_role = 'teller';
+    public string $petugas_status = 'aktif';
+    public string $petugas_password = '';
+    public string $petugas_password_confirmation = '';
 
     public function mount(): void
     {
@@ -43,6 +62,11 @@ class Pengaturan extends Component
             $this->admin_name = $user->name;
             $this->admin_email = $user->email;
         }
+    }
+
+    public function setTab(string $tab): void
+    {
+        $this->activeTab = $tab;
     }
 
     public function saveInstitutionSettings(): void
@@ -103,8 +127,178 @@ class Pengaturan extends Component
         session()->flash('success_password', 'Password akun admin berhasil diubah.');
     }
 
+    // ==========================================
+    // PETUGAS / TELLER MANAGEMENT
+    // ==========================================
+
+    public function openCreatePetugasModal(): void
+    {
+        $this->resetPetugasForm();
+        $this->showCreatePetugasModal = true;
+    }
+
+    public function closeCreatePetugasModal(): void
+    {
+        $this->showCreatePetugasModal = false;
+        $this->resetPetugasForm();
+    }
+
+    public function savePetugas(): void
+    {
+        $this->validate([
+            'petugas_name' => 'required|min:3|max:100',
+            'petugas_email' => 'required|email|unique:users,email',
+            'petugas_role' => 'required|in:admin,teller',
+            'petugas_password' => ['required', 'confirmed', Password::min(6)],
+        ], [
+            'petugas_name.required' => 'Nama lengkap petugas wajib diisi.',
+            'petugas_email.required' => 'Email petugas wajib diisi.',
+            'petugas_email.unique' => 'Email ini sudah digunakan oleh akun lain.',
+            'petugas_password.required' => 'Password wajib diisi.',
+            'petugas_password.confirmed' => 'Konfirmasi password tidak cocok.',
+            'petugas_password.min' => 'Password minimal 6 karakter.',
+        ]);
+
+        User::create([
+            'name' => trim($this->petugas_name),
+            'email' => trim($this->petugas_email),
+            'role' => $this->petugas_role,
+            'status' => 'aktif',
+            'password' => Hash::make($this->petugas_password),
+        ]);
+
+        session()->flash('success_petugas', 'Petugas baru "' . $this->petugas_name . '" berhasil ditambahkan.');
+        $this->closeCreatePetugasModal();
+    }
+
+    public function openEditPetugasModal(int $id): void
+    {
+        $user = User::findOrFail($id);
+        $this->selectedPetugasId = $user->id;
+        $this->petugas_name = $user->name;
+        $this->petugas_email = $user->email;
+        $this->petugas_role = $user->role ?? 'teller';
+        $this->petugas_status = $user->status ?? 'aktif';
+        $this->petugas_password = '';
+        $this->petugas_password_confirmation = '';
+        $this->showEditPetugasModal = true;
+    }
+
+    public function closeEditPetugasModal(): void
+    {
+        $this->showEditPetugasModal = false;
+        $this->resetPetugasForm();
+    }
+
+    public function updatePetugas(): void
+    {
+        $user = User::findOrFail($this->selectedPetugasId);
+
+        $rules = [
+            'petugas_name' => 'required|min:3|max:100',
+            'petugas_email' => 'required|email|unique:users,email,' . $user->id,
+            'petugas_role' => 'required|in:admin,teller',
+            'petugas_status' => 'required|in:aktif,nonaktif',
+        ];
+
+        if (!empty($this->petugas_password)) {
+            $rules['petugas_password'] = ['confirmed', Password::min(6)];
+        }
+
+        $this->validate($rules, [
+            'petugas_name.required' => 'Nama lengkap petugas wajib diisi.',
+            'petugas_email.required' => 'Email petugas wajib diisi.',
+            'petugas_password.confirmed' => 'Konfirmasi password tidak cocok.',
+            'petugas_password.min' => 'Password baru minimal 6 karakter.',
+        ]);
+
+        $updateData = [
+            'name' => trim($this->petugas_name),
+            'email' => trim($this->petugas_email),
+            'role' => $this->petugas_role,
+            'status' => $this->petugas_status,
+        ];
+
+        if (!empty($this->petugas_password)) {
+            $updateData['password'] = Hash::make($this->petugas_password);
+        }
+
+        $user->update($updateData);
+
+        session()->flash('success_petugas', 'Data petugas "' . $user->name . '" berhasil diperbarui.');
+        $this->closeEditPetugasModal();
+    }
+
+    public function togglePetugasStatus(int $id): void
+    {
+        $currentUserId = Auth::guard('web')->id();
+        if ($id === $currentUserId) {
+            session()->flash('error_petugas', 'Anda tidak dapat menonaktifkan akun yang sedang digunakan saat ini.');
+            return;
+        }
+
+        $user = User::findOrFail($id);
+        $newStatus = $user->status === 'aktif' ? 'nonaktif' : 'aktif';
+        $user->update(['status' => $newStatus]);
+
+        session()->flash('success_petugas', 'Status akun ' . $user->name . ' diubah menjadi ' . $newStatus . '.');
+    }
+
+    public function openDeletePetugasModal(int $id): void
+    {
+        $currentUserId = Auth::guard('web')->id();
+        if ($id === $currentUserId) {
+            session()->flash('error_petugas', 'Anda tidak dapat menghapus akun yang sedang Anda gunakan.');
+            return;
+        }
+
+        $this->deletePetugas = User::findOrFail($id);
+        $this->showDeletePetugasModal = true;
+    }
+
+    public function closeDeletePetugasModal(): void
+    {
+        $this->showDeletePetugasModal = false;
+        $this->deletePetugas = null;
+    }
+
+    public function confirmDeletePetugas(): void
+    {
+        if (!$this->deletePetugas) {
+            return;
+        }
+
+        if ($this->deletePetugas->id === Auth::guard('web')->id()) {
+            session()->flash('error_petugas', 'Anda tidak dapat menghapus akun Anda sendiri.');
+            $this->closeDeletePetugasModal();
+            return;
+        }
+
+        $name = $this->deletePetugas->name;
+        $this->deletePetugas->delete();
+
+        session()->flash('success_petugas', 'Akun petugas "' . $name . '" telah berhasil dihapus.');
+        $this->closeDeletePetugasModal();
+    }
+
+    public function resetPetugasForm(): void
+    {
+        $this->selectedPetugasId = null;
+        $this->petugas_name = '';
+        $this->petugas_email = '';
+        $this->petugas_role = 'teller';
+        $this->petugas_status = 'aktif';
+        $this->petugas_password = '';
+        $this->petugas_password_confirmation = '';
+        $this->resetValidation();
+    }
+
     public function render()
     {
-        return view('livewire.admin.pengaturan');
+        $petugasList = User::latest()->get();
+
+        return view('livewire.admin.pengaturan', [
+            'petugasList' => $petugasList,
+        ]);
     }
 }

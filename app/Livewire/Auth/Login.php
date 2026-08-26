@@ -38,6 +38,13 @@ class Login extends Component
             return;
         }
 
+        $user = Auth::guard('web')->user();
+        if ($user && $user->status !== 'aktif') {
+            Auth::guard('web')->logout();
+            $this->errorMessage = 'Akun petugas Anda telah dinonaktifkan oleh administrator. Silakan hubungi admin utama.';
+            return;
+        }
+
         session()->regenerate();
         session()->flash('success', 'Selamat datang di Panel Petugas Tabungan.');
         $this->redirectRoute('admin.dashboard', navigate: true);

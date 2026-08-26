@@ -44,8 +44,8 @@
         @fluxAppearance
         @livewireStyles
     </head>
-    <body class="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 antialiased font-sans flex flex-col">
-        <flux:sidebar sticky collapsible="mobile" class="bg-white dark:bg-zinc-950 border-r border-zinc-200 dark:border-zinc-800">
+    <body class="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 antialiased font-sans">
+        <flux:sidebar sticky collapsible="mobile" class="bg-white dark:bg-zinc-950 border-r border-zinc-200 dark:border-zinc-800 lg:sticky lg:top-0 lg:h-dvh lg:overflow-y-auto">
             <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
             <div class="flex items-center justify-between px-2 py-3">
@@ -53,10 +53,7 @@
                     <div class="size-9 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-md shadow-emerald-600/20 font-bold text-lg">
                         <x-icon-wallet class="size-5" />
                     </div>
-                    <div class="flex flex-col">
-                        <span class="font-bold text-base tracking-tight text-zinc-900 dark:text-white">TabunganKu</span>
-                        <span class="text-xs text-zinc-500 dark:text-zinc-400">Portal Petugas & Teller</span>
-                    </div>
+                    <span class="font-bold text-base tracking-tight text-zinc-900 dark:text-white">TabunganKu</span>
                 </div>
                 <x-theme-toggle />
             </div>

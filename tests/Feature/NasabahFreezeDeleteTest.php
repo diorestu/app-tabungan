@@ -123,4 +123,58 @@ class NasabahFreezeDeleteTest extends TestCase
         $this->assertDatabaseMissing('nasabahs', ['id' => $nasabah->id]);
         $this->assertDatabaseMissing('transaksis', ['nasabah_id' => $nasabah->id]);
     }
+
+    public function test_9_digit_account_numbering_format(): void
+    {
+        // Jawa = 2, Year = 26, Month = 08 -> 226080001 (9 digits)
+        $nomorJawa = Nasabah::generateNomorNasabah('2');
+        $this->assertEquals(9, strlen($nomorJawa));
+        $this->assertStringStartsWith('2' . date('ym'), $nomorJawa);
+        $this->assertStringEndsWith('0001', $nomorJawa);
+
+        // Sumatera = 1 -> 126080001
+        $nomorSumatera = Nasabah::generateNomorNasabah('1');
+        $this->assertEquals(9, strlen($nomorSumatera));
+        $this->assertStringStartsWith('1' . date('ym'), $nomorSumatera);
+
+        // Create nasabah with 9 digits
+        $nasabah = Nasabah::create([
+            'nomor_nasabah' => $nomorJawa,
+            'nama' => 'Nasabah Jawa',
+            'no_hp' => '081233445566',
+            'saldo' => 0,
+        ]);
+
+        $this->assertEquals('Jawa', $nasabah->wilayah_nama);
+
+        // Next number for Jawa should increment to 0002
+        $nextJawa = Nasabah::generateNomorNasabah('2');
+        $this->assertStringEndsWith('0002', $nextJawa);
+        $this->assertEquals(9, strlen($nextJawa));
+    }
+
+    public function test_admin_can_register_nasabah_fully_automatically(): void
+    {
+        $this->actingAs($this->admin);
+
+        Livewire::test(NasabahManager::class)
+            ->call('openCreateModal')
+            ->set('wilayah_code', '3') // Bali
+            ->set('nama', 'I Wayan Sudirta')
+            ->set('no_hp', '081399887766')
+            ->set('setoran_awal', 250000)
+            ->call('saveNasabah');
+
+        $this->assertDatabaseHas('nasabahs', [
+            'nama' => 'I Wayan Sudirta',
+            'no_hp' => '081399887766',
+            'saldo' => 250000,
+        ]);
+
+        $nasabah = Nasabah::where('nama', 'I Wayan Sudirta')->first();
+        $this->assertNotNull($nasabah);
+        $this->assertEquals(9, strlen($nasabah->nomor_nasabah));
+        $this->assertStringStartsWith('3' . date('ym'), $nasabah->nomor_nasabah);
+        $this->assertEquals('Bali', $nasabah->wilayah_nama);
+    }
 }

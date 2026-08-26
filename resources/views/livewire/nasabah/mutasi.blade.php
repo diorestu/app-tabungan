@@ -17,13 +17,23 @@
         <div class="flex items-center gap-2">
             <button 
                 type="button"
+                wire:click="exportCsv" 
+                class="w-full sm:w-auto px-4 py-2.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-bold rounded-xl border border-zinc-200 dark:border-zinc-700 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 shadow-sm"
+                title="Unduh File Rekening Koran Format Akuntansi (Debit & Kredit)"
+            >
+                <x-heroicon-s-arrow-down-tray class="size-4 text-emerald-600 dark:text-emerald-400" />
+                <span>Export Rekening Koran</span>
+            </button>
+
+            <button 
+                type="button"
                 onclick="window.print()" 
                 class="w-full sm:w-auto px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl shadow-md shadow-emerald-950/20 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                 </svg>
-                Cetak Rekening Koran
+                <span>Cetak Rekening Koran</span>
             </button>
         </div>
     </div>
@@ -32,8 +42,10 @@
     <div class="hidden print:block mb-6 p-4 border-b-2 border-black text-black">
         <div class="flex justify-between items-center">
             <div>
-                <h2 class="text-2xl font-black uppercase tracking-wider">TabunganKu</h2>
-                <p class="text-xs">Laporan Mutasi Rekening Tabungan Nasabah</p>
+                <h2 class="text-2xl font-black uppercase tracking-wider">{{ \App\Models\Setting::get('nama_lembaga', 'TabunganKu Digital') }}</h2>
+                <p class="text-xs">{{ \App\Models\Setting::get('slogan_lembaga', 'Layanan Simpanan & Tabungan Terpercaya') }}</p>
+                <p class="text-[10px] text-zinc-600">{{ \App\Models\Setting::get('alamat_lembaga') }} • Telp: {{ \App\Models\Setting::get('telepon_lembaga') }}</p>
+                <p class="text-xs font-bold mt-1">Laporan Mutasi Rekening Tabungan Nasabah</p>
             </div>
             <div class="text-right text-xs">
                 <p><strong>Nama:</strong> {{ $nasabah->nama }}</p>
@@ -78,7 +90,7 @@
                     type="button" 
                     wire:click="resetFilter"
                     title="Reset Filter"
-                    class="p-2.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-xl border border-zinc-200 dark:border-zinc-700 transition-colors"
+                    class="p-2.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-xl border border-zinc-200 dark:border-zinc-700 transition-colors cursor-pointer"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -140,10 +152,10 @@
         <!-- Filter Metrics Bar -->
         <div class="pt-2 border-t border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between text-[11px] text-zinc-500 dark:text-zinc-400">
             <div>
-                Total Masuk: <span class="font-mono font-bold text-emerald-600 dark:text-emerald-400">+Rp {{ number_format($filteredSetor, 0, ',', '.') }}</span>
+                Total Masuk: <span class="font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">+Rp {{ number_format($filteredSetor, 0, ',', '.') }}</span>
             </div>
             <div>
-                Total Keluar: <span class="font-mono font-bold text-amber-600 dark:text-amber-400">-Rp {{ number_format($filteredTarik, 0, ',', '.') }}</span>
+                Total Keluar: <span class="font-bold text-amber-600 dark:text-amber-400 tabular-nums">-Rp {{ number_format($filteredTarik, 0, ',', '.') }}</span>
             </div>
         </div>
     </div>
@@ -186,20 +198,20 @@
                                 <h4 class="text-xs font-bold text-zinc-900 dark:text-white">
                                     {{ $trx->jenis_transaksi === 'setor' ? 'Setor Tunai' : 'Tarik Tunai' }}
                                 </h4>
-                                <p class="text-[10px] text-zinc-500 dark:text-zinc-400 font-mono">
+                                <p class="text-[10px] text-zinc-500 dark:text-zinc-400">
                                     {{ $trx->created_at->format('d M Y, H:i') }}
                                 </p>
-                                <p class="text-[10px] text-zinc-400 dark:text-zinc-500 font-mono truncate max-w-[130px]">
+                                <p class="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium truncate max-w-[130px]">
                                     {{ $trx->kode_transaksi }}
                                 </p>
                             </div>
                         </div>
 
                         <div class="text-right space-y-0.5">
-                            <span class="text-xs font-bold font-mono block {{ $trx->jenis_transaksi === 'setor' ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400' }}">
+                            <span class="text-xs font-bold tabular-nums block {{ $trx->jenis_transaksi === 'setor' ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400' }}">
                                 {{ $trx->jenis_transaksi === 'setor' ? '+' : '-' }} {{ $trx->formatted_nominal }}
                             </span>
-                            <span class="text-[10px] font-mono text-zinc-500 dark:text-zinc-400 block">
+                            <span class="text-[10px] tabular-nums text-zinc-500 dark:text-zinc-400 block">
                                 Sisa {{ $trx->formatted_saldo_akhir }}
                             </span>
                             <span class="text-[9px] text-zinc-400 dark:text-zinc-500 flex items-center justify-end gap-0.5">
@@ -237,7 +249,7 @@
                                 <td class="py-3 px-3 text-zinc-700 dark:text-zinc-300 whitespace-nowrap print:text-black">
                                     {{ $trx->created_at->format('d/m/Y H:i') }}
                                 </td>
-                                <td class="py-3 px-3 font-mono font-semibold text-zinc-900 dark:text-zinc-200 print:text-black">
+                                <td class="py-3 px-3 font-semibold text-zinc-900 dark:text-zinc-200 print:text-black">
                                     {{ $trx->kode_transaksi }}
                                 </td>
                                 <td class="py-3 px-3">
@@ -245,13 +257,13 @@
                                         {{ $trx->jenis_transaksi === 'setor' ? 'SETOR' : 'TARIK' }}
                                     </span>
                                 </td>
-                                <td class="py-3 px-3 text-right font-mono font-semibold whitespace-nowrap text-emerald-600 dark:text-emerald-400 print:text-black">
+                                <td class="py-3 px-3 text-right font-semibold whitespace-nowrap text-emerald-600 dark:text-emerald-400 tabular-nums print:text-black">
                                     {{ $trx->jenis_transaksi === 'setor' ? 'Rp ' . number_format($trx->nominal, 0, ',', '.') : '-' }}
                                 </td>
-                                <td class="py-3 px-3 text-right font-mono font-semibold whitespace-nowrap text-amber-600 dark:text-amber-400 print:text-black">
+                                <td class="py-3 px-3 text-right font-semibold whitespace-nowrap text-amber-600 dark:text-amber-400 tabular-nums print:text-black">
                                     {{ $trx->jenis_transaksi === 'tarik' ? 'Rp ' . number_format($trx->nominal, 0, ',', '.') : '-' }}
                                 </td>
-                                <td class="py-3 px-3 text-right font-mono font-bold text-zinc-900 dark:text-zinc-200 whitespace-nowrap print:text-black">
+                                <td class="py-3 px-3 text-right font-bold text-zinc-900 dark:text-zinc-200 whitespace-nowrap tabular-nums print:text-black">
                                     {{ $trx->formatted_saldo_akhir }}
                                 </td>
                                 <td class="py-3 px-3 text-zinc-500 dark:text-zinc-400 max-w-xs truncate print:text-black">
@@ -299,11 +311,11 @@
                 <div class="space-y-2.5 text-xs">
                     <div class="text-center py-2">
                         <span 
-                            class="text-2xl font-extrabold font-mono" 
+                            class="text-2xl font-extrabold tabular-nums tracking-tight" 
                             :class="selectedTrx.jenis === 'setor' ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'"
                             x-text="(selectedTrx.jenis === 'setor' ? '+ ' : '- ') + selectedTrx.nominal"
                         ></span>
-                        <span class="block text-[11px] text-zinc-500 dark:text-zinc-400 font-mono mt-0.5" x-text="selectedTrx.kode"></span>
+                        <span class="block text-[11px] text-zinc-500 dark:text-zinc-400 mt-0.5 font-medium" x-text="selectedTrx.kode"></span>
                     </div>
 
                     <div class="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400">
@@ -312,15 +324,15 @@
                     </div>
                     <div class="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400">
                         <span>Waktu:</span>
-                        <span class="font-mono text-zinc-800 dark:text-zinc-200 font-medium" x-text="selectedTrx.waktu"></span>
+                        <span class="text-zinc-800 dark:text-zinc-200 font-medium" x-text="selectedTrx.waktu"></span>
                     </div>
                     <div class="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400">
                         <span>Saldo Sebelum:</span>
-                        <span class="font-mono text-zinc-800 dark:text-zinc-200 font-medium" x-text="selectedTrx.saldo_awal"></span>
+                        <span class="text-zinc-800 dark:text-zinc-200 font-medium tabular-nums" x-text="selectedTrx.saldo_awal"></span>
                     </div>
                     <div class="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400">
                         <span>Saldo Akhir:</span>
-                        <span class="font-mono font-bold text-emerald-600 dark:text-emerald-400" x-text="selectedTrx.saldo_akhir"></span>
+                        <span class="font-bold text-emerald-600 dark:text-emerald-400 tabular-nums" x-text="selectedTrx.saldo_akhir"></span>
                     </div>
                     <div class="flex justify-between py-1 text-zinc-600 dark:text-zinc-400">
                         <span>Keterangan:</span>
@@ -339,5 +351,3 @@
         </div>
     </div>
 </div>
-
-

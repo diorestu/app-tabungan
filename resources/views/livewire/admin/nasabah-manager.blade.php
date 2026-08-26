@@ -175,6 +175,16 @@
                                             <x-heroicon-o-eye class="size-3.5" />
                                         </button>
 
+                                        <!-- Cetak Buku Tabungan Button -->
+                                        <button 
+                                            type="button" 
+                                            wire:click="openBukuTabungan({{ $nasabah->id }})"
+                                            title="Cetak Buku Tabungan / Rekening Koran"
+                                            class="p-1.5 rounded-lg bg-blue-50 hover:bg-blue-600 hover:text-white dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 dark:hover:bg-blue-600 dark:hover:text-white transition-colors cursor-pointer"
+                                        >
+                                            <x-heroicon-o-book-open class="size-3.5" />
+                                        </button>
+
                                         <!-- Edit Button -->
                                         <button 
                                             type="button" 
@@ -212,85 +222,111 @@
     <!-- MODAL CREATE NASABAH -->
     @if ($showCreateModal)
         <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-            <div class="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl animate-scale-in">
-                <div class="p-5 border-b border-zinc-800 flex items-center justify-between">
+            <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl animate-scale-in text-zinc-900 dark:text-zinc-100">
+                <div class="p-5 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
                     <div>
-                        <h3 class="text-base font-bold text-white">Registrasi Nasabah Baru</h3>
-                        <p class="text-xs text-zinc-400">Buat buku rekening tabungan baru</p>
+                        <h3 class="text-base font-bold text-zinc-900 dark:text-white">Registrasi Nasabah Baru</h3>
+                        <p class="text-xs text-zinc-500">Penomoran otomatis 9 digit standar perbankan</p>
                     </div>
-                    <button type="button" wire:click="closeCreateModal" class="text-zinc-400 hover:text-white p-1 rounded-lg">
+                    <button type="button" wire:click="closeCreateModal" class="text-zinc-400 hover:text-zinc-600 dark:hover:text-white p-1 rounded-lg">
                         <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
                 </div>
 
-                <form wire:submit="saveNasabah" class="p-5 space-y-4">
-                    <!-- Nomor Nasabah -->
-                    <div>
-                        <label class="block text-xs font-semibold text-zinc-300 mb-1">
-                            Nomor ID Nasabah (Auto / Kustom) <span class="text-emerald-400">*</span>
-                        </label>
-                        <input 
-                            type="text" 
-                            wire:model="nomor_nasabah" 
-                            class="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white font-mono focus:ring-1 focus:ring-emerald-500"
-                        />
-                        @error('nomor_nasabah') <span class="text-[11px] text-rose-400 mt-1 block">{{ $message }}</span> @enderror
+                <form wire:submit="saveNasabah" class="p-6 space-y-4">
+                    <!-- Wilayah / Lokasi Selection & Auto ID Nasabah Info Card -->
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                                Wilayah / Lokasi Pendaftaran <span class="text-emerald-500">*</span>
+                            </label>
+                            <select 
+                                wire:model.live="wilayah_code" 
+                                class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs text-zinc-900 dark:text-white focus:ring-1 focus:ring-emerald-500 font-semibold cursor-pointer"
+                            >
+                                <option value="1">1 - Sumatera</option>
+                                <option value="2">2 - Jawa</option>
+                                <option value="3">3 - Bali</option>
+                                <option value="4">4 - Kalimantan</option>
+                                <option value="5">5 - Sulawesi</option>
+                                <option value="6">6 - Nusa Tenggara</option>
+                                <option value="7">7 - Maluku</option>
+                                <option value="8">8 - Papua</option>
+                            </select>
+                        </div>
+
+                        <!-- Automated 9-Digit ID Display Card -->
+                        <div class="p-3.5 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/60 flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] text-emerald-800 dark:text-emerald-300 font-semibold uppercase tracking-wider block">
+                                    Nomor Rekening (Otomatis 9 Digit)
+                                </span>
+                                <span class="text-[11px] text-zinc-600 dark:text-zinc-400">
+                                    Wilayah: <strong>{{ \App\Models\Nasabah::WILAYAH[$wilayah_code] ?? 'Jawa' }} ({{ $wilayah_code }})</strong> • Periode: <strong>{{ date('y/m') }}</strong>
+                                </span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-sm sm:text-base font-black font-mono tracking-wider text-emerald-600 dark:text-emerald-400 bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-xl border border-emerald-200 dark:border-emerald-800/80 shadow-sm inline-block">
+                                    {{ $nomor_nasabah }}
+                                </span>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Nama Lengkap -->
                     <div>
-                        <label class="block text-xs font-semibold text-zinc-300 mb-1">
-                            Nama Lengkap Nasabah <span class="text-emerald-400">*</span>
+                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                            Nama Lengkap Nasabah <span class="text-emerald-500">*</span>
                         </label>
                         <input 
                             type="text" 
                             wire:model="nama" 
                             placeholder="Contoh: Budi Santoso"
-                            class="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white focus:ring-1 focus:ring-emerald-500"
+                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs text-zinc-900 dark:text-white focus:ring-1 focus:ring-emerald-500"
                         />
-                        @error('nama') <span class="text-[11px] text-rose-400 mt-1 block">{{ $message }}</span> @enderror
+                        @error('nama') <span class="text-[11px] text-rose-500 mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
                     <!-- No Handphone -->
                     <div>
-                        <label class="block text-xs font-semibold text-zinc-300 mb-1">
-                            Nomor Handphone (Untuk Login Nasabah) <span class="text-emerald-400">*</span>
+                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                            Nomor Handphone (Untuk Login Nasabah) <span class="text-emerald-500">*</span>
                         </label>
                         <input 
                             type="tel" 
                             wire:model="no_hp" 
                             placeholder="Contoh: 081234567890"
-                            class="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white font-mono focus:ring-1 focus:ring-emerald-500"
+                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs text-zinc-900 dark:text-white font-mono focus:ring-1 focus:ring-emerald-500"
                         />
-                        @error('no_hp') <span class="text-[11px] text-rose-400 mt-1 block">{{ $message }}</span> @enderror
+                        @error('no_hp') <span class="text-[11px] text-rose-500 dark:text-rose-400 mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
                     <!-- NIK -->
                     <div>
-                        <label class="block text-xs font-semibold text-zinc-300 mb-1">
+                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
                             Nomor Induk Kependudukan (NIK - Opsional)
                         </label>
                         <input 
                             type="text" 
                             wire:model="nik" 
                             placeholder="Contoh: 320101..."
-                            class="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white font-mono focus:ring-1 focus:ring-emerald-500"
+                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs text-zinc-900 dark:text-white font-mono focus:ring-1 focus:ring-emerald-500"
                         />
-                        @error('nik') <span class="text-[11px] text-rose-400 mt-1 block">{{ $message }}</span> @enderror
+                        @error('nik') <span class="text-[11px] text-rose-500 dark:text-rose-400 mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
                     <!-- Alamat -->
                     <div>
-                        <label class="block text-xs font-semibold text-zinc-300 mb-1">
+                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
                             Alamat Domisili
                         </label>
                         <textarea 
                             wire:model="alamat" 
                             rows="2"
                             placeholder="Contoh: Jl. Melati No. 12..."
-                            class="w-full px-3 py-2 bg-zinc-950 border border-zinc-700 rounded-xl text-xs text-white focus:ring-1 focus:ring-emerald-500"
+                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs text-zinc-900 dark:text-white focus:ring-1 focus:ring-emerald-500"
                         ></textarea>
-                        @error('alamat') <span class="text-[11px] text-rose-400 mt-1 block">{{ $message }}</span> @enderror
+                        @error('alamat') <span class="text-[11px] text-rose-500 dark:text-rose-400 mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
                     <!-- Setoran Awal -->
@@ -581,6 +617,14 @@
                     <div class="flex items-center gap-2">
                         <button 
                             type="button" 
+                            wire:click="openBukuTabungan({{ $detailNasabah->id }})" 
+                            class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg shadow-sm flex items-center gap-1.5 cursor-pointer"
+                        >
+                            <x-heroicon-o-book-open class="size-3.5" />
+                            <span>Cetak Buku Tabungan</span>
+                        </button>
+                        <button 
+                            type="button" 
                             wire:click="openDeleteModal({{ $detailNasabah->id }})" 
                             class="px-3 py-1.5 bg-rose-50 hover:bg-rose-600 hover:text-white dark:bg-rose-950/30 text-rose-600 dark:text-rose-400 dark:hover:bg-rose-600 dark:hover:text-white text-xs font-semibold rounded-lg border border-rose-200 dark:border-rose-800/60 transition-colors cursor-pointer flex items-center gap-1.5"
                         >
@@ -662,6 +706,177 @@
                             <x-heroicon-s-trash class="size-4" />
                             <span>Ya, Hapus</span>
                         </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- MODAL BUKU TABUNGAN & CETAK REKENING KORAN -->
+    @if ($showBukuTabunganModal && $bukuNasabah)
+        @php
+            $bukuQuery = $bukuNasabah->transaksis()->oldest();
+            if (!empty($bukuStartDate)) {
+                $bukuQuery->whereDate('created_at', '>=', $bukuStartDate);
+            }
+            if (!empty($bukuEndDate)) {
+                $bukuQuery->whereDate('created_at', '<=', $bukuEndDate);
+            }
+            $bukuTransactions = $bukuQuery->get();
+            $totalBukuSetor = $bukuTransactions->where('jenis_transaksi', 'setor')->sum('nominal');
+            $totalBukuTarik = $bukuTransactions->where('jenis_transaksi', 'tarik')->sum('nominal');
+        @endphp
+
+        <div class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/70 backdrop-blur-sm overflow-y-auto">
+            <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl w-full max-w-4xl overflow-hidden shadow-2xl animate-scale-in text-zinc-900 dark:text-zinc-100 my-8">
+                <!-- Action Bar (Hidden on print) -->
+                <div class="p-4 bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-3 print:hidden">
+                    <div class="flex items-center gap-2">
+                        <div class="size-8 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                            <x-heroicon-o-book-open class="size-4" />
+                        </div>
+                        <div>
+                            <h3 class="text-xs sm:text-sm font-bold text-zinc-900 dark:text-white">Buku Tabungan & Rekening Koran</h3>
+                            <p class="text-[11px] text-zinc-500">{{ $bukuNasabah->nama }} ({{ $bukuNasabah->nomor_nasabah }})</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <button 
+                            type="button" 
+                            wire:click="exportBukuCsv"
+                            class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
+                        >
+                            <x-heroicon-o-arrow-down-tray class="size-3.5" />
+                            <span>Export CSV</span>
+                        </button>
+                        <button 
+                            type="button" 
+                            onclick="window.print()" 
+                            class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
+                        >
+                            <x-heroicon-o-printer class="size-3.5" />
+                            <span>Cetak Buku / Print</span>
+                        </button>
+                        <button 
+                            type="button" 
+                            wire:click="closeBukuTabungan" 
+                            class="px-3 py-1.5 bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-300 text-xs font-semibold rounded-xl cursor-pointer"
+                        >
+                            Tutup
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Passbook Document Body -->
+                <div class="p-6 sm:p-8 space-y-6 max-h-[75vh] overflow-y-auto print:max-h-none print:overflow-visible print:p-0">
+                    <!-- Bank / Institution Letterhead -->
+                    <div class="pb-4 border-b-2 border-zinc-900 dark:border-zinc-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                        <div>
+                            <h2 class="text-xl sm:text-2xl font-black tracking-tight uppercase text-zinc-900 dark:text-white">
+                                {{ \App\Models\Setting::get('nama_lembaga', 'TabunganKu Digital') }}
+                            </h2>
+                            <p class="text-xs text-zinc-600 dark:text-zinc-400 font-medium">
+                                {{ \App\Models\Setting::get('slogan_lembaga', 'Layanan Simpanan & Tabungan Terpercaya') }}
+                            </p>
+                            <p class="text-[11px] text-zinc-500 dark:text-zinc-500 mt-0.5">
+                                {{ \App\Models\Setting::get('alamat_lembaga') }} • Telp: {{ \App\Models\Setting::get('telepon_lembaga') }}
+                            </p>
+                        </div>
+                        <div class="sm:text-right text-xs">
+                            <span class="inline-block px-3 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white font-bold rounded-lg uppercase tracking-wider text-[10px] border border-zinc-300 dark:border-zinc-700 mb-1">
+                                LEMBAR BUKU TABUNGAN
+                            </span>
+                            <p class="text-[10px] text-zinc-500">Dicetak pada: {{ now()->format('d/m/Y H:i') }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Customer Identity Card -->
+                    <div class="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-mono">
+                        <div>
+                            <span class="text-[10px] text-zinc-500 block font-sans">Nomor Rekening / ID:</span>
+                            <span class="font-bold text-sm text-emerald-600 dark:text-emerald-400">{{ $bukuNasabah->nomor_nasabah }}</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-zinc-500 block font-sans">Nama Nasabah:</span>
+                            <span class="font-bold text-zinc-900 dark:text-white">{{ $bukuNasabah->nama }}</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-zinc-500 block font-sans">No. Handphone:</span>
+                            <span class="font-bold text-zinc-800 dark:text-zinc-200">{{ $bukuNasabah->no_hp }}</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-zinc-500 block font-sans">Saldo Akhir:</span>
+                            <span class="font-black text-sm text-emerald-600 dark:text-emerald-400">{{ $bukuNasabah->formatted_saldo }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Passbook Table -->
+                    <div class="border border-zinc-300 dark:border-zinc-700 rounded-xl overflow-hidden">
+                        <table class="w-full text-left text-xs font-mono border-collapse">
+                            <thead class="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-bold border-b border-zinc-300 dark:border-zinc-700">
+                                <tr>
+                                    <th class="p-2.5 text-center border-r border-zinc-200 dark:border-zinc-700/60 w-10">No</th>
+                                    <th class="p-2.5 border-r border-zinc-200 dark:border-zinc-700/60 w-28">Tanggal</th>
+                                    <th class="p-2.5 border-r border-zinc-200 dark:border-zinc-700/60 w-36">Kode Transaksi</th>
+                                    <th class="p-2.5 border-r border-zinc-200 dark:border-zinc-700/60">Uraian / Keterangan</th>
+                                    <th class="p-2.5 text-right border-r border-zinc-200 dark:border-zinc-700/60 w-28 text-amber-600 dark:text-amber-400">Debit (Tarik)</th>
+                                    <th class="p-2.5 text-right border-r border-zinc-200 dark:border-zinc-700/60 w-28 text-emerald-600 dark:text-emerald-400">Kredit (Setor)</th>
+                                    <th class="p-2.5 text-right border-r border-zinc-200 dark:border-zinc-700/60 w-32">Saldo</th>
+                                    <th class="p-2.5 text-center w-20">Petugas</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
+                                @forelse ($bukuTransactions as $idx => $bTrx)
+                                    <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
+                                        <td class="p-2 text-center border-r border-zinc-200 dark:border-zinc-800 text-zinc-500">{{ $idx + 1 }}</td>
+                                        <td class="p-2 border-r border-zinc-200 dark:border-zinc-800 whitespace-nowrap">{{ $bTrx->created_at->format('d/m/y H:i') }}</td>
+                                        <td class="p-2 border-r border-zinc-200 dark:border-zinc-800 font-bold text-zinc-700 dark:text-zinc-300">{{ $bTrx->kode_transaksi }}</td>
+                                        <td class="p-2 border-r border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 font-sans text-[11px] truncate max-w-xs">{{ $bTrx->keterangan ?? '-' }}</td>
+                                        <td class="p-2 text-right border-r border-zinc-200 dark:border-zinc-800 text-amber-600 dark:text-amber-400 font-bold">
+                                            {{ $bTrx->jenis_transaksi === 'tarik' ? number_format($bTrx->nominal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="p-2 text-right border-r border-zinc-200 dark:border-zinc-800 text-emerald-600 dark:text-emerald-400 font-bold">
+                                            {{ $bTrx->jenis_transaksi === 'setor' ? number_format($bTrx->nominal, 0, ',', '.') : '-' }}
+                                        </td>
+                                        <td class="p-2 text-right border-r border-zinc-200 dark:border-zinc-800 font-black text-zinc-900 dark:text-white">
+                                            {{ number_format($bTrx->saldo_akhir, 0, ',', '.') }}
+                                        </td>
+                                        <td class="p-2 text-center text-zinc-500 font-sans text-[10px]">{{ $bTrx->user?->name ? substr($bTrx->user->name, 0, 8) : 'Teller' }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="8" class="p-6 text-center text-zinc-400 dark:text-zinc-500 italic">Belum ada catatan mutasi tabungan.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                            <tfoot class="bg-zinc-100 dark:bg-zinc-800/80 font-bold border-t-2 border-zinc-300 dark:border-zinc-700 text-xs">
+                                <tr>
+                                    <td colspan="4" class="p-2.5 text-right font-sans">TOTAL MUTASI:</td>
+                                    <td class="p-2.5 text-right text-amber-600 dark:text-amber-400 font-mono">Rp {{ number_format($totalBukuTarik, 0, ',', '.') }}</td>
+                                    <td class="p-2.5 text-right text-emerald-600 dark:text-emerald-400 font-mono">Rp {{ number_format($totalBukuSetor, 0, ',', '.') }}</td>
+                                    <td class="p-2.5 text-right text-zinc-900 dark:text-white font-mono font-black" colspan="2">{{ $bukuNasabah->formatted_saldo }}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    <!-- Signature Footer for Official Bank Statements -->
+                    <div class="pt-6 grid grid-cols-2 gap-8 text-center text-xs">
+                        <div>
+                            <p class="text-zinc-500">Nasabah Penyimpan,</p>
+                            <div class="h-16"></div>
+                            <p class="font-bold text-zinc-900 dark:text-white border-t border-dashed border-zinc-400 inline-block px-8 pt-1">
+                                ( {{ $bukuNasabah->nama }} )
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-zinc-500">Petugas / Pengelola Tabungan,</p>
+                            <div class="h-16"></div>
+                            <p class="font-bold text-zinc-900 dark:text-white border-t border-dashed border-zinc-400 inline-block px-8 pt-1">
+                                ( {{ Auth::guard('web')->user()->name ?? 'Administrator' }} )
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
