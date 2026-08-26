@@ -278,4 +278,44 @@ class MvpFeaturesTest extends TestCase
         $response->assertSee('Dashboard Petugas');
         $response->assertSee(route('admin.dashboard'));
     }
+
+    public function test_nasabah_login_rate_limiting_after_repeated_failures(): void
+    {
+        \Illuminate\Support\Facades\RateLimiter::clear(
+            \Illuminate\Support\Str::transliterate('login:nasabah:999999999|127.0.0.1')
+        );
+
+        $component = Livewire::test(\App\Livewire\Nasabah\Login::class)
+            ->set('nomor_nasabah', '999999999')
+            ->set('no_hp', '081299999999');
+
+        for ($i = 0; $i < 5; $i++) {
+            $component->call('login');
+        }
+
+        // The 6th attempt should trigger rate limiting message
+        $component->call('login')
+            ->assertHasErrors(['nomor_nasabah'])
+            ->assertSee('Terlalu banyak percobaan login');
+    }
+
+    public function test_admin_login_rate_limiting_after_repeated_failures(): void
+    {
+        \Illuminate\Support\Facades\RateLimiter::clear(
+            \Illuminate\Support\Str::transliterate('login:admin:wrong@admin.test|127.0.0.1')
+        );
+
+        $component = Livewire::test(\App\Livewire\Auth\Login::class)
+            ->set('email', 'wrong@admin.test')
+            ->set('password', 'wrongpassword');
+
+        for ($i = 0; $i < 5; $i++) {
+            $component->call('login');
+        }
+
+        // The 6th attempt should trigger rate limiting message
+        $component->call('login')
+            ->assertHasErrors(['email'])
+            ->assertSee('Terlalu banyak percobaan login');
+    }
 }

@@ -33,7 +33,7 @@ Route::post('/theme', function (\Illuminate\Http\Request $request) {
 // PORTAL NASABAH (Prefix: /app)
 // ==========================================
 Route::prefix('app')->name('nasabah.')->group(function () {
-    Route::middleware('guest:nasabah')->group(function () {
+    Route::middleware(['guest:nasabah', 'throttle:login'])->group(function () {
         Route::get('/login', NasabahLogin::class)->name('login');
     });
 
@@ -58,7 +58,7 @@ Route::prefix('app')->name('nasabah.')->group(function () {
 // ==========================================
 // PORTAL PETUGAS / ADMIN (Email + Password)
 // ==========================================
-Route::middleware('guest')->group(function () {
+Route::middleware(['guest', 'throttle:login'])->group(function () {
     Route::get('/login', AdminLogin::class)->name('login');
 });
 
