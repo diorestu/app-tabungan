@@ -37,12 +37,19 @@
             })();
         </script>
 
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
+        <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+        
+        <!-- Open Graph / Meta -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:title" content="{{ $title ?? 'Portal Nasabah' }} - TabunganKu">
+        <meta property="og:description" content="Akses buku tabungan digital, pantau saldo mutasi, dan kantong impian nasabah.">
+        <meta property="og:image" content="{{ asset('images/og-image.jpg') }}">
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @fluxAppearance
         @livewireStyles
+        @laravelPWA
     </head>
     <body class="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 antialiased font-sans flex flex-col selection:bg-emerald-500 selection:text-white pb-24 md:pb-8 transition-colors duration-150">
         @php
@@ -55,9 +62,7 @@
                 <div class="flex items-center justify-between h-16">
                     <!-- Brand & User Greeting -->
                     <div class="flex items-center gap-3">
-                        <div class="size-10 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20 font-bold">
-                            <x-icon-wallet class="size-5" />
-                        </div>
+                        <img src="{{ asset('images/logo.png') }}" alt="TabunganKu Logo" class="size-10 rounded-2xl object-cover shadow-lg shadow-emerald-500/20 ring-1 ring-zinc-200 dark:ring-zinc-800">
                         <div>
                             <div class="flex items-center gap-1.5">
                                 <span class="font-extrabold text-sm sm:text-base text-zinc-900 dark:text-white tracking-tight">TabunganKu</span>

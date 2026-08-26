@@ -37,8 +37,7 @@
             })();
         </script>
 
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
+        <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @fluxAppearance
@@ -50,9 +49,7 @@
 
             <div class="flex items-center justify-between px-2 py-3">
                 <div class="flex items-center gap-3">
-                    <div class="size-9 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-md shadow-emerald-600/20 font-bold text-lg">
-                        <x-icon-wallet class="size-5" />
-                    </div>
+                    <img src="{{ asset('images/logo.png') }}" alt="TabunganKu Logo" class="size-9 rounded-xl object-cover shadow-md shadow-emerald-500/20 ring-1 ring-zinc-200 dark:ring-zinc-800">
                     <span class="font-bold text-base tracking-tight text-zinc-900 dark:text-white">TabunganKu</span>
                 </div>
                 <x-theme-toggle />

@@ -1,8 +1,8 @@
 <div class="w-full max-w-md mx-auto">
     <!-- Header Card -->
     <div class="text-center mb-8">
-        <div class="inline-flex size-14 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 items-center justify-center mb-4 border border-emerald-500/30 shadow-md shadow-emerald-600/10">
-            <x-icon-wallet class="size-7" />
+        <div class="inline-flex mb-4">
+            <img src="{{ asset('images/logo.png') }}" alt="TabunganKu Logo" class="size-16 rounded-3xl object-cover shadow-xl shadow-emerald-500/20 ring-2 ring-emerald-500/20">
         </div>
         <h1 class="text-2xl font-bold text-zinc-900 dark:text-white tracking-tight">Login Portal Nasabah</h1>
         <p class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 mt-1.5">Masuk dengan <strong>ID Nasabah</strong> dan <strong>Nomor Handphone</strong> terdaftar</p>

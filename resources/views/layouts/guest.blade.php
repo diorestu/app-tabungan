@@ -37,20 +37,25 @@
             })();
         </script>
 
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
+        <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+        
+        <!-- Open Graph / Meta -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:title" content="{{ $title ?? 'Sistem Tabungan Nasabah' }} - TabunganKu">
+        <meta property="og:description" content="Sistem buku tabungan digital dan pencatatan simpanan nasabah.">
+        <meta property="og:image" content="{{ asset('images/og-image.jpg') }}">
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @fluxAppearance
         @livewireStyles
+        @laravelPWA
     </head>
     <body class="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 antialiased font-sans flex flex-col justify-between selection:bg-emerald-500 selection:text-white transition-colors duration-150">
         <header class="border-b border-zinc-200 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/70 backdrop-blur sticky top-0 z-50 transition-colors">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
                 <a href="/" class="flex items-center gap-3">
-                    <div class="size-9 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-md shadow-emerald-600/30 font-bold text-lg">
-                        <x-icon-wallet class="size-5" />
-                    </div>
+                    <img src="{{ asset('images/logo.png') }}" alt="TabunganKu Logo" class="size-9 rounded-xl object-cover shadow-md shadow-emerald-500/20 ring-1 ring-zinc-200 dark:ring-zinc-800">
                     <div>
                         <span class="font-extrabold text-base tracking-tight text-zinc-900 dark:text-white">TabunganKu</span>
                         <span class="hidden sm:inline-block text-xs text-zinc-500 dark:text-zinc-400 ml-2 border-l border-zinc-300 dark:border-zinc-700 pl-2">Sistem Buku Tabungan Digital</span>

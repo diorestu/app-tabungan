@@ -43,20 +43,32 @@
             })();
         </script>
 
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
+        <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+        
+        <!-- Open Graph / Meta -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:title" content="TabunganKu - Sistem Pencatatan Tabungan Nasabah Digital">
+        <meta property="og:description" content="Solusi terpadu buku tabungan digital, mutasi real-time, dan rekening koran standar akuntansi.">
+        <meta property="og:image" content="{{ asset('images/og-image.jpg') }}">
+        <meta property="og:image:width" content="1200">
+        <meta property="og:image:height" content="630">
+
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="TabunganKu - Sistem Pencatatan Tabungan Nasabah Digital">
+        <meta name="twitter:description" content="Solusi terpadu buku tabungan digital, mutasi real-time, dan rekening koran standar akuntansi.">
+        <meta name="twitter:image" content="{{ asset('images/og-image.jpg') }}">
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @fluxAppearance
+        @laravelPWA
     </head>
     <body class="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 antialiased font-sans flex flex-col justify-between selection:bg-emerald-500 selection:text-white transition-colors duration-150">
         <!-- Top Navbar -->
         <header class="border-b border-zinc-200 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/70 backdrop-blur sticky top-0 z-50 transition-colors">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <div class="size-10 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20 font-bold text-lg">
-                        <x-icon-wallet class="size-6" />
-                    </div>
+                    <img src="{{ asset('images/logo.png') }}" alt="TabunganKu Logo" class="size-10 rounded-2xl object-cover shadow-lg shadow-emerald-500/20 ring-1 ring-zinc-200 dark:ring-zinc-800">
                     <div>
                         <span class="font-extrabold text-base tracking-tight text-zinc-900 dark:text-white">TabunganKu</span>
                         <span class="text-xs text-zinc-500 dark:text-zinc-400 block -mt-0.5">Sistem Pencatatan Tabungan Nasabah</span>

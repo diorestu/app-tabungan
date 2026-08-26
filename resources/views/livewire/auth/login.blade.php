@@ -1,8 +1,8 @@
 <div class="w-full max-w-md mx-auto">
     <!-- Header Card -->
     <div class="text-center mb-8">
-        <div class="inline-flex size-14 rounded-2xl bg-zinc-100 dark:bg-zinc-800 text-emerald-600 dark:text-emerald-400 items-center justify-center mb-4 border border-zinc-200 dark:border-zinc-700 shadow-md shadow-zinc-200 dark:shadow-zinc-950">
-            <x-heroicon-o-lock-closed class="size-7" />
+        <div class="inline-flex mb-4">
+            <img src="{{ asset('images/logo.png') }}" alt="TabunganKu Logo" class="size-16 rounded-3xl object-cover shadow-xl shadow-zinc-500/20 ring-2 ring-zinc-300 dark:ring-zinc-700">
         </div>
         <h1 class="text-2xl font-bold text-zinc-900 dark:text-white tracking-tight">Login Petugas / Teller</h1>
         <p class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 mt-1.5">Masuk untuk mengelola nasabah & mencatat transaksi tabungan</p>

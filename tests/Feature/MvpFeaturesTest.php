@@ -318,4 +318,40 @@ class MvpFeaturesTest extends TestCase
             ->assertHasErrors(['email'])
             ->assertSee('Terlalu banyak percobaan login');
     }
+
+    public function test_pwa_manifest_is_accessible_and_valid(): void
+    {
+        $response = $this->get('/manifest.json');
+        $response->assertStatus(200);
+        $response->assertJsonPath('short_name', 'TabunganKu');
+        $response->assertJsonPath('start_url', url('/app'));
+        $response->assertJsonPath('display', 'standalone');
+    }
+
+    public function test_pwa_tags_are_present_in_nasabah_login_and_group_pages(): void
+    {
+        // 1. Nasabah Login Page
+        $loginResponse = $this->get(route('nasabah.login'));
+        $loginResponse->assertStatus(200);
+        $loginResponse->assertSee('/manifest.json');
+        $loginResponse->assertSee('/serviceworker.js');
+        $loginResponse->assertSee('apple-mobile-web-app-capable');
+
+        // 2. Nasabah Authenticated Group Pages
+        $nasabah = Nasabah::create([
+            'nomor_nasabah' => '226080001',
+            'nama' => 'Rahmat Hidayat',
+            'no_hp' => '081298765432',
+            'status' => 'aktif',
+            'saldo' => 500000,
+        ]);
+
+        $this->actingAs($nasabah, 'nasabah');
+
+        $dashboardResponse = $this->get(route('nasabah.dashboard'));
+        $dashboardResponse->assertStatus(200);
+        $dashboardResponse->assertSee('/manifest.json');
+        $dashboardResponse->assertSee('/serviceworker.js');
+        $dashboardResponse->assertSee('apple-mobile-web-app-capable');
+    }
 }
