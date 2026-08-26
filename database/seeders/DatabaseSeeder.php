@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Administrator Tabungan',
                 'password' => bcrypt('password'),
+                'role' => 'admin',
+                'status' => 'aktif',
             ]
         );
 
