@@ -61,7 +61,7 @@
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @fluxAppearance
-        @laravelPWA
+        <x-pwa-meta />
     </head>
     <body class="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 antialiased font-sans flex flex-col justify-between selection:bg-emerald-500 selection:text-white transition-colors duration-150">
         <!-- Top Navbar -->

@@ -49,7 +49,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @fluxAppearance
         @livewireStyles
-        @laravelPWA
+        <x-pwa-meta />
     </head>
     <body class="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 antialiased font-sans flex flex-col selection:bg-emerald-500 selection:text-white pb-24 md:pb-8 transition-colors duration-150">
         @php
