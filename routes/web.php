@@ -69,6 +69,9 @@ Route::post('/logout', function () {
     return redirect()->route('login');
 })->name('logout');
 
+// Public Transaction Verification Route (Anti-Counterfeit QR Code)
+Route::get('/v/{code}', \App\Livewire\Public\VerifyTransaksi::class)->name('transaksi.verify');
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
         return redirect()->route('admin.dashboard');
@@ -80,7 +83,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/transaksi', TransaksiManager::class)->name('transaksi');
         Route::get('/setor', SetorTunai::class)->name('setor');
         Route::get('/tarik', TarikTunai::class)->name('tarik');
+        Route::get('/cetak-buku', \App\Livewire\Admin\CetakBuku::class)->name('cetak-buku');
+        Route::get('/tutup-kas', \App\Livewire\Admin\TutupKas::class)->name('tutup-kas');
+        Route::get('/bagi-hasil', \App\Livewire\Admin\BagiHasilAdmin::class)->name('bagi-hasil');
         Route::get('/pengaturan', Pengaturan::class)->name('pengaturan');
+        Route::get('/audit-log', \App\Livewire\Admin\AuditLog::class)->name('audit-log');
     });
 });
 

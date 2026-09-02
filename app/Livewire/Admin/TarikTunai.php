@@ -116,6 +116,19 @@ class TarikTunai extends Component
             // Update Saldo
             $nasabah->update(['saldo' => $saldoAkhir]);
             $this->selectedNasabah = $nasabah;
+
+            // Audit Trail Log
+            \App\Models\ActivityLog::record(
+                'tarik_tunai',
+                'Penarikan tunai ' . $this->lastTransaction->formatted_nominal . ' dari nasabah ' . $nasabah->nama . ' (' . $nasabah->nomor_nasabah . ')',
+                $this->lastTransaction,
+                [
+                    'nominal' => $nominalFloat,
+                    'saldo_awal' => $saldoAwal,
+                    'saldo_akhir' => $saldoAkhir,
+                    'kode_transaksi' => $this->lastTransaction->kode_transaksi,
+                ]
+            );
         });
 
         // WhatsApp Gateway Dispatch

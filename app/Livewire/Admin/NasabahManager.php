@@ -255,7 +255,10 @@ class NasabahManager extends Component
         }
 
         $nasabahName = $this->deleteNasabah->nama;
+        $nasabahNomor = $this->deleteNasabah->nomor_nasabah;
         $this->deleteNasabah->delete();
+
+        \App\Models\ActivityLog::record('hapus_nasabah', 'Menghapus data nasabah: ' . $nasabahName . ' (' . $nasabahNomor . ')');
 
         session()->flash('success', 'Nasabah "' . $nasabahName . '" beserta riwayat transaksinya telah berhasil dihapus.');
         $this->closeDeleteModal();
@@ -278,6 +281,8 @@ class NasabahManager extends Component
             'dibekukan' => 'dibekukan (dilarang bertransaksi)',
             'nonaktif' => 'dinonaktifkan',
         };
+
+        \App\Models\ActivityLog::record('status_nasabah', 'Mengubah status rekening nasabah ' . $nasabah->nama . ' (' . $nasabah->nomor_nasabah . ') menjadi: ' . $status, $nasabah);
 
         session()->flash('success', 'Status rekening nasabah ' . $nasabah->nama . ' berhasil ' . $statusLabel . '.');
 
@@ -335,6 +340,13 @@ class NasabahManager extends Component
                     'keterangan' => 'Setoran awal pembukaan rekening',
                 ]);
             }
+
+            \App\Models\ActivityLog::record(
+                'tambah_nasabah',
+                'Mendaftarkan nasabah baru: ' . $nasabah->nama . ' (' . $nasabah->nomor_nasabah . ') dengan setoran awal Rp ' . number_format($initialAmount, 0, ',', '.'),
+                $nasabah,
+                ['setoran_awal' => $initialAmount]
+            );
         });
 
         session()->flash('success', 'Nasabah baru "' . $this->nama . '" berhasil didaftarkan dengan Nomor Rekening: ' . $generatedNomor);
@@ -360,6 +372,8 @@ class NasabahManager extends Component
             'status' => $this->status,
         ]);
 
+        \App\Models\ActivityLog::record('edit_nasabah', 'Memperbarui data profil nasabah: ' . $nasabah->nama . ' (' . $nasabah->nomor_nasabah . ')', $nasabah);
+
         session()->flash('success', 'Data nasabah "' . $nasabah->nama . '" berhasil diperbarui.');
         $this->closeEditModal();
     }
@@ -368,9 +382,7 @@ class NasabahManager extends Component
     {
         $nasabah = Nasabah::findOrFail($id);
         $newStatus = $nasabah->status === 'aktif' ? 'nonaktif' : 'aktif';
-        $nasabah->update(['status' => $newStatus]);
-
-        session()->flash('success', 'Status nasabah ' . $nasabah->nama . ' diubah menjadi ' . $newStatus . '.');
+        $this->setStatus($id, $newStatus);
     }
 
     public function resetForm(): void

@@ -244,6 +244,19 @@
                         <span class="text-zinc-800 dark:text-zinc-300">{{ Auth::guard('web')->user()->name ?? 'Teller' }}</span>
                     </div>
 
+                    <!-- Anti-Counterfeit Verification QR Code -->
+                    <div class="py-2.5 px-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 flex items-center justify-between gap-3">
+                        <div class="space-y-0.5 text-left">
+                            <span class="text-[10px] font-bold text-zinc-900 dark:text-white uppercase flex items-center gap-1">
+                                <x-heroicon-s-shield-check class="size-3.5 text-emerald-600 dark:text-emerald-400" />
+                                Struk Resmi Terverifikasi
+                            </span>
+                            <span class="text-[9px] text-zinc-500 block leading-tight">Scan QR untuk verifikasi keaslian di server pusat</span>
+                            <span class="text-[8px] font-mono text-zinc-400 block break-all mt-0.5">Kode: {{ $lastTransaction->verification_code }}</span>
+                        </div>
+                        <img src="{{ $lastTransaction->qr_code_data_uri }}" alt="QR Verifikasi" class="size-14 rounded-lg bg-white p-1 shadow-sm shrink-0 border border-zinc-200">
+                    </div>
+
                     @if ($waStatusMessage)
                         <div class="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 text-[11px] flex items-center gap-2">
                             <x-heroicon-o-chat-bubble-left-right class="size-4 shrink-0 text-emerald-600 dark:text-emerald-400" />

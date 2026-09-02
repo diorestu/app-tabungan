@@ -9,6 +9,7 @@
         "php": "^8.3",
         "blade-ui-kit/blade-heroicons": "^2.7",
         "blade-ui-kit/blade-icons": "^1.10",
+        "chillerlan/php-qrcode": "^6.0",
         "laravel/framework": "^13.17",
         "laravel/tinker": "^3.0",
         "livewire/flux": "^2.17",

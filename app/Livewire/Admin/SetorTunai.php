@@ -105,6 +105,19 @@ class SetorTunai extends Component
             // Update Saldo
             $nasabah->update(['saldo' => $saldoAkhir]);
             $this->selectedNasabah = $nasabah;
+
+            // Audit Trail Log
+            \App\Models\ActivityLog::record(
+                'setor_tunai',
+                'Setoran tunai ' . $this->lastTransaction->formatted_nominal . ' untuk nasabah ' . $nasabah->nama . ' (' . $nasabah->nomor_nasabah . ')',
+                $this->lastTransaction,
+                [
+                    'nominal' => $nominalFloat,
+                    'saldo_awal' => $saldoAwal,
+                    'saldo_akhir' => $saldoAkhir,
+                    'kode_transaksi' => $this->lastTransaction->kode_transaksi,
+                ]
+            );
         });
 
         // WhatsApp Gateway Dispatch

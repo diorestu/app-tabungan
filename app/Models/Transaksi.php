@@ -14,6 +14,7 @@ class Transaksi extends Model
 
     protected $fillable = [
         'kode_transaksi',
+        'verification_code',
         'nasabah_id',
         'user_id',
         'jenis_transaksi',
@@ -22,6 +23,15 @@ class Transaksi extends Model
         'saldo_akhir',
         'keterangan',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (self $transaksi) {
+            if (empty($transaksi->verification_code)) {
+                $transaksi->verification_code = strtoupper(substr(hash('sha256', \Illuminate\Support\Str::uuid() . '|' . microtime(true) . '|' . config('app.key')), 0, 24));
+            }
+        });
+    }
 
     protected $casts = [
         'nominal' => 'decimal:2',
@@ -37,6 +47,22 @@ class Transaksi extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function getVerificationUrlAttribute(): string
+    {
+        return url('/v/' . $this->verification_code);
+    }
+
+    public function getQrCodeDataUriAttribute(): string
+    {
+        return \App\Services\QrCodeService::svgDataUri($this->verification_url);
+    }
+
+    public function getDigitalSignatureAttribute(): string
+    {
+        $timestamp = $this->created_at ? $this->created_at->timestamp : time();
+        return hash_hmac('sha256', $this->kode_transaksi . '|' . $this->nominal . '|' . $this->saldo_akhir . '|' . $timestamp, config('app.key'));
     }
 
     public function getFormattedNominalAttribute(): string

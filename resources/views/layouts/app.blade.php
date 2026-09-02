@@ -65,9 +65,16 @@
                     <flux:navlist.item icon="arrow-down-tray" href="{{ route('admin.setor') }}" :current="request()->routeIs('admin.setor')">Setor Tunai</flux:navlist.item>
                     <flux:navlist.item icon="arrow-up-tray" href="{{ route('admin.tarik') }}" :current="request()->routeIs('admin.tarik')">Tarik Tunai</flux:navlist.item>
                     <flux:navlist.item icon="clock" href="{{ route('admin.transaksi') }}" :current="request()->routeIs('admin.transaksi')">Riwayat Transaksi</flux:navlist.item>
+                    <flux:navlist.item icon="book-open" href="{{ route('admin.cetak-buku') }}" :current="request()->routeIs('admin.cetak-buku')">Cetak Buku Tabungan</flux:navlist.item>
+                </flux:navlist.group>
+
+                <flux:navlist.group heading="Kasir & Settlement" class="mt-4">
+                    <flux:navlist.item icon="banknotes" href="{{ route('admin.tutup-kas') }}" :current="request()->routeIs('admin.tutup-kas')">Tutup Kas Harian</flux:navlist.item>
+                    <flux:navlist.item icon="calculator" href="{{ route('admin.bagi-hasil') }}" :current="request()->routeIs('admin.bagi-hasil')">Bagi Hasil & Admin</flux:navlist.item>
                 </flux:navlist.group>
 
                 <flux:navlist.group heading="Sistem & Konfigurasi" class="mt-4">
+                    <flux:navlist.item icon="shield-check" href="{{ route('admin.audit-log') }}" :current="request()->routeIs('admin.audit-log')">Audit Trail & Log</flux:navlist.item>
                     <flux:navlist.item icon="cog-6-tooth" href="{{ route('admin.pengaturan') }}" :current="request()->routeIs('admin.pengaturan')">Pengaturan</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
