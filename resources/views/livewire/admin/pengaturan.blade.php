@@ -26,6 +26,14 @@
             </button>
             <button 
                 type="button" 
+                wire:click="setTab('wa')"
+                class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 {{ $activeTab === 'wa' ? 'bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white shadow-sm' : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white' }}"
+            >
+                <x-heroicon-o-chat-bubble-left-right class="size-4" />
+                <span>WhatsApp Gateway</span>
+            </button>
+            <button 
+                type="button" 
                 wire:click="setTab('keamanan')"
                 class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 {{ $activeTab === 'keamanan' ? 'bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white shadow-sm' : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white' }}"
             >
@@ -179,6 +187,219 @@
                     </div>
                 </div>
             </div>
+    @endif
+
+    <!-- ======================================================== -->
+    <!-- TAB: WHATSAPP GATEWAY NOTIFICATION -->
+    <!-- ======================================================== -->
+    @if ($activeTab === 'wa')
+        <div class="space-y-6 animate-fade-in">
+            @if (session('success_wa'))
+                <div class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 text-xs flex items-center justify-between gap-3 shadow-sm">
+                    <div class="flex items-center gap-2.5">
+                        <x-heroicon-s-check-circle class="size-5 shrink-0 text-emerald-600 dark:text-emerald-400" />
+                        <span class="font-medium">{{ session('success_wa') }}</span>
+                    </div>
+                    <button type="button" wire:click="openTestWaModal" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-[11px] font-bold cursor-pointer transition-colors shadow-sm">
+                        Uji Coba Sekarang &rarr;
+                    </button>
+                </div>
+            @endif
+
+            <form wire:submit="saveWhatsAppSettings" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Left 5 Cols: Gateway Driver & Credential -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 sm:p-6 shadow-sm transition-colors space-y-5">
+                        <div class="flex items-center justify-between pb-4 border-b border-zinc-100 dark:border-zinc-800">
+                            <div class="flex items-center gap-3">
+                                <div class="size-9 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                                    <x-heroicon-o-chat-bubble-left-right class="size-5" />
+                                </div>
+                                <div>
+                                    <h2 class="text-sm font-bold text-zinc-900 dark:text-white">Koneksi Gateway WhatsApp</h2>
+                                    <p class="text-[11px] text-zinc-500 dark:text-zinc-400">Penyedia API dan kredensial pengiriman</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Master Switch -->
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" wire:model.live="wa_gateway_enabled" class="sr-only peer">
+                                <div class="w-11 h-6 bg-zinc-200 peer-focus:outline-none rounded-full peer dark:bg-zinc-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-zinc-600 peer-checked:bg-emerald-600"></div>
+                            </label>
+                        </div>
+
+                        <!-- Status Badge -->
+                        <div class="p-3.5 rounded-xl border {{ $wa_gateway_enabled ? 'bg-emerald-500/5 border-emerald-500/20 text-emerald-700 dark:text-emerald-300' : 'bg-zinc-100 dark:bg-zinc-800/60 border-zinc-200 dark:border-zinc-700/80 text-zinc-600 dark:text-zinc-400' }} flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="size-2 rounded-full {{ $wa_gateway_enabled ? 'bg-emerald-500 animate-pulse' : 'bg-zinc-400' }}"></span>
+                                <span class="text-xs font-bold">{{ $wa_gateway_enabled ? 'Gateway WhatsApp AKTIF' : 'Gateway WhatsApp NONAKTIF' }}</span>
+                            </div>
+                            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 font-semibold">
+                                Driver: {{ strtoupper($wa_provider) }}
+                            </span>
+                        </div>
+
+                        <!-- Provider Selection -->
+                        <div>
+                            <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                                Provider Gateway <span class="text-emerald-500">*</span>
+                            </label>
+                            <select 
+                                wire:model.live="wa_provider" 
+                                class="w-full px-3.5 py-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs text-zinc-900 dark:text-white focus:ring-1 focus:ring-emerald-500"
+                            >
+                                <option value="mock">🧪 Mock Driver (Simulasi Log / Testing Gratis)</option>
+                                <option value="fonnte">⚡ Fonnte (Rekomendasi Indonesia - fonnte.com)</option>
+                                <option value="wablas">🌐 Wablas (wablas.com)</option>
+                                <option value="custom">🔌 Custom Webhook URL (REST API Sendiri)</option>
+                            </select>
+                            <p class="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1">
+                                @if ($wa_provider === 'mock')
+                                    Mode simulasi: Notifikasi dicatat di system log tanpa memerlukan kuota API berbayar.
+                                @elseif ($wa_provider === 'fonnte')
+                                    Dapatkan token API resmi dari dashboard <a href="https://fonnte.com" target="_blank" class="text-emerald-600 underline">fonnte.com</a>.
+                                @elseif ($wa_provider === 'wablas')
+                                    Dapatkan API token dan endpoint domain dari <a href="https://wablas.com" target="_blank" class="text-emerald-600 underline">wablas.com</a>.
+                                @else
+                                    Sistem akan mengirim payload JSON {phone, message} via HTTP POST ke endpoint Anda.
+                                @endif
+                            </p>
+                        </div>
+
+                        <!-- API Token / Auth Key -->
+                        @if ($wa_provider !== 'mock')
+                            <div>
+                                <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                                    API Token / Authorization Key <span class="text-emerald-500">*</span>
+                                </label>
+                                <input 
+                                    type="text" 
+                                    wire:model="wa_api_token" 
+                                    placeholder="Contoh: a1b2c3d4e5f6g7h8..."
+                                    class="w-full px-3.5 py-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs font-mono text-zinc-900 dark:text-white focus:ring-1 focus:ring-emerald-500"
+                                />
+                                @error('wa_api_token') <span class="text-[10px] text-rose-500 mt-1 block">{{ $message }}</span> @enderror
+                            </div>
+                        @endif
+
+                        <!-- Endpoint URL (For Custom / Wablas) -->
+                        @if ($wa_provider === 'custom' || $wa_provider === 'wablas')
+                            <div>
+                                <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                                    Endpoint Server URL
+                                </label>
+                                <input 
+                                    type="url" 
+                                    wire:model="wa_endpoint_url" 
+                                    placeholder="{{ $wa_provider === 'wablas' ? 'https://phone.wablas.com' : 'https://api.domain-anda.com/send' }}"
+                                    class="w-full px-3.5 py-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs font-mono text-zinc-900 dark:text-white focus:ring-1 focus:ring-emerald-500"
+                                />
+                                @error('wa_endpoint_url') <span class="text-[10px] text-rose-500 mt-1 block">{{ $message }}</span> @enderror
+                            </div>
+                        @endif
+
+                        <!-- Sender / Device ID -->
+                        <div>
+                            <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                                Nomor Sender / Device ID (Opsional)
+                            </label>
+                            <input 
+                                type="text" 
+                                wire:model="wa_sender_number" 
+                                placeholder="Contoh: 081234567890"
+                                class="w-full px-3.5 py-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs text-zinc-900 dark:text-white focus:ring-1 focus:ring-emerald-500"
+                            />
+                        </div>
+
+                        <!-- Auto Send Toggle -->
+                        <div class="pt-3 border-t border-zinc-100 dark:border-zinc-800">
+                            <label class="flex items-start gap-3 cursor-pointer">
+                                <input type="checkbox" wire:model="wa_auto_send" class="mt-0.5 rounded text-emerald-600 focus:ring-emerald-500 size-4">
+                                <div>
+                                    <span class="text-xs font-bold text-zinc-900 dark:text-white block">Kirim Otomatis Setiap Transaksi Selesai</span>
+                                    <span class="text-[11px] text-zinc-500 dark:text-zinc-400">Sistem langsung mengirimkan struk ke nomor HP nasabah sesaat setelah teller memproses setor atau tarik tunai</span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Test Action Trigger -->
+                        <div class="pt-4 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
+                            <button 
+                                type="button" 
+                                wire:click="openTestWaModal"
+                                class="w-full py-2.5 px-4 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-bold rounded-xl transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                            >
+                                <x-heroicon-o-paper-airplane class="size-4 text-emerald-600 dark:text-emerald-400" />
+                                <span>Kirim Pesan Uji Coba (Test)</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right 7 Cols: Message Templates & Live Preview -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 sm:p-6 shadow-sm transition-colors space-y-5">
+                        <div class="pb-3 border-b border-zinc-100 dark:border-zinc-800">
+                            <h2 class="text-sm font-bold text-zinc-900 dark:text-white">Template Pesan Struk Digital</h2>
+                            <p class="text-[11px] text-zinc-500 dark:text-zinc-400">Kustomisasi format teks notifikasi WhatsApp yang diterima nasabah</p>
+                        </div>
+
+                        <!-- Variables Legend Helper -->
+                        <div class="p-3.5 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 space-y-2">
+                            <span class="text-[11px] font-bold text-zinc-700 dark:text-zinc-300 block">Variabel Dinamis yang Tersedia:</span>
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 rounded font-mono text-[10px]">{nama}</span>
+                                <span class="px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 rounded font-mono text-[10px]">{nomor_nasabah}</span>
+                                <span class="px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 rounded font-mono text-[10px]">{nominal}</span>
+                                <span class="px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 rounded font-mono text-[10px]">{saldo_akhir}</span>
+                                <span class="px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 rounded font-mono text-[10px]">{kode_transaksi}</span>
+                                <span class="px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 rounded font-mono text-[10px]">{tanggal}</span>
+                                <span class="px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 rounded font-mono text-[10px]">{waktu}</span>
+                                <span class="px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 rounded font-mono text-[10px]">{teller}</span>
+                                <span class="px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 rounded font-mono text-[10px]">{nama_lembaga}</span>
+                            </div>
+                        </div>
+
+                        <!-- Template Setoran -->
+                        <div>
+                            <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 flex items-center justify-between">
+                                <span>Template Notifikasi Setoran Tunai <span class="text-emerald-500">*</span></span>
+                                <span class="text-[10px] font-normal text-emerald-600 dark:text-emerald-400">Gunakan tanda *tebal* dan `kode` WhatsApp</span>
+                            </label>
+                            <textarea 
+                                wire:model="wa_template_setor" 
+                                rows="6" 
+                                class="w-full px-3.5 py-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs font-mono text-zinc-900 dark:text-white focus:ring-1 focus:ring-emerald-500"
+                            ></textarea>
+                            @error('wa_template_setor') <span class="text-[10px] text-rose-500 mt-1 block">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Template Penarikan -->
+                        <div>
+                            <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 flex items-center justify-between">
+                                <span>Template Notifikasi Penarikan Tunai <span class="text-emerald-500">*</span></span>
+                                <span class="text-[10px] font-normal text-rose-600 dark:text-rose-400">Gunakan tanda *tebal* dan `kode` WhatsApp</span>
+                            </label>
+                            <textarea 
+                                wire:model="wa_template_tarik" 
+                                rows="6" 
+                                class="w-full px-3.5 py-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs font-mono text-zinc-900 dark:text-white focus:ring-1 focus:ring-emerald-500"
+                            ></textarea>
+                            @error('wa_template_tarik') <span class="text-[10px] text-rose-500 mt-1 block">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div class="pt-4 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-end gap-3">
+                            <button 
+                                type="submit" 
+                                class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-emerald-600/30 transition-all flex items-center gap-2 cursor-pointer"
+                            >
+                                <x-heroicon-s-check class="size-4" />
+                                <span>Simpan Pengaturan WhatsApp</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     @endif
 
@@ -691,6 +912,92 @@
                         Ya, Hapus
                     </button>
                 </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- ======================================================== -->
+    <!-- MODAL UJI COBA WHATSAPP GATEWAY -->
+    <!-- ======================================================== -->
+    @if ($showTestWaModal)
+        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 dark:bg-black/80 backdrop-blur-sm">
+            <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl animate-scale-in text-zinc-900 dark:text-zinc-100">
+                <div class="p-5 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="size-9 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                            <x-heroicon-o-paper-airplane class="size-5" />
+                        </div>
+                        <div>
+                            <h3 class="text-base font-bold text-zinc-900 dark:text-white">Uji Coba Kirim WhatsApp</h3>
+                            <p class="text-xs text-zinc-500">Kirim pesan uji coba untuk memvalidasi konfigurasi gateway</p>
+                        </div>
+                    </div>
+                    <button type="button" wire:click="closeTestWaModal" class="text-zinc-400 hover:text-zinc-600 dark:hover:text-white p-1 rounded-lg">
+                        <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+
+                <form wire:submit="sendTestWhatsApp" class="p-6 space-y-4">
+                    @if ($test_wa_result)
+                        <div class="p-4 rounded-xl border {{ $test_wa_success ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200' : 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200' }} text-xs flex items-start gap-2.5">
+                            @if ($test_wa_success)
+                                <x-heroicon-s-check-circle class="size-5 shrink-0 text-emerald-600 dark:text-emerald-400" />
+                            @else
+                                <x-heroicon-s-x-circle class="size-5 shrink-0 text-rose-600 dark:text-rose-400" />
+                            @endif
+                            <div class="space-y-1">
+                                <span class="font-bold block">{{ $test_wa_success ? 'Pesan Terkirim / Berhasil!' : 'Gagal Mengirim Pesan' }}</span>
+                                <p class="text-[11px] font-mono leading-relaxed">{{ $test_wa_result }}</p>
+                            </div>
+                        </div>
+                    @endif
+
+                    <div>
+                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                            Nomor WhatsApp Tujuan <span class="text-emerald-500">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            wire:model="test_wa_phone" 
+                            placeholder="Contoh: 081298765432 atau 6281298765432"
+                            class="w-full px-3.5 py-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs font-mono text-zinc-900 dark:text-white focus:ring-1 focus:ring-emerald-500"
+                        />
+                        @error('test_wa_phone') <span class="text-[10px] text-rose-500 mt-1 block">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                            Isi Pesan Uji Coba <span class="text-emerald-500">*</span>
+                        </label>
+                        <textarea 
+                            wire:model="test_wa_message" 
+                            rows="4" 
+                            class="w-full px-3.5 py-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs font-mono text-zinc-900 dark:text-white focus:ring-1 focus:ring-emerald-500"
+                        ></textarea>
+                        @error('test_wa_message') <span class="text-[10px] text-rose-500 mt-1 block">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="pt-4 border-t border-zinc-200 dark:border-zinc-800 flex items-center justify-end gap-2">
+                        <button 
+                            type="button" 
+                            wire:click="closeTestWaModal"
+                            class="px-4 py-2 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-xs font-semibold rounded-xl cursor-pointer"
+                        >
+                            Tutup
+                        </button>
+                        <button 
+                            type="submit" 
+                            wire:loading.attr="disabled"
+                            class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-md cursor-pointer flex items-center gap-2"
+                        >
+                            <span wire:loading.remove>Kirim Pesan Uji Coba</span>
+                            <span wire:loading class="flex items-center gap-2">
+                                <svg class="animate-spin size-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+                                Mengirim...
+                            </span>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     @endif

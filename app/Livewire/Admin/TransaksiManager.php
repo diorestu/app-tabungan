@@ -29,6 +29,7 @@ class TransaksiManager extends Component
 
     public ?Transaksi $selectedReceipt = null;
     public bool $showReceiptModal = false;
+    public ?string $waStatusMessage = null;
 
     public function updatingSearch(): void
     {
@@ -62,13 +63,25 @@ class TransaksiManager extends Component
     public function openReceipt(int $id): void
     {
         $this->selectedReceipt = Transaksi::with(['nasabah', 'user'])->findOrFail($id);
+        $this->waStatusMessage = null;
         $this->showReceiptModal = true;
+    }
+
+    public function sendWhatsAppReceipt(int $id): void
+    {
+        $trx = Transaksi::with(['nasabah', 'user'])->findOrFail($id);
+        $waService = app(\App\Services\WhatsAppService::class);
+        $res = $waService->sendTransactionReceipt($trx);
+
+        $this->waStatusMessage = $res['message'] ?? 'Status tidak diketahui';
+        session()->flash('success_wa_' . $id, $res['message'] ?? 'Pesan diproses');
     }
 
     public function closeReceipt(): void
     {
         $this->showReceiptModal = false;
         $this->selectedReceipt = null;
+        $this->waStatusMessage = null;
     }
 
     public function exportCsv()

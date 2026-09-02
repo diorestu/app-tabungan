@@ -341,13 +341,23 @@
                 </div>
             </template>
 
-            <button 
-                type="button" 
-                @click="selectedTrx = null" 
-                class="w-full py-2.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-semibold rounded-xl transition-colors cursor-pointer"
-            >
-                Tutup
-            </button>
+            <div class="flex items-center gap-2 pt-2">
+                <a 
+                    :href="'https://wa.me/?text=' + encodeURIComponent('📄 *BUKTI MUTASI TABUNGANKU*\n\n• Jenis: ' + (selectedTrx ? (selectedTrx.jenis === 'setor' ? 'Setor Tunai' : 'Penarikan Tunai') : '') + '\n• Kode: ' + (selectedTrx ? selectedTrx.kode : '') + '\n• Nominal: ' + (selectedTrx ? ((selectedTrx.jenis === 'setor' ? '+' : '-') + selectedTrx.nominal) : '') + '\n• Saldo Akhir: ' + (selectedTrx ? selectedTrx.saldo_akhir : '') + '\n• Waktu: ' + (selectedTrx ? selectedTrx.waktu : '') + '\n• Keterangan: ' + (selectedTrx ? selectedTrx.keterangan : ''))"
+                    target="_blank"
+                    class="w-1/2 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-md shadow-emerald-600/20 cursor-pointer"
+                >
+                    <x-heroicon-o-chat-bubble-left-right class="size-4" />
+                    <span>Bagikan WA</span>
+                </a>
+                <button 
+                    type="button" 
+                    @click="selectedTrx = null" 
+                    class="w-1/2 py-2.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-semibold rounded-xl transition-colors cursor-pointer"
+                >
+                    Tutup
+                </button>
+            </div>
         </div>
     </div>
 </div>

@@ -118,14 +118,50 @@ class TarikTunai extends Component
             $this->selectedNasabah = $nasabah;
         });
 
+        // WhatsApp Gateway Dispatch
+        $this->waStatusMessage = null;
+        $waService = app(\App\Services\WhatsAppService::class);
+        $settings = \App\Models\Setting::getAllSettings();
+        if (($settings['wa_gateway_enabled'] ?? '0') === '1' && ($settings['wa_auto_send'] ?? '1') === '1') {
+            $res = $waService->sendTransactionReceipt($this->lastTransaction);
+            if ($res['success'] ?? false) {
+                $this->waStatusMessage = 'Struk berhasil terkirim via WhatsApp.';
+            } else {
+                $this->waStatusMessage = 'Catatan WA: ' . ($res['message'] ?? 'Gateway nonaktif');
+            }
+        }
+
         $this->showSuccessModal = true;
         $this->nominal = '';
         $this->keterangan = 'Tarik tunai tabungan';
     }
 
+    public ?string $waStatusMessage = null;
+
+    public function sendWhatsAppReceipt(): void
+    {
+        if (!$this->lastTransaction) {
+            return;
+        }
+
+        $waService = app(\App\Services\WhatsAppService::class);
+        $res = $waService->sendTransactionReceipt($this->lastTransaction);
+        $this->waStatusMessage = $res['message'] ?? 'Status tidak diketahui';
+    }
+
+    public function getDirectWhatsAppUrlProperty(): string
+    {
+        if (!$this->lastTransaction) {
+            return '#';
+        }
+
+        return \App\Services\WhatsAppService::getDirectWhatsAppUrl($this->lastTransaction);
+    }
+
     public function closeSuccessModal(): void
     {
         $this->showSuccessModal = false;
+        $this->waStatusMessage = null;
     }
 
     public function render()

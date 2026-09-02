@@ -16,7 +16,7 @@ use Livewire\Component;
 class Pengaturan extends Component
 {
     // Active Tab
-    public string $activeTab = 'lembaga'; // 'lembaga', 'petugas', 'keamanan'
+    public string $activeTab = 'lembaga'; // 'lembaga', 'wa', 'petugas', 'keamanan'
 
     // Institution Settings
     public string $nama_lembaga = '';
@@ -24,6 +24,23 @@ class Pengaturan extends Component
     public string $alamat_lembaga = '';
     public string $telepon_lembaga = '';
     public string $pesan_struk = '';
+
+    // WhatsApp Gateway Settings
+    public bool $wa_gateway_enabled = false;
+    public string $wa_provider = 'mock'; // 'mock', 'fonnte', 'wablas', 'custom'
+    public string $wa_api_token = '';
+    public string $wa_sender_number = '';
+    public string $wa_endpoint_url = '';
+    public bool $wa_auto_send = true;
+    public string $wa_template_setor = '';
+    public string $wa_template_tarik = '';
+
+    // WhatsApp Test Message Modal
+    public bool $showTestWaModal = false;
+    public string $test_wa_phone = '';
+    public string $test_wa_message = '';
+    public ?string $test_wa_result = null;
+    public bool $test_wa_success = false;
 
     // Admin Profile & Password Change
     public string $admin_name = '';
@@ -57,6 +74,21 @@ class Pengaturan extends Component
         $this->telepon_lembaga = $settings['telepon_lembaga'] ?? '';
         $this->pesan_struk = $settings['pesan_struk'] ?? '';
 
+        // WhatsApp Settings
+        $this->wa_gateway_enabled = ($settings['wa_gateway_enabled'] ?? '0') === '1';
+        $this->wa_provider = $settings['wa_provider'] ?? 'mock';
+        $this->wa_api_token = $settings['wa_api_token'] ?? '';
+        $this->wa_sender_number = $settings['wa_sender_number'] ?? '';
+        $this->wa_endpoint_url = $settings['wa_endpoint_url'] ?? '';
+        $this->wa_auto_send = ($settings['wa_auto_send'] ?? '1') === '1';
+
+        $defaultSetorTemplate = "🟢 *STRUK SETORAN TABUNGAN*\n*{nama_lembaga}*\n\nHalo *{nama}*,\nSetoran tunai Anda telah berhasil dicatat ke rekening tabungan.\n\n📄 *Rincian Transaksi:*\n• No. Rekening: `{nomor_nasabah}`\n• No. Struk: `{kode_transaksi}`\n• Tanggal & Waktu: {tanggal} {waktu}\n• Nominal Setor: *+{nominal}*\n• Saldo Akhir: *{saldo_akhir}*\n• Teller: {teller}\n• Keterangan: {keterangan}\n\nTerima kasih telah menabung di *{nama_lembaga}*. Simpan bukti digital ini sebagai tanda transaksi yang sah.\n\n_Pesan otomatis dari Sistem TabunganKu_";
+
+        $defaultTarikTemplate = "🔴 *STRUK PENARIKAN TABUNGAN*\n*{nama_lembaga}*\n\nHalo *{nama}*,\nPenarikan tunai dari rekening tabungan Anda telah berhasil diproses.\n\n📄 *Rincian Transaksi:*\n• No. Rekening: `{nomor_nasabah}`\n• No. Struk: `{kode_transaksi}`\n• Tanggal & Waktu: {tanggal} {waktu}\n• Nominal Tarik: *-{nominal}*\n• Saldo Akhir: *{saldo_akhir}*\n• Teller: {teller}\n• Keterangan: {keterangan}\n\nTerima kasih atas kepercayaan Anda pada *{nama_lembaga}*.\n\n_Pesan otomatis dari Sistem TabunganKu_";
+
+        $this->wa_template_setor = $settings['wa_template_setor'] ?? $defaultSetorTemplate;
+        $this->wa_template_tarik = $settings['wa_template_tarik'] ?? $defaultTarikTemplate;
+
         $user = Auth::guard('web')->user();
         if ($user) {
             $this->admin_name = $user->name;
@@ -86,6 +118,58 @@ class Pengaturan extends Component
         Setting::set('pesan_struk', trim($this->pesan_struk), 'Catatan Kaki Struk Transaksi');
 
         session()->flash('success_institution', 'Profil lembaga dan pengaturan struk berhasil disimpan.');
+    }
+
+    public function saveWhatsAppSettings(): void
+    {
+        $this->validate([
+            'wa_provider' => 'required|in:mock,fonnte,wablas,custom',
+            'wa_api_token' => 'nullable|string|max:255',
+            'wa_sender_number' => 'nullable|string|max:30',
+            'wa_endpoint_url' => 'nullable|string|max:255',
+            'wa_template_setor' => 'required|string|max:1500',
+            'wa_template_tarik' => 'required|string|max:1500',
+        ]);
+
+        Setting::set('wa_gateway_enabled', $this->wa_gateway_enabled ? '1' : '0', 'Status Aktif WhatsApp Gateway');
+        Setting::set('wa_provider', $this->wa_provider, 'Penyedia Layanan WhatsApp API');
+        Setting::set('wa_api_token', trim($this->wa_api_token), 'API Token / Auth Key');
+        Setting::set('wa_sender_number', trim($this->wa_sender_number), 'Nomor Pengirim / Device ID');
+        Setting::set('wa_endpoint_url', trim($this->wa_endpoint_url), 'Custom Endpoint URL');
+        Setting::set('wa_auto_send', $this->wa_auto_send ? '1' : '0', 'Kirim Notifikasi Otomatis Tiap Transaksi');
+        Setting::set('wa_template_setor', trim($this->wa_template_setor), 'Template Pesan WhatsApp Setoran');
+        Setting::set('wa_template_tarik', trim($this->wa_template_tarik), 'Template Pesan WhatsApp Penarikan');
+
+        session()->flash('success_wa', 'Pengaturan WhatsApp Gateway & template notifikasi berhasil disimpan.');
+    }
+
+    public function openTestWaModal(): void
+    {
+        $this->test_wa_phone = $this->telepon_lembaga ?: '081298765432';
+        $this->test_wa_message = "🔔 *UJI COBA WHATSAPP GATEWAY*\n\nSistem notifikasi *TabunganKu* berhasil terhubung dengan gateway.\nPesan uji coba ini dikirim pada " . now()->translatedFormat('d F Y H:i:s') . ' WIB.';
+        $this->test_wa_result = null;
+        $this->showTestWaModal = true;
+    }
+
+    public function closeTestWaModal(): void
+    {
+        $this->showTestWaModal = false;
+        $this->test_wa_result = null;
+    }
+
+    public function sendTestWhatsApp(\App\Services\WhatsAppService $waService): void
+    {
+        $this->validate([
+            'test_wa_phone' => 'required|min:8|max:20',
+            'test_wa_message' => 'required|min:5|max:1000',
+        ], [
+            'test_wa_phone.required' => 'Nomor WhatsApp tujuan wajib diisi.',
+            'test_wa_message.required' => 'Pesan uji coba tidak boleh kosong.',
+        ]);
+
+        $res = $waService->sendMessage($this->test_wa_phone, $this->test_wa_message);
+        $this->test_wa_success = $res['success'] ?? false;
+        $this->test_wa_result = $res['message'] ?? 'Respon tidak diketahui.';
     }
 
     public function updateAdminProfile(): void

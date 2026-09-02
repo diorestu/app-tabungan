@@ -267,25 +267,46 @@
                         <span class="text-zinc-800 dark:text-zinc-300">{{ Auth::guard('web')->user()->name ?? 'Teller' }}</span>
                     </div>
 
+                    @if ($waStatusMessage)
+                        <div class="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 text-[11px] flex items-center gap-2">
+                            <x-heroicon-o-chat-bubble-left-right class="size-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+                            <span>{{ $waStatusMessage }}</span>
+                        </div>
+                    @endif
+
                     <p class="text-[10px] text-center text-zinc-400 dark:text-zinc-500 italic pt-2 border-t border-zinc-100 dark:border-zinc-800">
                         {{ \App\Models\Setting::get('pesan_struk', 'Simpan struk ini sebagai bukti transaksi resmi.') }}
                     </p>
                 </div>
 
                 <!-- Actions -->
-                <div class="p-5 bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-800 flex items-center justify-between gap-3">
-                    <button 
-                        type="button" 
-                        onclick="window.print()" 
-                        class="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-md cursor-pointer"
-                    >
-                        <x-heroicon-o-printer class="size-4" />
-                        Cetak Struk Tarik
-                    </button>
+                <div class="p-5 bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+                    <div class="flex items-center gap-2">
+                        <button 
+                            type="button" 
+                            onclick="window.print()" 
+                            class="px-3.5 py-2 bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
+                        >
+                            <x-heroicon-o-printer class="size-4" />
+                            <span>Cetak Struk</span>
+                        </button>
+
+                        <!-- WhatsApp Action -->
+                        <a 
+                            href="{{ $this->directWhatsAppUrl }}" 
+                            target="_blank" 
+                            class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow-md shadow-emerald-600/20 cursor-pointer transition-all"
+                            title="Kirim atau buka struk via WhatsApp"
+                        >
+                            <x-heroicon-o-chat-bubble-left-right class="size-4" />
+                            <span>Kirim WhatsApp</span>
+                        </a>
+                    </div>
+
                     <button 
                         type="button" 
                         wire:click="closeSuccessModal" 
-                        class="px-4 py-2 bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-300 text-xs font-semibold rounded-xl cursor-pointer"
+                        class="px-4 py-2 bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-300 text-xs font-semibold rounded-xl cursor-pointer text-center"
                     >
                         Selesai / Tutup
                     </button>
