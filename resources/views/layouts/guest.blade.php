@@ -52,50 +52,45 @@
         <x-pwa-meta />
     </head>
     <body class="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 antialiased font-sans flex flex-col justify-between selection:bg-emerald-500 selection:text-white transition-colors duration-150">
-        <header class="border-b border-zinc-200 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/70 backdrop-blur sticky top-0 z-50 transition-colors">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-                <a href="/" class="flex items-center gap-3">
-                    <img src="{{ asset('images/logo.png') }}" alt="TabunganKu Logo" class="size-9 rounded-xl object-cover shadow-md shadow-emerald-500/20 ring-1 ring-zinc-200 dark:ring-zinc-800">
-                    <div>
-                        <span class="font-extrabold text-base tracking-tight text-zinc-900 dark:text-white">TabunganKu</span>
-                        <span class="hidden sm:inline-block text-xs text-zinc-500 dark:text-zinc-400 ml-2 border-l border-zinc-300 dark:border-zinc-700 pl-2">Sistem Buku Tabungan Digital</span>
+        <header class="border-b border-zinc-200 dark:border-zinc-800/80 bg-white/90 dark:bg-zinc-950/80 backdrop-blur-md sticky top-0 z-50">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+                <a href="/" class="flex items-center gap-2.5">
+                    <img src="{{ asset('images/logo.png') }}" alt="TabunganKu Logo" class="size-7 rounded-lg object-cover ring-1 ring-zinc-200 dark:ring-zinc-800">
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-sm tracking-tight text-zinc-900 dark:text-white">TabunganKu</span>
                     </div>
                 </a>
 
-                <div class="flex items-center gap-2 sm:gap-3 text-xs font-medium">
+                <div class="flex items-center gap-2 text-xs">
                     <x-theme-toggle />
                     @if (Auth::guard('nasabah')->check())
-                        <a href="{{ route('nasabah.dashboard') }}" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold transition-colors shadow-sm flex items-center gap-1.5">
-                            <x-heroicon-s-home class="size-4" />
+                        <a href="{{ route('nasabah.dashboard') }}" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold transition-colors flex items-center gap-1.5 shadow-xs">
+                            <x-heroicon-s-home class="size-3.5" />
                             <span>Dashboard Nasabah</span>
                         </a>
                     @elseif (Auth::guard('web')->check())
-                        <a href="{{ route('admin.dashboard') }}" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold transition-colors shadow-sm flex items-center gap-1.5">
-                            <x-heroicon-s-squares-2x2 class="size-4" />
+                        <a href="{{ route('admin.dashboard') }}" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold transition-colors flex items-center gap-1.5 shadow-xs">
+                            <x-heroicon-s-squares-2x2 class="size-3.5" />
                             <span>Dashboard Petugas</span>
                         </a>
                     @else
-                        <a href="{{ route('nasabah.login') }}" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold transition-colors shadow-sm">
-                            Login Nasabah
-                        </a>
-                        <a href="{{ route('login') }}" class="px-3.5 py-2 rounded-xl bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 transition-colors border border-zinc-200 dark:border-zinc-700">
-                            Login Petugas
+                        <a href="{{ route('home') }}" class="px-3 py-1.5 rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors">
+                            Halaman Utama
                         </a>
                     @endif
                 </div>
             </div>
         </header>
 
-        <main class="flex-1 flex flex-col justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+        <main class="flex-1 flex flex-col justify-center py-10 px-4 sm:px-6">
             {{ $slot }}
         </main>
 
-        <footer class="border-t border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-zinc-950 py-6 text-center text-xs text-zinc-500 transition-colors">
-            <p>&copy; {{ date('Y') }} TabunganKu - Sistem Pencatatan Tabungan Nasabah. Dibangun dengan Laravel 12, Livewire, dan Flux UI.</p>
+        <footer class="border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 py-5 text-center text-xs text-zinc-400 dark:text-zinc-500">
+            <p>&copy; {{ date('Y') }} TabunganKu. Portal Pencatatan Tabungan Nasabah.</p>
         </footer>
 
         @fluxScripts
         @livewireScripts
     </body>
 </html>
-

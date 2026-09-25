@@ -1,38 +1,34 @@
-<div class="space-y-4 sm:space-y-6" x-data="{ showDateFilter: false, selectedTrx: null }">
+<div class="space-y-4" x-data="{ showDateFilter: false, selectedTrx: null }">
     <!-- Header & Action Bar -->
-    <div class="bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800/80 p-4 sm:p-5 rounded-2xl print:hidden flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm transition-colors">
+    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 sm:p-5 rounded-xl print:hidden flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
         <div>
-            <div class="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 mb-1">
-                <a href="{{ route('nasabah.dashboard') }}" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors flex items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-                    </svg>
+            <div class="flex items-center gap-1 text-[11px] text-zinc-400 mb-0.5">
+                <a href="{{ route('nasabah.dashboard') }}" class="hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors flex items-center gap-1">
+                    <x-heroicon-s-arrow-left class="size-3" />
                     <span>Kembali ke Beranda</span>
                 </a>
             </div>
-            <h1 class="text-lg sm:text-xl font-bold text-zinc-900 dark:text-white tracking-tight">Riwayat Mutasi Rekening</h1>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400">Daftar lengkap transaksi setor & tarik tunai Anda</p>
+            <h1 class="text-base sm:text-lg font-bold text-zinc-900 dark:text-white tracking-tight">Riwayat Mutasi Rekening</h1>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400">Pencatatan riwayat setor dan tarik tabungan Anda</p>
         </div>
 
         <div class="flex items-center gap-2">
             <button 
                 type="button"
                 wire:click="exportCsv" 
-                class="w-full sm:w-auto px-4 py-2.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-bold rounded-xl border border-zinc-200 dark:border-zinc-700 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 shadow-sm"
-                title="Unduh File Rekening Koran Format Akuntansi (Debit & Kredit)"
+                class="w-full sm:w-auto px-3.5 py-1.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-semibold rounded-lg border border-zinc-200 dark:border-zinc-700 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                title="Unduh Rekening Koran (CSV)"
             >
-                <x-heroicon-s-arrow-down-tray class="size-4 text-emerald-600 dark:text-emerald-400" />
-                <span>Export Rekening Koran</span>
+                <x-heroicon-s-arrow-down-tray class="size-3.5 text-zinc-500 dark:text-zinc-400" />
+                <span>Export CSV</span>
             </button>
 
             <button 
                 type="button"
                 onclick="window.print()" 
-                class="w-full sm:w-auto px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl shadow-md shadow-emerald-950/20 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                class="w-full sm:w-auto px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg shadow-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                </svg>
+                <x-heroicon-s-printer class="size-3.5" />
                 <span>Cetak Rekening Koran</span>
             </button>
         </div>
@@ -44,7 +40,7 @@
             <div>
                 <h2 class="text-2xl font-black uppercase tracking-wider">{{ \App\Models\Setting::get('nama_lembaga', 'TabunganKu Digital') }}</h2>
                 <p class="text-xs">{{ \App\Models\Setting::get('slogan_lembaga', 'Layanan Simpanan & Tabungan Terpercaya') }}</p>
-                <p class="text-[10px] text-zinc-600">{{ \App\Models\Setting::get('alamat_lembaga') }} • Telp: {{ \App\Models\Setting::get('telepon_lembaga') }}</p>
+                <p class="text-[10px] text-zinc-600">{{ \App\Models\Setting::get('alamat_lembaga') }} &bull; Telp: {{ \App\Models\Setting::get('telepon_lembaga') }}</p>
                 <p class="text-xs font-bold mt-1">Laporan Mutasi Rekening Tabungan Nasabah</p>
             </div>
             <div class="text-right text-xs">
@@ -56,32 +52,27 @@
         </div>
     </div>
 
-    <!-- Filter Section (Mobile Friendly Touch Controls) -->
-    <div class="bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-4 print:hidden space-y-3 shadow-sm transition-colors">
+    <!-- Filter Section -->
+    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 print:hidden space-y-3 shadow-xs">
         <!-- Search & Filter Toggle Row -->
         <div class="flex items-center gap-2">
             <div class="relative flex-1">
                 <input 
                     type="text" 
                     wire:model.live.debounce.300ms="search" 
-                    placeholder="Cari kode transaksi atau catatan..."
-                    class="w-full pl-9 pr-3 py-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                    placeholder="Cari kode transaksi atau keterangan..."
+                    class="w-full pl-8 pr-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700/80 rounded-lg text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                 />
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-4 absolute left-3 top-3 text-zinc-400 dark:text-zinc-500" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
-                </svg>
+                <x-heroicon-o-magnifying-glass class="size-3.5 absolute left-2.5 top-2.5 text-zinc-400" />
             </div>
 
             <!-- Date Toggle Button -->
             <button 
                 type="button" 
                 @click="showDateFilter = !showDateFilter"
-                class="px-3 py-2.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
-                :class="showDateFilter || '{{ $startDate || $endDate }}' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/40' : 'bg-zinc-50 dark:bg-zinc-950 text-zinc-700 dark:text-zinc-300 border-zinc-300 dark:border-zinc-800'"
+                class="px-2.5 py-1.5 rounded-lg border text-xs font-medium flex items-center gap-1 transition-colors cursor-pointer {{ $startDate || $endDate ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800' : 'bg-zinc-50 dark:bg-zinc-950 text-zinc-700 dark:text-zinc-300 border-zinc-300 dark:border-zinc-700/80' }}"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
+                <x-heroicon-o-calendar class="size-3.5" />
                 <span class="hidden sm:inline">Tanggal</span>
             </button>
 
@@ -90,37 +81,35 @@
                     type="button" 
                     wire:click="resetFilter"
                     title="Reset Filter"
-                    class="p-2.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-xl border border-zinc-200 dark:border-zinc-700 transition-colors cursor-pointer"
+                    class="p-1.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-400 rounded-lg border border-zinc-200 dark:border-zinc-700 transition-colors cursor-pointer"
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                    <x-heroicon-s-x-mark class="size-3.5" />
                 </button>
             @endif
         </div>
 
-        <!-- Horizontal Quick Filter Pills (Semua, Setor, Tarik) -->
-        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+        <!-- Horizontal Quick Filter Pills -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5">
             <button 
                 type="button" 
                 wire:click="$set('jenis', '')"
-                class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer {{ empty($jenis) ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 shadow font-bold' : 'bg-zinc-100 dark:bg-zinc-950 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white border border-zinc-200 dark:border-zinc-800' }}"
+                class="px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer whitespace-nowrap {{ empty($jenis) ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-semibold' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white' }}"
             >
-                Semua Transaksi
+                Semua
             </button>
             <button 
                 type="button" 
                 wire:click="$set('jenis', 'setor')"
-                class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer flex items-center gap-1 {{ $jenis === 'setor' ? 'bg-emerald-600 text-white shadow font-bold' : 'bg-zinc-100 dark:bg-zinc-950 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 border border-zinc-200 dark:border-zinc-800' }}"
+                class="px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer whitespace-nowrap {{ $jenis === 'setor' ? 'bg-emerald-600 text-white font-semibold' : 'bg-zinc-100 dark:bg-zinc-800 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40' }}"
             >
-                <span>+</span> Setor Tunai
+                + Setor Tunai
             </button>
             <button 
                 type="button" 
                 wire:click="$set('jenis', 'tarik')"
-                class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer flex items-center gap-1 {{ $jenis === 'tarik' ? 'bg-amber-600 text-white shadow font-bold' : 'bg-zinc-100 dark:bg-zinc-950 text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/40 border border-zinc-200 dark:border-zinc-800' }}"
+                class="px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer whitespace-nowrap {{ $jenis === 'tarik' ? 'bg-rose-600 text-white font-semibold' : 'bg-zinc-100 dark:bg-zinc-800 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40' }}"
             >
-                <span>-</span> Tarik Tunai
+                - Tarik Tunai
             </button>
         </div>
 
@@ -128,50 +117,47 @@
         <div 
             x-show="showDateFilter" 
             x-transition 
-            class="grid grid-cols-2 gap-2 pt-2 border-t border-zinc-100 dark:border-zinc-800/80"
+            class="grid grid-cols-2 gap-2 pt-2 border-t border-zinc-100 dark:border-zinc-800"
             style="{{ empty($startDate) && empty($endDate) ? 'display: none;' : '' }}"
         >
             <div>
-                <label class="block text-[10px] font-semibold text-zinc-600 dark:text-zinc-400 mb-1">Dari Tanggal</label>
+                <label class="block text-[10px] font-medium text-zinc-500 mb-1">Dari Tanggal</label>
                 <input 
                     type="date" 
                     wire:model.live="startDate"
-                    class="w-full px-2.5 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                    class="w-full px-2.5 py-1 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700/80 rounded-md text-xs text-zinc-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
                 />
             </div>
             <div>
-                <label class="block text-[10px] font-semibold text-zinc-600 dark:text-zinc-400 mb-1">Sampai Tanggal</label>
+                <label class="block text-[10px] font-medium text-zinc-500 mb-1">Sampai Tanggal</label>
                 <input 
                     type="date" 
                     wire:model.live="endDate"
-                    class="w-full px-2.5 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                    class="w-full px-2.5 py-1 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700/80 rounded-md text-xs text-zinc-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
                 />
             </div>
         </div>
 
         <!-- Filter Metrics Bar -->
-        <div class="pt-2 border-t border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between text-[11px] text-zinc-500 dark:text-zinc-400">
+        <div class="pt-2 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-xs text-zinc-500">
             <div>
                 Total Masuk: <span class="font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">+Rp {{ number_format($filteredSetor, 0, ',', '.') }}</span>
             </div>
             <div>
-                Total Keluar: <span class="font-bold text-amber-600 dark:text-amber-400 tabular-nums">-Rp {{ number_format($filteredTarik, 0, ',', '.') }}</span>
+                Total Keluar: <span class="font-bold text-rose-600 dark:text-rose-400 tabular-nums">-Rp {{ number_format($filteredTarik, 0, ',', '.') }}</span>
             </div>
         </div>
     </div>
 
-    <!-- Transactions List (Mobile Cards Feed & Desktop Table) -->
-    <div class="bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl p-3 sm:p-5 print:bg-transparent print:border-none print:p-0 shadow-sm transition-colors">
+    <!-- Transactions List -->
+    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3 sm:p-4 print:bg-transparent print:border-none print:p-0 shadow-xs">
         @if ($transaksis->isEmpty())
-            <div class="text-center py-12 text-zinc-400 dark:text-zinc-500 text-xs">
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-8 mx-auto text-zinc-400 dark:text-zinc-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
+            <div class="text-center py-10 text-zinc-400 dark:text-zinc-500 text-xs">
                 Tidak ada data mutasi yang sesuai filter.
             </div>
         @else
-            <!-- MOBILE VIEW: Interactive Banking Cards Feed -->
-            <div class="space-y-2.5 md:hidden">
+            <!-- MOBILE VIEW: Interactive Cards -->
+            <div class="space-y-2 md:hidden">
                 @foreach ($transaksis as $trx)
                     <div 
                         @click="selectedTrx = {{ json_encode([
@@ -183,90 +169,81 @@
                             'keterangan' => $trx->keterangan ?: '-',
                             'waktu' => $trx->created_at->format('d M Y, H:i:s'),
                         ]) }}"
-                        class="p-3.5 rounded-2xl bg-zinc-50 dark:bg-zinc-950/70 border border-zinc-200 dark:border-zinc-800/80 active:bg-zinc-100 dark:active:bg-zinc-800/60 transition-all flex items-center justify-between cursor-pointer shadow-sm"
+                        class="p-3 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800/60 transition-colors flex items-center justify-between cursor-pointer"
                     >
-                        <div class="flex items-center gap-3">
-                            <div class="size-11 rounded-2xl flex items-center justify-center shrink-0 {{ $trx->jenis_transaksi === 'setor' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20' }}">
+                        <div class="flex items-center gap-2.5">
+                            <div class="size-8 rounded-lg flex items-center justify-center shrink-0 {{ $trx->jenis_transaksi === 'setor' ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400' : 'bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400' }}">
                                 @if ($trx->jenis_transaksi === 'setor')
-                                    <x-heroicon-s-arrow-down-tray class="size-5" />
+                                    <x-heroicon-s-arrow-down-tray class="size-4" />
                                 @else
-                                    <x-heroicon-s-arrow-up-tray class="size-5" />
+                                    <x-heroicon-s-arrow-up-tray class="size-4" />
                                 @endif
                             </div>
 
-                            <div class="space-y-0.5">
-                                <h4 class="text-xs font-bold text-zinc-900 dark:text-white">
+                            <div>
+                                <h4 class="text-xs font-semibold text-zinc-900 dark:text-white">
                                     {{ $trx->jenis_transaksi === 'setor' ? 'Setor Tunai' : 'Tarik Tunai' }}
                                 </h4>
-                                <p class="text-[10px] text-zinc-500 dark:text-zinc-400">
-                                    {{ $trx->created_at->format('d M Y, H:i') }}
-                                </p>
-                                <p class="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium truncate max-w-[130px]">
-                                    {{ $trx->kode_transaksi }}
+                                <p class="text-[10px] text-zinc-400 font-mono mt-0.5">
+                                    {{ $trx->created_at->format('d/m/Y H:i') }}
                                 </p>
                             </div>
                         </div>
 
-                        <div class="text-right space-y-0.5">
-                            <span class="text-xs font-bold tabular-nums block {{ $trx->jenis_transaksi === 'setor' ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400' }}">
+                        <div class="text-right">
+                            <span class="text-xs font-bold tabular-nums block {{ $trx->jenis_transaksi === 'setor' ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400' }}">
                                 {{ $trx->jenis_transaksi === 'setor' ? '+' : '-' }} {{ $trx->formatted_nominal }}
                             </span>
-                            <span class="text-[10px] tabular-nums text-zinc-500 dark:text-zinc-400 block">
-                                Sisa {{ $trx->formatted_saldo_akhir }}
-                            </span>
-                            <span class="text-[9px] text-zinc-400 dark:text-zinc-500 flex items-center justify-end gap-0.5">
-                                <span>Detail</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="size-2.5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
-                                </svg>
+                            <span class="text-[10px] tabular-nums text-zinc-400 block mt-0.5">
+                                Saldo {{ $trx->formatted_saldo_akhir }}
                             </span>
                         </div>
                     </div>
                 @endforeach
             </div>
 
-            <!-- DESKTOP VIEW: Clean Table (Visible on md and up) -->
+            <!-- DESKTOP VIEW: Clean Table -->
             <div class="hidden md:block overflow-x-auto">
                 <table class="w-full text-left text-xs">
                     <thead>
-                        <tr class="border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 font-semibold print:text-black print:border-black">
-                            <th class="pb-3 px-3">No</th>
-                            <th class="pb-3 px-3">Tanggal & Waktu</th>
-                            <th class="pb-3 px-3">Kode Transaksi</th>
-                            <th class="pb-3 px-3">Jenis</th>
-                            <th class="pb-3 px-3 text-right">Debit (Setor)</th>
-                            <th class="pb-3 px-3 text-right">Kredit (Tarik)</th>
-                            <th class="pb-3 px-3 text-right">Saldo Akhir</th>
-                            <th class="pb-3 px-3">Keterangan</th>
+                        <tr class="border-b border-zinc-200 dark:border-zinc-800 text-zinc-400 font-medium print:text-black print:border-black">
+                            <th class="pb-2.5 px-3">No</th>
+                            <th class="pb-2.5 px-3">Tanggal & Waktu</th>
+                            <th class="pb-2.5 px-3">Kode Transaksi</th>
+                            <th class="pb-2.5 px-3">Jenis</th>
+                            <th class="pb-2.5 px-3 text-right">Debit (Setor)</th>
+                            <th class="pb-2.5 px-3 text-right">Kredit (Tarik)</th>
+                            <th class="pb-2.5 px-3 text-right">Saldo Akhir</th>
+                            <th class="pb-2.5 px-3">Keterangan</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800/60 print:divide-zinc-300 print:text-black">
+                    <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800 print:divide-zinc-300 print:text-black">
                         @foreach ($transaksis as $index => $trx)
                             <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition-colors">
-                                <td class="py-3 px-3 text-zinc-500 print:text-black">
+                                <td class="py-2.5 px-3 text-zinc-400 print:text-black">
                                     {{ $transaksis->firstItem() + $index }}
                                 </td>
-                                <td class="py-3 px-3 text-zinc-700 dark:text-zinc-300 whitespace-nowrap print:text-black">
+                                <td class="py-2.5 px-3 text-zinc-500 whitespace-nowrap font-mono text-[11px] print:text-black">
                                     {{ $trx->created_at->format('d/m/Y H:i') }}
                                 </td>
-                                <td class="py-3 px-3 font-semibold text-zinc-900 dark:text-zinc-200 print:text-black">
+                                <td class="py-2.5 px-3 font-mono text-zinc-700 dark:text-zinc-300 print:text-black">
                                     {{ $trx->kode_transaksi }}
                                 </td>
-                                <td class="py-3 px-3">
-                                    <span class="px-2 py-0.5 rounded text-[10px] font-bold {{ $trx->jenis_transaksi === 'setor' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-amber-500/10 text-amber-600 dark:text-amber-400' }} print:text-black">
+                                <td class="py-2.5 px-3">
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-semibold {{ $trx->jenis_transaksi === 'setor' ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300' : 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300' }} print:text-black">
                                         {{ $trx->jenis_transaksi === 'setor' ? 'SETOR' : 'TARIK' }}
                                     </span>
                                 </td>
-                                <td class="py-3 px-3 text-right font-semibold whitespace-nowrap text-emerald-600 dark:text-emerald-400 tabular-nums print:text-black">
+                                <td class="py-2.5 px-3 text-right font-mono font-medium whitespace-nowrap text-emerald-600 dark:text-emerald-400 tabular-nums print:text-black">
                                     {{ $trx->jenis_transaksi === 'setor' ? 'Rp ' . number_format($trx->nominal, 0, ',', '.') : '-' }}
                                 </td>
-                                <td class="py-3 px-3 text-right font-semibold whitespace-nowrap text-amber-600 dark:text-amber-400 tabular-nums print:text-black">
+                                <td class="py-2.5 px-3 text-right font-mono font-medium whitespace-nowrap text-rose-600 dark:text-rose-400 tabular-nums print:text-black">
                                     {{ $trx->jenis_transaksi === 'tarik' ? 'Rp ' . number_format($trx->nominal, 0, ',', '.') : '-' }}
                                 </td>
-                                <td class="py-3 px-3 text-right font-bold text-zinc-900 dark:text-zinc-200 whitespace-nowrap tabular-nums print:text-black">
+                                <td class="py-2.5 px-3 text-right font-mono font-semibold text-zinc-900 dark:text-zinc-100 whitespace-nowrap tabular-nums print:text-black">
                                     {{ $trx->formatted_saldo_akhir }}
                                 </td>
-                                <td class="py-3 px-3 text-zinc-500 dark:text-zinc-400 max-w-xs truncate print:text-black">
+                                <td class="py-2.5 px-3 text-zinc-500 max-w-xs truncate print:text-black">
                                     {{ $trx->keterangan ?? '-' }}
                                 </td>
                             </tr>
@@ -276,7 +253,7 @@
             </div>
 
             <!-- Pagination -->
-            <div class="mt-4 print:hidden">
+            <div class="mt-3 print:hidden">
                 {{ $transaksis->links() }}
             </div>
         @endif
@@ -285,75 +262,73 @@
     <!-- Mobile Transaction Detail Bottom-Sheet Modal -->
     <div 
         x-show="selectedTrx" 
-        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter="transition ease-out duration-150"
         x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100"
-        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave="transition ease-in duration-100"
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
-        class="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 dark:bg-black/80 backdrop-blur-sm"
+        class="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/50 backdrop-blur-xs"
         style="display: none;"
     >
         <div 
             @click.outside="selectedTrx = null"
-            class="w-full max-w-md bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl p-5 space-y-4 text-zinc-900 dark:text-zinc-100"
+            class="w-full max-w-md bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-t-2xl sm:rounded-2xl overflow-hidden shadow-xl p-5 space-y-4 text-zinc-900 dark:text-zinc-100"
         >
             <div class="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-3">
-                <h3 class="text-sm font-bold text-zinc-900 dark:text-white">Detail Mutasi Transaksi</h3>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-white">Detail Mutasi Transaksi</h3>
                 <button @click="selectedTrx = null" class="text-zinc-400 hover:text-zinc-600 dark:hover:text-white p-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                    </svg>
+                    <x-heroicon-s-x-mark class="size-4" />
                 </button>
             </div>
 
             <template x-if="selectedTrx">
-                <div class="space-y-2.5 text-xs">
+                <div class="space-y-2 text-xs">
                     <div class="text-center py-2">
                         <span 
-                            class="text-2xl font-extrabold tabular-nums tracking-tight" 
-                            :class="selectedTrx.jenis === 'setor' ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'"
+                            class="text-2xl font-bold tabular-nums tracking-tight" 
+                            :class="selectedTrx.jenis === 'setor' ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'"
                             x-text="(selectedTrx.jenis === 'setor' ? '+ ' : '- ') + selectedTrx.nominal"
                         ></span>
-                        <span class="block text-[11px] text-zinc-500 dark:text-zinc-400 mt-0.5 font-medium" x-text="selectedTrx.kode"></span>
+                        <span class="block text-[11px] font-mono text-zinc-400 mt-0.5" x-text="selectedTrx.kode"></span>
                     </div>
 
-                    <div class="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400">
-                        <span>Jenis Mutasi:</span>
-                        <span class="font-bold uppercase text-zinc-900 dark:text-white" x-text="selectedTrx.jenis === 'setor' ? 'Setor Tunai' : 'Penarikan Tunai'"></span>
+                    <div class="flex justify-between py-1.5 border-b border-zinc-100 dark:border-zinc-800 text-zinc-500">
+                        <span>Jenis Mutasi</span>
+                        <span class="font-semibold uppercase text-zinc-900 dark:text-white" x-text="selectedTrx.jenis === 'setor' ? 'Setor Tunai' : 'Penarikan Tunai'"></span>
                     </div>
-                    <div class="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400">
-                        <span>Waktu:</span>
+                    <div class="flex justify-between py-1.5 border-b border-zinc-100 dark:border-zinc-800 text-zinc-500">
+                        <span>Waktu</span>
                         <span class="text-zinc-800 dark:text-zinc-200 font-medium" x-text="selectedTrx.waktu"></span>
                     </div>
-                    <div class="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400">
-                        <span>Saldo Sebelum:</span>
+                    <div class="flex justify-between py-1.5 border-b border-zinc-100 dark:border-zinc-800 text-zinc-500">
+                        <span>Saldo Sebelum</span>
                         <span class="text-zinc-800 dark:text-zinc-200 font-medium tabular-nums" x-text="selectedTrx.saldo_awal"></span>
                     </div>
-                    <div class="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400">
-                        <span>Saldo Akhir:</span>
-                        <span class="font-bold text-emerald-600 dark:text-emerald-400 tabular-nums" x-text="selectedTrx.saldo_akhir"></span>
+                    <div class="flex justify-between py-1.5 border-b border-zinc-100 dark:border-zinc-800 text-zinc-500">
+                        <span>Saldo Akhir</span>
+                        <span class="font-bold text-zinc-900 dark:text-white tabular-nums" x-text="selectedTrx.saldo_akhir"></span>
                     </div>
-                    <div class="flex justify-between py-1 text-zinc-600 dark:text-zinc-400">
-                        <span>Keterangan:</span>
+                    <div class="flex justify-between py-1.5 text-zinc-500">
+                        <span>Keterangan</span>
                         <span class="text-zinc-800 dark:text-zinc-200 font-medium" x-text="selectedTrx.keterangan"></span>
                     </div>
                 </div>
             </template>
 
-            <div class="flex items-center gap-2 pt-2">
+            <div class="flex items-center gap-2 pt-1">
                 <a 
                     :href="'https://wa.me/?text=' + encodeURIComponent('📄 *BUKTI MUTASI TABUNGANKU*\n\n• Jenis: ' + (selectedTrx ? (selectedTrx.jenis === 'setor' ? 'Setor Tunai' : 'Penarikan Tunai') : '') + '\n• Kode: ' + (selectedTrx ? selectedTrx.kode : '') + '\n• Nominal: ' + (selectedTrx ? ((selectedTrx.jenis === 'setor' ? '+' : '-') + selectedTrx.nominal) : '') + '\n• Saldo Akhir: ' + (selectedTrx ? selectedTrx.saldo_akhir : '') + '\n• Waktu: ' + (selectedTrx ? selectedTrx.waktu : '') + '\n• Keterangan: ' + (selectedTrx ? selectedTrx.keterangan : ''))"
                     target="_blank"
-                    class="w-1/2 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-md shadow-emerald-600/20 cursor-pointer"
+                    class="w-1/2 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
                 >
-                    <x-heroicon-o-chat-bubble-left-right class="size-4" />
+                    <x-heroicon-o-chat-bubble-left-right class="size-3.5" />
                     <span>Bagikan WA</span>
                 </a>
                 <button 
                     type="button" 
                     @click="selectedTrx = null" 
-                    class="w-1/2 py-2.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-semibold rounded-xl transition-colors cursor-pointer"
+                    class="w-1/2 py-2 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-semibold rounded-lg transition-colors cursor-pointer"
                 >
                     Tutup
                 </button>

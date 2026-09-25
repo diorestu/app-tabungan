@@ -39,14 +39,14 @@
     <button 
         type="button" 
         @click="toggle()" 
-        class="p-2 rounded-xl text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all cursor-pointer focus:outline-none"
-        title="Ganti Tema (Light / Dark Mode)"
+        class="size-8 rounded-lg text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-700/60 transition-colors flex items-center justify-center cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400"
+        title="Ganti Tema"
         aria-label="Ganti Tema"
     >
         <!-- Sun Icon (shown in dark mode to switch to light) -->
         <x-heroicon-o-sun x-show="darkMode" class="size-4 text-amber-400" />
         <!-- Moon Icon (shown in light mode to switch to dark) -->
-        <x-heroicon-o-moon x-show="!darkMode" class="size-4 text-zinc-700" style="display: none;" />
+        <x-heroicon-o-moon x-show="!darkMode" class="size-4 text-zinc-600" style="display: none;" />
     </button>
 </div>
 

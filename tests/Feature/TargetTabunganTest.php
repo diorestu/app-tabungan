@@ -15,6 +15,7 @@ class TargetTabunganTest extends TestCase
     use RefreshDatabase;
 
     protected User $admin;
+
     protected Nasabah $nasabah;
 
     protected function setUp(): void
@@ -52,12 +53,15 @@ class TargetTabunganTest extends TestCase
         $this->actingAs($this->nasabah, 'nasabah');
 
         Livewire::test(TargetTabungan::class)
+            ->call('openCreateModal')
+            ->assertSet('showCreateModal', true)
             ->set('nama_target', 'Tabungan Kambing Qurban')
             ->set('kategori', 'qurban')
             ->set('target_nominal', '3500000')
             ->set('catatan', 'Rencana beli kambing jantan')
             ->call('saveTarget')
-            ->assertHasNoErrors();
+            ->assertHasNoErrors()
+            ->assertSet('showCreateModal', false);
 
         $this->assertDatabaseHas('target_tabungans', [
             'nasabah_id' => $this->nasabah->id,
@@ -84,9 +88,11 @@ class TargetTabunganTest extends TestCase
 
         Livewire::test(TargetTabungan::class)
             ->call('openAlokasiModal', $target->id)
+            ->assertSet('showAlokasiModal', true)
             ->set('alokasi_nominal', '200000')
             ->call('prosesAlokasi')
-            ->assertHasNoErrors();
+            ->assertHasNoErrors()
+            ->assertSet('showAlokasiModal', false);
 
         $this->nasabah->refresh();
         $target->refresh();
@@ -120,9 +126,11 @@ class TargetTabunganTest extends TestCase
 
         Livewire::test(TargetTabungan::class)
             ->call('openTarikModal', $target->id)
+            ->assertSet('showTarikModal', true)
             ->set('tarik_nominal', '150000')
             ->call('prosesTarik')
-            ->assertHasNoErrors();
+            ->assertHasNoErrors()
+            ->assertSet('showTarikModal', false);
 
         $this->nasabah->refresh();
         $target->refresh();
@@ -154,8 +162,10 @@ class TargetTabunganTest extends TestCase
 
         Livewire::test(TargetTabungan::class)
             ->call('openDeleteModal', $target->id)
+            ->assertSet('showDeleteModal', true)
             ->call('confirmDelete')
-            ->assertHasNoErrors();
+            ->assertHasNoErrors()
+            ->assertSet('showDeleteModal', false);
 
         $this->nasabah->refresh();
 
@@ -164,5 +174,46 @@ class TargetTabunganTest extends TestCase
         $this->assertDatabaseMissing('target_tabungans', [
             'id' => $target->id,
         ]);
+    }
+
+    public function test_nasabah_modal_open_close_and_validation(): void
+    {
+        $this->actingAs($this->nasabah, 'nasabah');
+
+        // Test open and close create modal
+        Livewire::test(TargetTabungan::class)
+            ->call('openCreateModal')
+            ->assertSet('showCreateModal', true)
+            ->call('closeCreateModal')
+            ->assertSet('showCreateModal', false);
+
+        // Test validation errors on create
+        Livewire::test(TargetTabungan::class)
+            ->call('openCreateModal')
+            ->set('nama_target', '')
+            ->set('target_nominal', '')
+            ->call('saveTarget')
+            ->assertHasErrors(['nama_target', 'target_nominal']);
+    }
+
+    public function test_nasabah_cannot_allocate_more_than_main_balance(): void
+    {
+        $target = TargetTabunganModel::create([
+            'nasabah_id' => $this->nasabah->id,
+            'nama_target' => 'Target Besar',
+            'kategori' => 'rumah',
+            'target_nominal' => 50000000,
+            'terkumpul_nominal' => 0,
+            'status' => 'berjalan',
+        ]);
+
+        $this->actingAs($this->nasabah, 'nasabah');
+
+        // Nasabah balance is 1,000,000. Try to allocate 5,000,000
+        Livewire::test(TargetTabungan::class)
+            ->call('openAlokasiModal', $target->id)
+            ->set('alokasi_nominal', '5000000')
+            ->call('prosesAlokasi')
+            ->assertHasErrors(['alokasi_nominal']);
     }
 }

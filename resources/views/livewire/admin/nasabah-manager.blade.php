@@ -1,15 +1,15 @@
 <div class="space-y-6">
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl shadow-sm transition-colors">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl">
         <div>
-            <h1 class="text-xl font-bold text-zinc-900 dark:text-white tracking-tight">Data Nasabah Tabungan</h1>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400">Kelola informasi rekening dan data kontak nasabah</p>
+            <h1 class="text-lg sm:text-xl font-bold text-zinc-900 dark:text-white tracking-tight">Data Nasabah Tabungan</h1>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Kelola rekening nasabah, status akun, dan pencetakan buku tabungan</p>
         </div>
 
         <button 
             type="button" 
             wire:click="openCreateModal"
-            class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer active:scale-95 shrink-0"
+            class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-xl transition-colors cursor-pointer shrink-0"
         >
             <x-heroicon-s-plus class="size-4" />
             <span>Registrasi Nasabah Baru</span>
@@ -17,13 +17,13 @@
     </div>
 
     <!-- Filters & Search -->
-    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center gap-3 justify-between shadow-sm transition-colors">
+    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 flex flex-col sm:flex-row items-center gap-3 justify-between">
         <div class="w-full sm:w-80 relative">
             <input 
                 type="text" 
                 wire:model.live.debounce.300ms="search" 
                 placeholder="Cari nama, ID nasabah, No. HP, NIK..."
-                class="w-full pl-9 pr-4 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700/80 rounded-xl text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                class="w-full pl-9 pr-3.5 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 transition-all"
             />
             <x-heroicon-o-magnifying-glass class="size-4 absolute left-3 top-2.5 text-zinc-400 dark:text-zinc-500" />
         </div>
@@ -31,7 +31,7 @@
         <div class="flex items-center gap-2 w-full sm:w-auto">
             <select 
                 wire:model.live="statusFilter"
-                class="w-full sm:w-44 px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700/80 rounded-xl text-xs text-zinc-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                class="w-full sm:w-44 px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 transition-all cursor-pointer"
             >
                 <option value="">Semua Status</option>
                 <option value="aktif">Status Aktif</option>
@@ -42,52 +42,57 @@
     </div>
 
     <!-- Nasabah Table -->
-    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 sm:p-6 shadow-sm transition-colors">
+    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden">
         @if ($nasabahs->isEmpty())
-            <div class="text-center py-12 text-zinc-400 dark:text-zinc-500 text-xs">
-                <x-heroicon-o-users class="size-10 mx-auto text-zinc-400 dark:text-zinc-600 mb-2" />
-                Tidak ada data nasabah ditemukan.
+            <div class="text-center py-16 px-4">
+                <div class="size-12 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center mx-auto mb-3 text-zinc-400 dark:text-zinc-500">
+                    <x-heroicon-o-users class="size-6" />
+                </div>
+                <h3 class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Tidak ada data nasabah</h3>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1 max-w-sm mx-auto">Tidak ditemukan nasabah yang sesuai dengan filter pencarian Anda.</p>
             </div>
         @else
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-xs">
                     <thead>
-                        <tr class="border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 font-semibold">
-                            <th class="pb-3 px-3">No</th>
-                            <th class="pb-3 px-3">ID Nasabah</th>
-                            <th class="pb-3 px-3">Nama & NIK</th>
-                            <th class="pb-3 px-3">No. Handphone</th>
-                            <th class="pb-3 px-3 text-right">Saldo Tabungan</th>
-                            <th class="pb-3 px-3 text-center">Status</th>
-                            <th class="pb-3 px-3 text-center">Aksi Cepat</th>
+                        <tr class="border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/30 text-zinc-500 dark:text-zinc-400 font-semibold">
+                            <th class="py-3 px-4 w-12 text-center">No</th>
+                            <th class="py-3 px-4">ID Nasabah</th>
+                            <th class="py-3 px-4">Nama & NIK</th>
+                            <th class="py-3 px-4">No. HP</th>
+                            <th class="py-3 px-4 text-right">Saldo</th>
+                            <th class="py-3 px-4 text-center">Status</th>
+                            <th class="py-3 px-4 text-right">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800/60">
+                    <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800/70">
                         @foreach ($nasabahs as $index => $nasabah)
-                            <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition-colors">
-                                <td class="py-3.5 px-3 text-zinc-500">
+                            <tr class="hover:bg-zinc-50/70 dark:hover:bg-zinc-800/40 transition-colors">
+                                <td class="py-3 px-4 text-center text-zinc-400 dark:text-zinc-500 tabular-nums">
                                     {{ $nasabahs->firstItem() + $index }}
                                 </td>
-                                <td class="py-3.5 px-3 font-mono font-bold text-emerald-600 dark:text-emerald-400">
-                                    {{ $nasabah->nomor_nasabah }}
+                                <td class="py-3 px-4">
+                                    <span class="font-mono font-semibold text-emerald-600 dark:text-emerald-400">
+                                        {{ $nasabah->nomor_nasabah }}
+                                    </span>
                                 </td>
-                                <td class="py-3.5 px-3">
-                                    <span class="font-semibold text-zinc-900 dark:text-white block">{{ $nasabah->nama }}</span>
-                                    <span class="text-[10px] text-zinc-400 dark:text-zinc-500 font-mono">NIK: {{ $nasabah->nik ?? '-' }}</span>
+                                <td class="py-3 px-4">
+                                    <div class="font-semibold text-zinc-900 dark:text-white">{{ $nasabah->nama }}</div>
+                                    <div class="text-[11px] text-zinc-400 dark:text-zinc-500 font-mono">NIK: {{ $nasabah->nik ?? '-' }}</div>
                                 </td>
-                                <td class="py-3.5 px-3 font-mono text-zinc-700 dark:text-zinc-300">
+                                <td class="py-3 px-4 font-mono text-zinc-600 dark:text-zinc-400">
                                     {{ $nasabah->no_hp }}
                                 </td>
-                                <td class="py-3.5 px-3 text-right font-mono font-bold text-zinc-900 dark:text-white whitespace-nowrap">
+                                <td class="py-3 px-4 text-right font-mono font-semibold text-zinc-900 dark:text-white tabular-nums whitespace-nowrap">
                                     {{ $nasabah->formatted_saldo }}
                                 </td>
-                                <td class="py-3.5 px-3 text-center">
+                                <td class="py-3 px-4 text-center">
                                     @if ($nasabah->status === 'aktif')
                                         <button 
                                             type="button" 
                                             wire:click="toggleFreeze({{ $nasabah->id }})"
-                                            title="Klik untuk bekukan rekening nasabah"
-                                            class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 transition-colors cursor-pointer"
+                                            title="Klik untuk bekukan rekening"
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 hover:bg-emerald-100 transition-colors cursor-pointer"
                                         >
                                             <span class="size-1.5 rounded-full bg-emerald-500"></span>
                                             <span>Aktif</span>
@@ -96,43 +101,39 @@
                                         <button 
                                             type="button" 
                                             wire:click="toggleFreeze({{ $nasabah->id }})"
-                                            title="Klik untuk buka blokir (aktifkan) rekening"
-                                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 hover:bg-amber-500/25 transition-colors cursor-pointer"
+                                            title="Klik untuk buka blokir rekening"
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60 hover:bg-amber-100 transition-colors cursor-pointer"
                                         >
-                                            <x-heroicon-s-lock-closed class="size-3 text-amber-600 dark:text-amber-400" />
+                                            <span class="size-1.5 rounded-full bg-amber-500"></span>
                                             <span>Dibekukan</span>
                                         </button>
                                     @else
                                         <button 
                                             type="button" 
                                             wire:click="setStatus({{ $nasabah->id }}, 'aktif')"
-                                            title="Klik untuk aktifkan kembali"
-                                            class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
+                                            title="Klik untuk aktifkan rekening"
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-200 transition-colors cursor-pointer"
                                         >
+                                            <span class="size-1.5 rounded-full bg-zinc-400"></span>
                                             <span>Non-Aktif</span>
                                         </button>
                                     @endif
                                 </td>
-                                <td class="py-3.5 px-3 text-center">
-                                    <div class="flex items-center justify-center gap-1.5">
+                                <td class="py-3 px-4 text-right">
+                                    <div class="inline-flex items-center justify-end gap-1">
                                         <!-- Shortcut Setor -->
                                         @if ($nasabah->status === 'aktif')
                                             <a 
                                                 href="{{ route('admin.setor', ['nasabah_id' => $nasabah->id]) }}" 
                                                 title="Setor Tunai"
-                                                class="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white transition-colors"
+                                                class="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition-colors"
                                             >
-                                                <x-heroicon-s-arrow-down-tray class="size-3.5" />
+                                                <x-heroicon-s-arrow-down-tray class="size-4" />
                                             </a>
                                         @else
-                                            <button 
-                                                type="button" 
-                                                disabled 
-                                                title="{{ $nasabah->status === 'dibekukan' ? 'Rekening dibekukan - transaksi ditolak' : 'Rekening non-aktif' }}"
-                                                class="p-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-600 opacity-40 cursor-not-allowed"
-                                            >
-                                                <x-heroicon-s-arrow-down-tray class="size-3.5" />
-                                            </button>
+                                            <span class="p-1.5 text-zinc-300 dark:text-zinc-700 cursor-not-allowed">
+                                                <x-heroicon-s-arrow-down-tray class="size-4" />
+                                            </span>
                                         @endif
 
                                         <!-- Shortcut Tarik -->
@@ -140,49 +141,34 @@
                                             <a 
                                                 href="{{ route('admin.tarik', ['nasabah_id' => $nasabah->id]) }}" 
                                                 title="Tarik Tunai"
-                                                class="p-1.5 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-600 hover:text-white transition-colors"
+                                                class="p-1.5 rounded-lg text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-950/50 transition-colors"
                                             >
-                                                <x-heroicon-s-arrow-up-tray class="size-3.5" />
+                                                <x-heroicon-s-arrow-up-tray class="size-4" />
                                             </a>
                                         @else
-                                            <button 
-                                                type="button" 
-                                                disabled 
-                                                title="{{ $nasabah->status === 'dibekukan' ? 'Rekening dibekukan - transaksi ditolak' : 'Rekening non-aktif' }}"
-                                                class="p-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-600 opacity-40 cursor-not-allowed"
-                                            >
-                                                <x-heroicon-s-arrow-up-tray class="size-3.5" />
-                                            </button>
+                                            <span class="p-1.5 text-zinc-300 dark:text-zinc-700 cursor-not-allowed">
+                                                <x-heroicon-s-arrow-up-tray class="size-4" />
+                                            </span>
                                         @endif
-
-                                        <!-- Freeze / Unfreeze Quick Action -->
-                                        <button 
-                                            type="button" 
-                                            wire:click="toggleFreeze({{ $nasabah->id }})"
-                                            title="{{ $nasabah->status === 'dibekukan' ? 'Buka Blokir (Aktifkan Rekening)' : 'Bekukan Rekening Nasabah' }}"
-                                            class="p-1.5 rounded-lg {{ $nasabah->status === 'dibekukan' ? 'bg-amber-500 text-white hover:bg-amber-600' : 'bg-zinc-100 hover:bg-amber-50 dark:bg-zinc-800 dark:hover:bg-amber-950/40 text-zinc-600 hover:text-amber-600 dark:text-zinc-300 dark:hover:text-amber-400' }} transition-colors cursor-pointer"
-                                        >
-                                            <x-heroicon-o-lock-closed class="size-3.5" />
-                                        </button>
 
                                         <!-- Detail Button -->
                                         <button 
                                             type="button" 
                                             wire:click="openDetailModal({{ $nasabah->id }})"
                                             title="Lihat Detail & Mutasi"
-                                            class="p-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
+                                            class="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
                                         >
-                                            <x-heroicon-o-eye class="size-3.5" />
+                                            <x-heroicon-o-eye class="size-4" />
                                         </button>
 
                                         <!-- Cetak Buku Tabungan Button -->
                                         <button 
                                             type="button" 
                                             wire:click="openBukuTabungan({{ $nasabah->id }})"
-                                            title="Cetak Buku Tabungan / Rekening Koran"
-                                            class="p-1.5 rounded-lg bg-blue-50 hover:bg-blue-600 hover:text-white dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 dark:hover:bg-blue-600 dark:hover:text-white transition-colors cursor-pointer"
+                                            title="Cetak Buku Tabungan"
+                                            class="p-1.5 rounded-lg text-zinc-500 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
                                         >
-                                            <x-heroicon-o-book-open class="size-3.5" />
+                                            <x-heroicon-o-book-open class="size-4" />
                                         </button>
 
                                         <!-- Edit Button -->
@@ -190,9 +176,9 @@
                                             type="button" 
                                             wire:click="openEditModal({{ $nasabah->id }})"
                                             title="Edit Data"
-                                            class="p-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
+                                            class="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
                                         >
-                                            <x-heroicon-o-pencil-square class="size-3.5" />
+                                            <x-heroicon-o-pencil-square class="size-4" />
                                         </button>
 
                                         <!-- Delete Button -->
@@ -200,9 +186,9 @@
                                             type="button" 
                                             wire:click="openDeleteModal({{ $nasabah->id }})"
                                             title="Hapus Nasabah"
-                                            class="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-600 hover:text-white dark:bg-rose-950/30 text-rose-600 dark:text-rose-400 dark:hover:bg-rose-600 dark:hover:text-white transition-colors cursor-pointer"
+                                            class="p-1.5 rounded-lg text-zinc-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
                                         >
-                                            <x-heroicon-o-trash class="size-3.5" />
+                                            <x-heroicon-o-trash class="size-4" />
                                         </button>
                                     </div>
                                 </td>
@@ -213,36 +199,38 @@
             </div>
 
             <!-- Pagination -->
-            <div class="mt-4">
-                {{ $nasabahs->links() }}
-            </div>
+            @if ($nasabahs->hasPages())
+                <div class="p-4 border-t border-zinc-200 dark:border-zinc-800">
+                    {{ $nasabahs->links() }}
+                </div>
+            @endif
         @endif
     </div>
 
     <!-- MODAL CREATE NASABAH -->
     @if ($showCreateModal)
-        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-            <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl animate-scale-in text-zinc-900 dark:text-zinc-100">
-                <div class="p-5 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
+        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/60 backdrop-blur-xs">
+            <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-xl text-zinc-900 dark:text-zinc-100">
+                <div class="px-6 py-4 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
                     <div>
-                        <h3 class="text-base font-bold text-zinc-900 dark:text-white">Registrasi Nasabah Baru</h3>
-                        <p class="text-xs text-zinc-500">Penomoran otomatis 9 digit standar perbankan</p>
+                        <h3 class="text-sm font-bold text-zinc-900 dark:text-white">Registrasi Nasabah Baru</h3>
+                        <p class="text-xs text-zinc-500 dark:text-zinc-400">Penomoran otomatis 9 digit standar perbankan</p>
                     </div>
-                    <button type="button" wire:click="closeCreateModal" class="text-zinc-400 hover:text-zinc-600 dark:hover:text-white p-1 rounded-lg">
-                        <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    <button type="button" wire:click="closeCreateModal" class="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 p-1 rounded-lg cursor-pointer">
+                        <x-heroicon-o-x-mark class="size-5" />
                     </button>
                 </div>
 
                 <form wire:submit="saveNasabah" class="p-6 space-y-4">
-                    <!-- Wilayah / Lokasi Selection & Auto ID Nasabah Info Card -->
+                    <!-- Wilayah Selection & Auto ID Preview -->
                     <div class="space-y-3">
                         <div>
-                            <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                            <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
                                 Wilayah / Lokasi Pendaftaran <span class="text-emerald-500">*</span>
                             </label>
                             <select 
                                 wire:model.live="wilayah_code" 
-                                class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs text-zinc-900 dark:text-white focus:ring-1 focus:ring-emerald-500 font-semibold cursor-pointer"
+                                class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 cursor-pointer"
                             >
                                 <option value="1">1 - Sumatera</option>
                                 <option value="2">2 - Jawa</option>
@@ -255,83 +243,79 @@
                             </select>
                         </div>
 
-                        <!-- Automated 9-Digit ID Display Card -->
-                        <div class="p-3.5 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/60 flex items-center justify-between">
+                        <!-- ID Nasabah Auto Card -->
+                        <div class="p-3.5 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
                             <div>
-                                <span class="text-[10px] text-emerald-800 dark:text-emerald-300 font-semibold uppercase tracking-wider block">
-                                    Nomor Rekening (Otomatis 9 Digit)
-                                </span>
-                                <span class="text-[11px] text-zinc-600 dark:text-zinc-400">
-                                    Wilayah: <strong>{{ \App\Models\Nasabah::WILAYAH[$wilayah_code] ?? 'Jawa' }} ({{ $wilayah_code }})</strong> • Periode: <strong>{{ date('y/m') }}</strong>
+                                <span class="text-[10px] text-zinc-400 uppercase tracking-wider block font-semibold">Nomor Rekening Otomatis</span>
+                                <span class="text-[11px] text-zinc-500">
+                                    {{ \App\Models\Nasabah::WILAYAH[$wilayah_code] ?? 'Jawa' }} (Kode {{ $wilayah_code }}) • Periode {{ date('y/m') }}
                                 </span>
                             </div>
-                            <div class="text-right">
-                                <span class="text-sm sm:text-base font-black font-mono tracking-wider text-emerald-600 dark:text-emerald-400 bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-xl border border-emerald-200 dark:border-emerald-800/80 shadow-sm inline-block">
-                                    {{ $nomor_nasabah }}
-                                </span>
-                            </div>
+                            <span class="text-sm font-bold font-mono text-emerald-600 dark:text-emerald-400">
+                                {{ $nomor_nasabah }}
+                            </span>
                         </div>
                     </div>
 
                     <!-- Nama Lengkap -->
                     <div>
-                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                            Nama Lengkap Nasabah <span class="text-emerald-500">*</span>
+                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                            Nama Lengkap <span class="text-emerald-500">*</span>
                         </label>
                         <input 
                             type="text" 
                             wire:model="nama" 
                             placeholder="Contoh: Budi Santoso"
-                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs text-zinc-900 dark:text-white focus:ring-1 focus:ring-emerald-500"
+                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20"
                         />
                         @error('nama') <span class="text-[11px] text-rose-500 mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
                     <!-- No Handphone -->
                     <div>
-                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                            Nomor Handphone (Untuk Login Nasabah) <span class="text-emerald-500">*</span>
+                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                            Nomor Handphone (Untuk Login Portal) <span class="text-emerald-500">*</span>
                         </label>
                         <input 
                             type="tel" 
                             wire:model="no_hp" 
-                            placeholder="Contoh: 081234567890"
-                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs text-zinc-900 dark:text-white font-mono focus:ring-1 focus:ring-emerald-500"
+                            placeholder="08xxxxxxxxxx"
+                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white font-mono placeholder-zinc-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20"
                         />
-                        @error('no_hp') <span class="text-[11px] text-rose-500 dark:text-rose-400 mt-1 block">{{ $message }}</span> @enderror
+                        @error('no_hp') <span class="text-[11px] text-rose-500 mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
                     <!-- NIK -->
                     <div>
-                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                            Nomor Induk Kependudukan (NIK - Opsional)
+                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                            NIK (Nomor Induk Kependudukan - Opsional)
                         </label>
                         <input 
                             type="text" 
                             wire:model="nik" 
-                            placeholder="Contoh: 320101..."
-                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs text-zinc-900 dark:text-white font-mono focus:ring-1 focus:ring-emerald-500"
+                            placeholder="16 digit NIK"
+                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white font-mono placeholder-zinc-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20"
                         />
-                        @error('nik') <span class="text-[11px] text-rose-500 dark:text-rose-400 mt-1 block">{{ $message }}</span> @enderror
+                        @error('nik') <span class="text-[11px] text-rose-500 mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
                     <!-- Alamat -->
                     <div>
-                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
                             Alamat Domisili
                         </label>
                         <textarea 
                             wire:model="alamat" 
                             rows="2"
-                            placeholder="Contoh: Jl. Melati No. 12..."
-                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs text-zinc-900 dark:text-white focus:ring-1 focus:ring-emerald-500"
+                            placeholder="Alamat lengkap nasabah..."
+                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20"
                         ></textarea>
-                        @error('alamat') <span class="text-[11px] text-rose-500 dark:text-rose-400 mt-1 block">{{ $message }}</span> @enderror
+                        @error('alamat') <span class="text-[11px] text-rose-500 mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
                     <!-- Setoran Awal -->
                     <div>
-                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
                             Setoran Awal (Rp - Opsional)
                         </label>
                         <input 
@@ -340,23 +324,23 @@
                             min="0"
                             step="1000"
                             placeholder="0"
-                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs text-zinc-900 dark:text-white font-mono focus:ring-1 focus:ring-emerald-500"
+                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white font-mono placeholder-zinc-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20"
                         />
-                        <span class="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1 block">Otomatis dicatat sebagai transaksi setoran awal jika > 0</span>
-                        @error('setoran_awal') <span class="text-[11px] text-rose-500 dark:text-rose-400 mt-1 block">{{ $message }}</span> @enderror
+                        <span class="text-[11px] text-zinc-400 mt-1 block">Otomatis dicatat sebagai transaksi setoran awal jika diisi</span>
+                        @error('setoran_awal') <span class="text-[11px] text-rose-500 mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
-                    <div class="pt-3 border-t border-zinc-200 dark:border-zinc-800 flex items-center justify-end gap-2">
+                    <div class="pt-4 border-t border-zinc-200 dark:border-zinc-800 flex items-center justify-end gap-2">
                         <button 
                             type="button" 
                             wire:click="closeCreateModal" 
-                            class="px-4 py-2 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-xs font-semibold rounded-xl cursor-pointer"
+                            class="px-4 py-2 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-xs font-semibold rounded-xl cursor-pointer transition-colors"
                         >
                             Batal
                         </button>
                         <button 
                             type="submit" 
-                            class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl shadow-md cursor-pointer"
+                            class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-xl cursor-pointer transition-colors"
                         >
                             Simpan Nasabah
                         </button>
@@ -368,79 +352,74 @@
 
     <!-- MODAL EDIT NASABAH -->
     @if ($showEditModal)
-        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 dark:bg-black/70 backdrop-blur-sm">
-            <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl animate-scale-in text-zinc-900 dark:text-zinc-100">
-                <div class="p-5 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
+        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/60 backdrop-blur-xs">
+            <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-xl text-zinc-900 dark:text-zinc-100">
+                <div class="px-6 py-4 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
                     <div>
-                        <h3 class="text-base font-bold text-zinc-900 dark:text-white">Edit Data Nasabah</h3>
-                        <p class="text-xs text-zinc-500 dark:text-zinc-400 font-mono">ID: {{ $nomor_nasabah }}</p>
+                        <h3 class="text-sm font-bold text-zinc-900 dark:text-white">Edit Data Nasabah</h3>
+                        <p class="text-xs text-zinc-500 font-mono">ID: {{ $nomor_nasabah }}</p>
                     </div>
-                    <button type="button" wire:click="closeEditModal" class="text-zinc-400 hover:text-zinc-600 dark:hover:text-white p-1 rounded-lg">
-                        <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    <button type="button" wire:click="closeEditModal" class="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 p-1 rounded-lg cursor-pointer">
+                        <x-heroicon-o-x-mark class="size-5" />
                     </button>
                 </div>
 
-                <form wire:submit="updateNasabah" class="p-5 space-y-4">
-                    <!-- Nama Lengkap -->
+                <form wire:submit="updateNasabah" class="p-6 space-y-4">
                     <div>
-                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                            Nama Lengkap Nasabah <span class="text-emerald-500">*</span>
+                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                            Nama Lengkap <span class="text-emerald-500">*</span>
                         </label>
                         <input 
                             type="text" 
                             wire:model="nama" 
-                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs text-zinc-900 dark:text-white focus:ring-1 focus:ring-emerald-500"
+                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20"
                         />
-                        @error('nama') <span class="text-[11px] text-rose-500 dark:text-rose-400 mt-1 block">{{ $message }}</span> @enderror
+                        @error('nama') <span class="text-[11px] text-rose-500 mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
-                    <!-- No Handphone -->
                     <div>
-                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
                             Nomor Handphone (Untuk Login) <span class="text-emerald-500">*</span>
                         </label>
                         <input 
                             type="tel" 
                             wire:model="no_hp" 
-                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs text-zinc-900 dark:text-white font-mono focus:ring-1 focus:ring-emerald-500"
+                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white font-mono focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20"
                         />
-                        @error('no_hp') <span class="text-[11px] text-rose-500 dark:text-rose-400 mt-1 block">{{ $message }}</span> @enderror
+                        @error('no_hp') <span class="text-[11px] text-rose-500 mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
-                    <!-- NIK -->
                     <div>
-                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
                             Nomor Induk Kependudukan (NIK)
                         </label>
                         <input 
                             type="text" 
                             wire:model="nik" 
-                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs text-zinc-900 dark:text-white font-mono focus:ring-1 focus:ring-emerald-500"
+                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white font-mono focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20"
                         />
-                        @error('nik') <span class="text-[11px] text-rose-500 dark:text-rose-400 mt-1 block">{{ $message }}</span> @enderror
+                        @error('nik') <span class="text-[11px] text-rose-500 mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
-                    <!-- Alamat -->
                     <div>
-                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
                             Alamat Domisili
                         </label>
                         <textarea 
                             wire:model="alamat" 
                             rows="2"
-                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs text-zinc-900 dark:text-white focus:ring-1 focus:ring-emerald-500"
+                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20"
                         ></textarea>
-                        @error('alamat') <span class="text-[11px] text-rose-500 dark:text-rose-400 mt-1 block">{{ $message }}</span> @enderror
+                        @error('alamat') <span class="text-[11px] text-rose-500 mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
-                    <!-- Status -->
                     <div>
-                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
                             Status Akun
                         </label>
                         <select 
                             wire:model="status" 
-                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs text-zinc-900 dark:text-white focus:ring-1 focus:ring-emerald-500"
+                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 cursor-pointer"
                         >
                             <option value="aktif">Aktif (Bisa Transaksi & Login)</option>
                             <option value="dibekukan">Dibekukan (Blokir Sementara)</option>
@@ -448,17 +427,17 @@
                         </select>
                     </div>
 
-                    <div class="pt-3 border-t border-zinc-200 dark:border-zinc-800 flex items-center justify-end gap-2">
+                    <div class="pt-4 border-t border-zinc-200 dark:border-zinc-800 flex items-center justify-end gap-2">
                         <button 
                             type="button" 
                             wire:click="closeEditModal" 
-                            class="px-4 py-2 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-xs font-semibold rounded-xl cursor-pointer"
+                            class="px-4 py-2 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-xs font-semibold rounded-xl cursor-pointer transition-colors"
                         >
                             Batal
                         </button>
                         <button 
                             type="submit" 
-                            class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl shadow-md cursor-pointer"
+                            class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-xl cursor-pointer transition-colors"
                         >
                             Perbarui Data
                         </button>
@@ -470,110 +449,109 @@
 
     <!-- MODAL DETAIL NASABAH -->
     @if ($showDetailModal && $detailNasabah)
-        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 dark:bg-black/70 backdrop-blur-sm">
-            <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl animate-scale-in text-zinc-900 dark:text-zinc-100">
-                <div class="p-5 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
+        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/60 backdrop-blur-xs">
+            <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl w-full max-w-2xl overflow-hidden shadow-xl text-zinc-900 dark:text-zinc-100 flex flex-col max-h-[85vh]">
+                <div class="px-6 py-4 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between shrink-0">
                     <div>
                         <div class="flex items-center gap-2">
-                            <h3 class="text-base font-bold text-zinc-900 dark:text-white">Detail Buku Tabungan Nasabah</h3>
+                            <h3 class="text-sm font-bold text-zinc-900 dark:text-white">Detail Rekening Nasabah</h3>
                             @if ($detailNasabah->status === 'aktif')
-                                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">Aktif</span>
+                                <span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60">Aktif</span>
                             @elseif ($detailNasabah->status === 'dibekukan')
-                                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">Dibekukan</span>
+                                <span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60">Dibekukan</span>
                             @else
-                                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-300 dark:border-zinc-700">Non-Aktif</span>
+                                <span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700">Non-Aktif</span>
                             @endif
                         </div>
                         <p class="text-xs font-mono text-emerald-600 dark:text-emerald-400 mt-0.5">{{ $detailNasabah->nomor_nasabah }}</p>
                     </div>
-                    <button type="button" wire:click="closeDetailModal" class="text-zinc-400 hover:text-zinc-600 dark:hover:text-white p-1 rounded-lg">
-                        <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    <button type="button" wire:click="closeDetailModal" class="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 p-1 rounded-lg cursor-pointer">
+                        <x-heroicon-o-x-mark class="size-5" />
                     </button>
                 </div>
 
-                <div class="p-5 space-y-6 max-h-[80vh] overflow-y-auto">
-                    <!-- Profile Header Summary -->
+                <div class="p-6 space-y-5 overflow-y-auto">
+                    <!-- Profile Summary Cards -->
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         <div class="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
-                            <span class="text-[10px] text-zinc-500 block">Nama Nasabah</span>
-                            <span class="text-xs font-bold text-zinc-900 dark:text-white">{{ $detailNasabah->nama }}</span>
+                            <span class="text-[10px] text-zinc-400 block font-medium">Nama</span>
+                            <span class="text-xs font-semibold text-zinc-900 dark:text-white truncate block">{{ $detailNasabah->nama }}</span>
                         </div>
                         <div class="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
-                            <span class="text-[10px] text-zinc-500 block">No. Handphone (Login)</span>
-                            <span class="text-xs font-bold font-mono text-zinc-800 dark:text-zinc-200">{{ $detailNasabah->no_hp }}</span>
+                            <span class="text-[10px] text-zinc-400 block font-medium">No. Handphone</span>
+                            <span class="text-xs font-mono font-semibold text-zinc-900 dark:text-white">{{ $detailNasabah->no_hp }}</span>
                         </div>
                         <div class="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
-                            <span class="text-[10px] text-zinc-500 block">NIK</span>
-                            <span class="text-xs font-bold font-mono text-zinc-800 dark:text-zinc-200">{{ $detailNasabah->nik ?? '-' }}</span>
+                            <span class="text-[10px] text-zinc-400 block font-medium">NIK</span>
+                            <span class="text-xs font-mono text-zinc-700 dark:text-zinc-300">{{ $detailNasabah->nik ?? '-' }}</span>
                         </div>
-                        <div class="p-3 bg-emerald-50 dark:bg-emerald-950/40 rounded-xl border border-emerald-200 dark:border-emerald-800/60">
-                            <span class="text-[10px] text-emerald-700 dark:text-emerald-300 block">Saldo Tabungan</span>
-                            <span class="text-sm font-black font-mono text-emerald-600 dark:text-emerald-400">{{ $detailNasabah->formatted_saldo }}</span>
+                        <div class="p-3 bg-emerald-50/60 dark:bg-emerald-950/30 rounded-xl border border-emerald-200 dark:border-emerald-800/60">
+                            <span class="text-[10px] text-emerald-700 dark:text-emerald-300 block font-medium">Saldo Tabungan</span>
+                            <span class="text-xs font-bold font-mono text-emerald-600 dark:text-emerald-400 tabular-nums">{{ $detailNasabah->formatted_saldo }}</span>
                         </div>
                     </div>
 
                     @if ($detailNasabah->status === 'dibekukan')
-                        <div class="p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-600/40 text-amber-900 dark:text-amber-200 text-xs flex items-start justify-between gap-3">
-                            <div class="flex items-start gap-2">
-                                <x-heroicon-s-lock-closed class="size-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-                                <div>
-                                    <strong class="block font-semibold">Rekening Sedang Dibekukan</strong>
-                                    <span>Transaksi setor/tarik tunai dan akses login portal nasabah sedang diblokir sementara.</span>
-                                </div>
+                        <div class="p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 text-xs flex items-center justify-between gap-3">
+                            <div class="flex items-center gap-2">
+                                <x-heroicon-s-lock-closed class="size-4 text-amber-600 dark:text-amber-400 shrink-0" />
+                                <span class="text-amber-800 dark:text-amber-300">Rekening dibekukan. Transaksi setor & tarik dinonaktifkan sementara.</span>
                             </div>
                             <button 
                                 type="button" 
                                 wire:click="toggleFreeze({{ $detailNasabah->id }})"
-                                class="px-3 py-1 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-lg shrink-0 cursor-pointer shadow-sm"
+                                class="px-2.5 py-1 bg-amber-600 hover:bg-amber-500 text-white font-semibold text-xs rounded-lg shrink-0 cursor-pointer transition-colors"
                             >
                                 Buka Blokir
                             </button>
                         </div>
                     @endif
 
-                    <!-- Alamat -->
-                    <div class="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 text-xs text-zinc-600 dark:text-zinc-400">
-                        <span class="text-[10px] text-zinc-500 block font-semibold">Alamat:</span>
-                        {{ $detailNasabah->alamat ?? 'Tidak dicantumkan' }}
-                    </div>
+                    @if ($detailNasabah->alamat)
+                        <div class="text-xs text-zinc-600 dark:text-zinc-400">
+                            <span class="font-medium text-zinc-900 dark:text-zinc-200">Alamat:</span> {{ $detailNasabah->alamat }}
+                        </div>
+                    @endif
 
                     <!-- 10 Transaksi Terakhir -->
                     <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <h4 class="text-xs font-bold text-zinc-900 dark:text-white uppercase tracking-wider">10 Mutasi Transaksi Terakhir</h4>
-                            <span class="text-[10px] text-zinc-500">Otomatis diperbarui</span>
+                        <div class="flex items-center justify-between mb-2.5">
+                            <h4 class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">10 Mutasi Transaksi Terakhir</h4>
+                            <span class="text-[11px] text-zinc-400">Terbaru</span>
                         </div>
 
                         @if ($detailNasabah->transaksis->isEmpty())
-                            <p class="text-xs text-zinc-400 dark:text-zinc-500 py-4 text-center">Belum ada transaksi pada rekening ini.</p>
+                            <div class="p-6 text-center text-xs text-zinc-400 border border-zinc-200 dark:border-zinc-800 rounded-xl">
+                                Belum ada riwayat transaksi pada rekening ini.
+                            </div>
                         @else
                             <div class="overflow-x-auto border border-zinc-200 dark:border-zinc-800 rounded-xl">
                                 <table class="w-full text-left text-xs">
                                     <thead class="bg-zinc-50 dark:bg-zinc-950 text-zinc-500 dark:text-zinc-400 font-semibold border-b border-zinc-200 dark:border-zinc-800">
                                         <tr>
-                                            <th class="p-2.5">Waktu</th>
-                                            <th class="p-2.5">Kode</th>
-                                            <th class="p-2.5">Jenis</th>
-                                            <th class="p-2.5 text-right">Nominal</th>
-                                            <th class="p-2.5 text-right">Saldo Akhir</th>
+                                            <th class="py-2.5 px-3">Waktu</th>
+                                            <th class="py-2.5 px-3">Kode</th>
+                                            <th class="py-2.5 px-3">Jenis</th>
+                                            <th class="py-2.5 px-3 text-right">Nominal</th>
+                                            <th class="py-2.5 px-3 text-right">Saldo Akhir</th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
                                         @foreach ($detailNasabah->transaksis as $trx)
                                             <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
-                                                <td class="p-2.5 text-zinc-500 dark:text-zinc-400 whitespace-nowrap">{{ $trx->created_at->format('d/m/y H:i') }}</td>
-                                                <td class="p-2.5 font-mono text-zinc-800 dark:text-zinc-300">{{ $trx->kode_transaksi }}</td>
-                                                <td class="p-2.5">
+                                                <td class="py-2.5 px-3 text-zinc-400 whitespace-nowrap">{{ $trx->created_at->format('d/m/y H:i') }}</td>
+                                                <td class="py-2.5 px-3 font-mono text-zinc-700 dark:text-zinc-300">{{ $trx->kode_transaksi }}</td>
+                                                <td class="py-2.5 px-3">
                                                     @if ($trx->jenis_transaksi === 'setor')
-                                                        <span class="text-emerald-600 dark:text-emerald-400 font-bold text-[11px]">+ SETOR</span>
+                                                        <span class="text-emerald-600 dark:text-emerald-400 font-semibold text-[11px]">+ SETOR</span>
                                                     @else
-                                                        <span class="text-amber-600 dark:text-amber-400 font-bold text-[11px]">- TARIK</span>
+                                                        <span class="text-amber-600 dark:text-amber-400 font-semibold text-[11px]">- TARIK</span>
                                                     @endif
                                                 </td>
-                                                <td class="p-2.5 text-right font-mono font-bold {{ $trx->jenis_transaksi === 'setor' ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400' }}">
+                                                <td class="py-2.5 px-3 text-right font-mono font-semibold tabular-nums {{ $trx->jenis_transaksi === 'setor' ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400' }}">
                                                     {{ $trx->formatted_nominal }}
                                                 </td>
-                                                <td class="p-2.5 text-right font-mono text-zinc-700 dark:text-zinc-300">
+                                                <td class="py-2.5 px-3 text-right font-mono text-zinc-700 dark:text-zinc-300 tabular-nums">
                                                     {{ $trx->formatted_saldo_akhir }}
                                                 </td>
                                             </tr>
@@ -585,19 +563,19 @@
                     </div>
                 </div>
 
-                <div class="p-4 bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-3">
+                <div class="px-6 py-4 bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-2.5 shrink-0">
                     <div class="flex items-center gap-2">
                         @if ($detailNasabah->status === 'aktif')
                             <a 
                                 href="{{ route('admin.setor', ['nasabah_id' => $detailNasabah->id]) }}" 
-                                class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg shadow-sm flex items-center gap-1.5 cursor-pointer"
+                                class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors"
                             >
                                 <x-heroicon-s-arrow-down-tray class="size-3.5" />
                                 <span>Setor</span>
                             </a>
                             <a 
                                 href="{{ route('admin.tarik', ['nasabah_id' => $detailNasabah->id]) }}" 
-                                class="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold rounded-lg shadow-sm flex items-center gap-1.5 cursor-pointer"
+                                class="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors"
                             >
                                 <x-heroicon-s-arrow-up-tray class="size-3.5" />
                                 <span>Tarik</span>
@@ -606,35 +584,26 @@
 
                         <button 
                             type="button" 
-                            wire:click="toggleFreeze({{ $detailNasabah->id }})" 
-                            class="px-3 py-1.5 {{ $detailNasabah->status === 'dibekukan' ? 'bg-emerald-600 hover:bg-emerald-500 text-white' : 'bg-amber-600 hover:bg-amber-500 text-white' }} text-xs font-semibold rounded-lg shadow-sm flex items-center gap-1.5 cursor-pointer"
+                            wire:click="openBukuTabungan({{ $detailNasabah->id }})" 
+                            class="px-3 py-1.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
                         >
-                            <x-heroicon-s-lock-closed class="size-3.5" />
-                            <span>{{ $detailNasabah->status === 'dibekukan' ? 'Buka Blokir' : 'Bekukan Rekening' }}</span>
+                            <x-heroicon-o-book-open class="size-3.5" />
+                            <span>Buku Tabungan</span>
                         </button>
                     </div>
 
                     <div class="flex items-center gap-2">
                         <button 
                             type="button" 
-                            wire:click="openBukuTabungan({{ $detailNasabah->id }})" 
-                            class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg shadow-sm flex items-center gap-1.5 cursor-pointer"
-                        >
-                            <x-heroicon-o-book-open class="size-3.5" />
-                            <span>Cetak Buku Tabungan</span>
-                        </button>
-                        <button 
-                            type="button" 
                             wire:click="openDeleteModal({{ $detailNasabah->id }})" 
-                            class="px-3 py-1.5 bg-rose-50 hover:bg-rose-600 hover:text-white dark:bg-rose-950/30 text-rose-600 dark:text-rose-400 dark:hover:bg-rose-600 dark:hover:text-white text-xs font-semibold rounded-lg border border-rose-200 dark:border-rose-800/60 transition-colors cursor-pointer flex items-center gap-1.5"
+                            class="px-3 py-1.5 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-xs font-semibold rounded-lg transition-colors cursor-pointer"
                         >
-                            <x-heroicon-o-trash class="size-3.5" />
-                            <span>Hapus Nasabah</span>
+                            Hapus
                         </button>
                         <button 
                             type="button" 
                             wire:click="closeDetailModal" 
-                            class="px-4 py-1.5 bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-300 text-xs font-semibold rounded-lg cursor-pointer"
+                            class="px-4 py-1.5 bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-semibold rounded-lg transition-colors cursor-pointer"
                         >
                             Tutup
                         </button>
@@ -646,27 +615,27 @@
 
     <!-- MODAL DELETE KONFIRMASI -->
     @if ($showDeleteModal && $deleteNasabah)
-        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 dark:bg-black/80 backdrop-blur-sm">
-            <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl animate-scale-in text-zinc-900 dark:text-zinc-100">
+        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/60 backdrop-blur-xs">
+            <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl w-full max-w-md overflow-hidden shadow-xl text-zinc-900 dark:text-zinc-100">
                 <div class="p-6 text-center">
-                    <div class="size-14 rounded-2xl bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center mx-auto mb-4 border border-rose-500/30">
-                        <x-heroicon-o-trash class="size-7" />
+                    <div class="size-12 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center mx-auto mb-4 border border-rose-200 dark:border-rose-900">
+                        <x-heroicon-o-trash class="size-6" />
                     </div>
 
-                    <h3 class="text-lg font-extrabold text-zinc-900 dark:text-white tracking-tight">Hapus Data Nasabah?</h3>
-                    <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Tindakan ini permanen dan akan menghapus seluruh data rekening nasabah.</p>
+                    <h3 class="text-base font-bold text-zinc-900 dark:text-white">Hapus Data Nasabah?</h3>
+                    <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Tindakan ini permanen dan akan menghapus seluruh data rekening nasabah ini.</p>
 
-                    <div class="my-5 p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800 text-left space-y-2 text-xs">
+                    <div class="my-4 p-3.5 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-left space-y-2 text-xs">
                         <div class="flex justify-between">
                             <span class="text-zinc-500">ID Nasabah:</span>
-                            <span class="font-mono font-bold text-emerald-600 dark:text-emerald-400">{{ $deleteNasabah->nomor_nasabah }}</span>
+                            <span class="font-mono font-semibold text-emerald-600 dark:text-emerald-400">{{ $deleteNasabah->nomor_nasabah }}</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-zinc-500">Nama Nasabah:</span>
-                            <span class="font-bold text-zinc-900 dark:text-white">{{ $deleteNasabah->nama }}</span>
+                            <span class="text-zinc-500">Nama:</span>
+                            <span class="font-semibold text-zinc-900 dark:text-white">{{ $deleteNasabah->nama }}</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-zinc-500">No. Handphone:</span>
+                            <span class="text-zinc-500">No. HP:</span>
                             <span class="font-mono text-zinc-700 dark:text-zinc-300">{{ $deleteNasabah->no_hp }}</span>
                         </div>
                         <div class="flex justify-between">
@@ -675,36 +644,36 @@
                         </div>
                         <div class="pt-2 border-t border-zinc-200 dark:border-zinc-800 flex justify-between items-center">
                             <span class="text-zinc-700 dark:text-zinc-300 font-semibold">Sisa Saldo:</span>
-                            <span class="font-mono font-black text-sm {{ (float)$deleteNasabah->saldo > 0 ? 'text-rose-600 dark:text-rose-400' : 'text-zinc-700 dark:text-zinc-300' }}">
+                            <span class="font-mono font-bold text-sm {{ (float)$deleteNasabah->saldo > 0 ? 'text-rose-600 dark:text-rose-400' : 'text-zinc-700 dark:text-zinc-300' }}">
                                 {{ $deleteNasabah->formatted_saldo }}
                             </span>
                         </div>
                     </div>
 
                     @if ((float)$deleteNasabah->saldo > 0)
-                        <div class="p-3 mb-5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700/60 text-amber-800 dark:text-amber-300 text-left text-[11px] flex items-start gap-2">
+                        <div class="p-3 mb-4 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 text-amber-800 dark:text-amber-300 text-left text-xs flex items-start gap-2">
                             <x-heroicon-s-exclamation-triangle class="size-4 shrink-0 mt-0.5 text-amber-600 dark:text-amber-400" />
                             <div>
-                                <strong>Peringatan Saldo Masih Ada:</strong> Nasabah ini masih memiliki saldo tabungan sebesar <strong>{{ $deleteNasabah->formatted_saldo }}</strong>.
+                                <strong>Perhatian:</strong> Nasabah ini masih memiliki saldo tabungan aktif sebesar <strong>{{ $deleteNasabah->formatted_saldo }}</strong>.
                             </div>
                         </div>
                     @endif
 
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-2.5">
                         <button 
                             type="button" 
                             wire:click="closeDeleteModal" 
-                            class="w-1/2 py-2.5 px-4 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 font-semibold text-xs rounded-xl transition-colors cursor-pointer"
+                            class="flex-1 py-2 px-4 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 font-semibold text-xs rounded-xl transition-colors cursor-pointer"
                         >
                             Batal
                         </button>
                         <button 
                             type="button" 
                             wire:click="confirmDelete" 
-                            class="w-1/2 py-2.5 px-4 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-lg shadow-rose-600/30 transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+                            class="flex-1 py-2 px-4 bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs rounded-xl transition-colors cursor-pointer flex items-center justify-center gap-1.5"
                         >
                             <x-heroicon-s-trash class="size-4" />
-                            <span>Ya, Hapus</span>
+                            <span>Hapus Nasabah</span>
                         </button>
                     </div>
                 </div>
@@ -727,17 +696,17 @@
             $totalBukuTarik = $bukuTransactions->where('jenis_transaksi', 'tarik')->sum('nominal');
         @endphp
 
-        <div class="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/70 backdrop-blur-sm overflow-y-auto">
-            <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl w-full max-w-4xl overflow-hidden shadow-2xl animate-scale-in text-zinc-900 dark:text-zinc-100 my-8">
+        <div class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-zinc-950/60 backdrop-blur-xs overflow-y-auto">
+            <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl w-full max-w-4xl overflow-hidden shadow-xl text-zinc-900 dark:text-zinc-100 my-6">
                 <!-- Action Bar (Hidden on print) -->
-                <div class="p-4 bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-3 print:hidden">
-                    <div class="flex items-center gap-2">
-                        <div class="size-8 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
-                            <x-heroicon-o-book-open class="size-4" />
+                <div class="px-6 py-4 bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-3 print:hidden">
+                    <div class="flex items-center gap-3">
+                        <div class="size-9 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                            <x-heroicon-o-book-open class="size-5" />
                         </div>
                         <div>
-                            <h3 class="text-xs sm:text-sm font-bold text-zinc-900 dark:text-white">Buku Tabungan & Rekening Koran</h3>
-                            <p class="text-[11px] text-zinc-500">{{ $bukuNasabah->nama }} ({{ $bukuNasabah->nomor_nasabah }})</p>
+                            <h3 class="text-sm font-bold text-zinc-900 dark:text-white">Buku Tabungan & Rekening Koran</h3>
+                            <p class="text-xs text-zinc-500">{{ $bukuNasabah->nama }} • <span class="font-mono">{{ $bukuNasabah->nomor_nasabah }}</span></p>
                         </div>
                     </div>
 
@@ -745,23 +714,23 @@
                         <button 
                             type="button" 
                             wire:click="exportBukuCsv"
-                            class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
+                            class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer"
                         >
-                            <x-heroicon-o-arrow-down-tray class="size-3.5" />
+                            <x-heroicon-o-arrow-down-tray class="size-4" />
                             <span>Export CSV</span>
                         </button>
                         <button 
                             type="button" 
                             onclick="window.print()" 
-                            class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
+                            class="px-3.5 py-1.5 bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-900 font-semibold text-xs rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer"
                         >
-                            <x-heroicon-o-printer class="size-3.5" />
-                            <span>Cetak Buku / Print</span>
+                            <x-heroicon-o-printer class="size-4" />
+                            <span>Cetak Buku</span>
                         </button>
                         <button 
                             type="button" 
                             wire:click="closeBukuTabungan" 
-                            class="px-3 py-1.5 bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-300 text-xs font-semibold rounded-xl cursor-pointer"
+                            class="px-3.5 py-1.5 bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-semibold rounded-xl cursor-pointer transition-colors"
                         >
                             Tutup
                         </button>
@@ -770,10 +739,10 @@
 
                 <!-- Passbook Document Body -->
                 <div class="p-6 sm:p-8 space-y-6 max-h-[75vh] overflow-y-auto print:max-h-none print:overflow-visible print:p-0">
-                    <!-- Bank / Institution Letterhead -->
-                    <div class="pb-4 border-b-2 border-zinc-900 dark:border-zinc-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                    <!-- Institution Letterhead -->
+                    <div class="pb-4 border-b-2 border-zinc-900 dark:border-zinc-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                         <div>
-                            <h2 class="text-xl sm:text-2xl font-black tracking-tight uppercase text-zinc-900 dark:text-white">
+                            <h2 class="text-xl sm:text-2xl font-bold tracking-tight uppercase text-zinc-900 dark:text-white">
                                 {{ \App\Models\Setting::get('nama_lembaga', 'TabunganKu Digital') }}
                             </h2>
                             <p class="text-xs text-zinc-600 dark:text-zinc-400 font-medium">
@@ -784,15 +753,15 @@
                             </p>
                         </div>
                         <div class="sm:text-right text-xs">
-                            <span class="inline-block px-3 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white font-bold rounded-lg uppercase tracking-wider text-[10px] border border-zinc-300 dark:border-zinc-700 mb-1">
+                            <span class="inline-block px-2.5 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white font-bold rounded-lg uppercase tracking-wider text-[10px] border border-zinc-200 dark:border-zinc-700 mb-1">
                                 LEMBAR BUKU TABUNGAN
                             </span>
-                            <p class="text-[10px] text-zinc-500">Dicetak pada: {{ now()->format('d/m/Y H:i') }}</p>
+                            <p class="text-[11px] text-zinc-500">Dicetak: {{ now()->format('d/m/Y H:i') }}</p>
                         </div>
                     </div>
 
                     <!-- Customer Identity Card -->
-                    <div class="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-mono">
+                    <div class="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-mono">
                         <div>
                             <span class="text-[10px] text-zinc-500 block font-sans">Nomor Rekening / ID:</span>
                             <span class="font-bold text-sm text-emerald-600 dark:text-emerald-400">{{ $bukuNasabah->nomor_nasabah }}</span>
@@ -803,65 +772,65 @@
                         </div>
                         <div>
                             <span class="text-[10px] text-zinc-500 block font-sans">No. Handphone:</span>
-                            <span class="font-bold text-zinc-800 dark:text-zinc-200">{{ $bukuNasabah->no_hp }}</span>
+                            <span class="font-semibold text-zinc-800 dark:text-zinc-200">{{ $bukuNasabah->no_hp }}</span>
                         </div>
                         <div>
                             <span class="text-[10px] text-zinc-500 block font-sans">Saldo Akhir:</span>
-                            <span class="font-black text-sm text-emerald-600 dark:text-emerald-400">{{ $bukuNasabah->formatted_saldo }}</span>
+                            <span class="font-bold text-sm text-emerald-600 dark:text-emerald-400 tabular-nums">{{ $bukuNasabah->formatted_saldo }}</span>
                         </div>
                     </div>
 
                     <!-- Passbook Table -->
-                    <div class="border border-zinc-300 dark:border-zinc-700 rounded-xl overflow-hidden">
+                    <div class="border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden">
                         <table class="w-full text-left text-xs font-mono border-collapse">
-                            <thead class="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-bold border-b border-zinc-300 dark:border-zinc-700">
+                            <thead class="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-bold border-b border-zinc-200 dark:border-zinc-700">
                                 <tr>
-                                    <th class="p-2.5 text-center border-r border-zinc-200 dark:border-zinc-700/60 w-10">No</th>
-                                    <th class="p-2.5 border-r border-zinc-200 dark:border-zinc-700/60 w-28">Tanggal</th>
-                                    <th class="p-2.5 border-r border-zinc-200 dark:border-zinc-700/60 w-36">Kode Transaksi</th>
-                                    <th class="p-2.5 border-r border-zinc-200 dark:border-zinc-700/60">Uraian / Keterangan</th>
-                                    <th class="p-2.5 text-right border-r border-zinc-200 dark:border-zinc-700/60 w-28 text-amber-600 dark:text-amber-400">Debit (Tarik)</th>
-                                    <th class="p-2.5 text-right border-r border-zinc-200 dark:border-zinc-700/60 w-28 text-emerald-600 dark:text-emerald-400">Kredit (Setor)</th>
-                                    <th class="p-2.5 text-right border-r border-zinc-200 dark:border-zinc-700/60 w-32">Saldo</th>
+                                    <th class="p-2.5 text-center border-r border-zinc-200 dark:border-zinc-700 w-10">No</th>
+                                    <th class="p-2.5 border-r border-zinc-200 dark:border-zinc-700 w-24">Tanggal</th>
+                                    <th class="p-2.5 border-r border-zinc-200 dark:border-zinc-700 w-32">Kode</th>
+                                    <th class="p-2.5 border-r border-zinc-200 dark:border-zinc-700 font-sans">Uraian / Keterangan</th>
+                                    <th class="p-2.5 text-right border-r border-zinc-200 dark:border-zinc-700 w-28 text-amber-600 dark:text-amber-400">Debit (Tarik)</th>
+                                    <th class="p-2.5 text-right border-r border-zinc-200 dark:border-zinc-700 w-28 text-emerald-600 dark:text-emerald-400">Kredit (Setor)</th>
+                                    <th class="p-2.5 text-right border-r border-zinc-200 dark:border-zinc-700 w-32">Saldo</th>
                                     <th class="p-2.5 text-center w-20">Petugas</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
                                 @forelse ($bukuTransactions as $idx => $bTrx)
                                     <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
-                                        <td class="p-2 text-center border-r border-zinc-200 dark:border-zinc-800 text-zinc-500">{{ $idx + 1 }}</td>
+                                        <td class="p-2 text-center border-r border-zinc-200 dark:border-zinc-800 text-zinc-500 tabular-nums">{{ $idx + 1 }}</td>
                                         <td class="p-2 border-r border-zinc-200 dark:border-zinc-800 whitespace-nowrap">{{ $bTrx->created_at->format('d/m/y H:i') }}</td>
-                                        <td class="p-2 border-r border-zinc-200 dark:border-zinc-800 font-bold text-zinc-700 dark:text-zinc-300">{{ $bTrx->kode_transaksi }}</td>
+                                        <td class="p-2 border-r border-zinc-200 dark:border-zinc-800 font-semibold text-zinc-700 dark:text-zinc-300">{{ $bTrx->kode_transaksi }}</td>
                                         <td class="p-2 border-r border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 font-sans text-[11px] truncate max-w-xs">{{ $bTrx->keterangan ?? '-' }}</td>
-                                        <td class="p-2 text-right border-r border-zinc-200 dark:border-zinc-800 text-amber-600 dark:text-amber-400 font-bold">
+                                        <td class="p-2 text-right border-r border-zinc-200 dark:border-zinc-800 text-amber-600 dark:text-amber-400 font-semibold tabular-nums">
                                             {{ $bTrx->jenis_transaksi === 'tarik' ? number_format($bTrx->nominal, 0, ',', '.') : '-' }}
                                         </td>
-                                        <td class="p-2 text-right border-r border-zinc-200 dark:border-zinc-800 text-emerald-600 dark:text-emerald-400 font-bold">
+                                        <td class="p-2 text-right border-r border-zinc-200 dark:border-zinc-800 text-emerald-600 dark:text-emerald-400 font-semibold tabular-nums">
                                             {{ $bTrx->jenis_transaksi === 'setor' ? number_format($bTrx->nominal, 0, ',', '.') : '-' }}
                                         </td>
-                                        <td class="p-2 text-right border-r border-zinc-200 dark:border-zinc-800 font-black text-zinc-900 dark:text-white">
+                                        <td class="p-2 text-right border-r border-zinc-200 dark:border-zinc-800 font-bold text-zinc-900 dark:text-white tabular-nums">
                                             {{ number_format($bTrx->saldo_akhir, 0, ',', '.') }}
                                         </td>
                                         <td class="p-2 text-center text-zinc-500 font-sans text-[10px]">{{ $bTrx->user?->name ? substr($bTrx->user->name, 0, 8) : 'Teller' }}</td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="8" class="p-6 text-center text-zinc-400 dark:text-zinc-500 italic">Belum ada catatan mutasi tabungan.</td>
+                                        <td colspan="8" class="p-6 text-center text-zinc-400 dark:text-zinc-500 font-sans italic">Belum ada catatan mutasi tabungan.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
-                            <tfoot class="bg-zinc-100 dark:bg-zinc-800/80 font-bold border-t-2 border-zinc-300 dark:border-zinc-700 text-xs">
+                            <tfoot class="bg-zinc-100 dark:bg-zinc-800/80 font-bold border-t-2 border-zinc-200 dark:border-zinc-700 text-xs">
                                 <tr>
                                     <td colspan="4" class="p-2.5 text-right font-sans">TOTAL MUTASI:</td>
-                                    <td class="p-2.5 text-right text-amber-600 dark:text-amber-400 font-mono">Rp {{ number_format($totalBukuTarik, 0, ',', '.') }}</td>
-                                    <td class="p-2.5 text-right text-emerald-600 dark:text-emerald-400 font-mono">Rp {{ number_format($totalBukuSetor, 0, ',', '.') }}</td>
-                                    <td class="p-2.5 text-right text-zinc-900 dark:text-white font-mono font-black" colspan="2">{{ $bukuNasabah->formatted_saldo }}</td>
+                                    <td class="p-2.5 text-right text-amber-600 dark:text-amber-400 font-mono tabular-nums">Rp {{ number_format($totalBukuTarik, 0, ',', '.') }}</td>
+                                    <td class="p-2.5 text-right text-emerald-600 dark:text-emerald-400 font-mono tabular-nums">Rp {{ number_format($totalBukuSetor, 0, ',', '.') }}</td>
+                                    <td class="p-2.5 text-right text-zinc-900 dark:text-white font-mono font-bold tabular-nums" colspan="2">{{ $bukuNasabah->formatted_saldo }}</td>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
 
-                    <!-- Signature Footer for Official Bank Statements -->
+                    <!-- Signatures Footer -->
                     <div class="pt-6 grid grid-cols-2 gap-8 text-center text-xs">
                         <div>
                             <p class="text-zinc-500">Nasabah Penyimpan,</p>
@@ -871,7 +840,7 @@
                             </p>
                         </div>
                         <div>
-                            <p class="text-zinc-500">Petugas / Pengelola Tabungan,</p>
+                            <p class="text-zinc-500">Petugas / Pengelola,</p>
                             <div class="h-16"></div>
                             <p class="font-bold text-zinc-900 dark:text-white border-t border-dashed border-zinc-400 inline-block px-8 pt-1">
                                 ( {{ Auth::guard('web')->user()->name ?? 'Administrator' }} )
@@ -883,5 +852,3 @@
         </div>
     @endif
 </div>
-
-

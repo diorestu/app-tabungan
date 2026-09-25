@@ -1,50 +1,50 @@
-<div class="max-w-4xl mx-auto space-y-6">
+<div class="max-w-4xl mx-auto space-y-4 sm:space-y-5">
     <!-- Header -->
-    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl flex items-center justify-between shadow-sm transition-colors">
+    <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 sm:p-5 rounded-xl flex items-center justify-between shadow-xs">
         <div>
-            <h1 class="text-xl font-bold text-zinc-900 dark:text-white tracking-tight">Pencatatan Penarikan Tabungan</h1>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Pilih rekening nasabah dan verifikasi ketersediaan saldo sebelum menyerahkan uang tunai</p>
+            <h1 class="text-base sm:text-lg font-bold text-zinc-900 dark:text-white tracking-tight">Pencatatan Penarikan Tabungan</h1>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400">Verifikasi identitas nasabah dan cek saldo sebelum menyerahkan uang tunai</p>
         </div>
 
         <a 
             href="{{ route('admin.setor') }}" 
-            class="text-xs px-3 py-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700 transition-colors flex items-center gap-1.5"
+            class="text-xs px-3 py-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700 transition-colors flex items-center gap-1"
         >
-            <span>Pindah ke Setor Tunai</span>
-            <x-heroicon-s-chevron-right class="size-3.5" />
+            <span>Setor Tunai</span>
+            <x-heroicon-s-chevron-right class="size-3" />
         </a>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5">
         <!-- Main Form (Left 2 cols) -->
-        <div class="lg:col-span-2 space-y-5">
-            <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 sm:p-6 shadow-sm transition-colors">
-                <form wire:submit="processTarik" class="space-y-5">
+        <div class="lg:col-span-2 space-y-4">
+            <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 sm:p-5 shadow-xs">
+                <form wire:submit="processTarik" class="space-y-4">
                     <!-- Step 1: Select Nasabah -->
                     <div>
-                        <label class="block text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1.5">
-                            1. Rekening Nasabah yang Menarik Dana <span class="text-amber-500">*</span>
+                        <label class="block text-xs font-semibold text-zinc-800 dark:text-zinc-200 mb-1">
+                            1. Rekening Nasabah Penarik <span class="text-rose-500">*</span>
                         </label>
 
                         @if ($selectedNasabah)
-                            <div class="p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-500/40 flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <div class="size-10 rounded-xl bg-amber-500/20 text-amber-700 dark:text-amber-400 flex items-center justify-center font-bold text-sm">
+                            <div class="p-3 rounded-lg bg-rose-50/70 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 flex items-center justify-between">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="size-8 rounded-lg bg-rose-100 dark:bg-rose-900/60 text-rose-700 dark:text-rose-300 flex items-center justify-center font-bold text-xs">
                                         {{ strtoupper(substr($selectedNasabah->nama, 0, 1)) }}
                                     </div>
                                     <div>
-                                        <h4 class="text-sm font-bold text-zinc-900 dark:text-white">{{ $selectedNasabah->nama }}</h4>
-                                        <div class="flex items-center gap-2 text-xs">
-                                            <span class="font-mono text-amber-600 dark:text-amber-400 font-semibold">{{ $selectedNasabah->nomor_nasabah }}</span>
-                                            <span class="text-zinc-400 dark:text-zinc-500">•</span>
-                                            <span class="text-zinc-700 dark:text-zinc-300 font-bold">Saldo: {{ $selectedNasabah->formatted_saldo }}</span>
+                                        <h4 class="text-xs font-bold text-zinc-900 dark:text-white">{{ $selectedNasabah->nama }}</h4>
+                                        <div class="flex items-center gap-2 text-[11px]">
+                                            <span class="font-mono text-zinc-600 dark:text-zinc-400">{{ $selectedNasabah->nomor_nasabah }}</span>
+                                            <span class="text-zinc-300 dark:text-zinc-600">&bull;</span>
+                                            <span class="font-mono font-semibold text-emerald-600 dark:text-emerald-400">Saldo: {{ $selectedNasabah->formatted_saldo }}</span>
                                         </div>
                                     </div>
                                 </div>
                                 <button 
                                     type="button" 
                                     wire:click="clearSelectedNasabah" 
-                                    class="text-xs px-2.5 py-1 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 transition-colors cursor-pointer"
+                                    class="text-xs px-2 py-1 rounded bg-white dark:bg-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700 transition-colors cursor-pointer"
                                 >
                                     Ganti
                                 </button>
@@ -55,59 +55,56 @@
                                     type="text" 
                                     wire:model.live.debounce.250ms="nasabahSearch" 
                                     placeholder="Ketik nama, ID nasabah, atau No. HP..."
-                                    class="w-full pl-10 pr-4 py-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                                    class="w-full pl-8 pr-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700/80 rounded-lg text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-rose-500"
                                     autofocus
                                 />
-                                <x-heroicon-o-magnifying-glass class="size-4 absolute left-3.5 top-3 text-zinc-400 dark:text-zinc-500" />
+                                <x-heroicon-o-magnifying-glass class="size-3.5 absolute left-2.5 top-2.5 text-zinc-400" />
                             </div>
 
                             @if ($searchResults->isNotEmpty())
-                                <div class="mt-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-xl divide-y divide-zinc-100 dark:divide-zinc-800">
+                                <div class="mt-1.5 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-hidden shadow-lg divide-y divide-zinc-100 dark:divide-zinc-800">
                                     @foreach ($searchResults as $result)
                                         <button 
                                             type="button" 
                                             wire:click="selectNasabah({{ $result->id }})"
-                                            class="w-full text-left p-3 hover:bg-zinc-50 dark:hover:bg-zinc-800/80 transition-colors flex items-center justify-between cursor-pointer"
+                                            class="w-full text-left p-2.5 hover:bg-zinc-50 dark:hover:bg-zinc-800/80 transition-colors flex items-center justify-between cursor-pointer"
                                         >
                                             <div>
                                                 <p class="text-xs font-semibold text-zinc-900 dark:text-white">{{ $result->nama }}</p>
-                                                <p class="text-[11px] text-zinc-500 dark:text-zinc-400 font-mono">{{ $result->nomor_nasabah }} • {{ $result->no_hp }}</p>
+                                                <p class="text-[11px] text-zinc-500 dark:text-zinc-400 font-mono">{{ $result->nomor_nasabah }} &bull; {{ $result->no_hp }}</p>
                                             </div>
                                             <div class="text-right">
-                                                <span class="text-xs font-bold font-mono text-emerald-600 dark:text-emerald-400">{{ $result->formatted_saldo }}</span>
-                                                <span class="text-[10px] text-zinc-400 dark:text-zinc-500 flex items-center justify-end gap-0.5">
-                                                    <span>Pilih</span>
-                                                    <x-heroicon-s-chevron-right class="size-3" />
-                                                </span>
+                                                <span class="text-xs font-bold font-mono text-zinc-800 dark:text-zinc-200">{{ $result->formatted_saldo }}</span>
+                                                <span class="text-[10px] text-zinc-400 block">Pilih &rarr;</span>
                                             </div>
                                         </button>
                                     @endforeach
                                 </div>
                             @elseif(strlen($nasabahSearch) >= 2)
-                                <p class="text-[11px] text-zinc-400 dark:text-zinc-500 mt-1.5 italic">Tidak ditemukan nasabah dengan kata kunci tersebut.</p>
+                                <p class="text-[11px] text-zinc-400 mt-1 italic">Tidak ditemukan nasabah dengan kata kunci tersebut.</p>
                             @endif
                         @endif
-                        @error('nasabah_id') <span class="text-[11px] text-rose-500 dark:text-rose-400 mt-1 block">{{ $message }}</span> @enderror
+                        @error('nasabah_id') <span class="text-[11px] text-rose-500 mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
                     <!-- Step 2: Nominal Penarikan -->
                     <div>
-                        <div class="flex items-center justify-between mb-1.5">
-                            <label class="block text-xs font-bold text-zinc-800 dark:text-zinc-200">
-                                2. Nominal Uang Ditarik (Rp) <span class="text-amber-500">*</span>
+                        <div class="flex items-center justify-between mb-1">
+                            <label class="block text-xs font-semibold text-zinc-800 dark:text-zinc-200">
+                                2. Nominal Uang Ditarik (Rp) <span class="text-rose-500">*</span>
                             </label>
                             @if ($selectedNasabah && (float)$selectedNasabah->saldo > 0)
                                 <button 
                                     type="button" 
                                     wire:click="setAllBalance"
-                                    class="text-[11px] font-semibold text-amber-600 dark:text-amber-400 hover:underline cursor-pointer"
+                                    class="text-[11px] font-semibold text-rose-600 dark:text-rose-400 hover:underline cursor-pointer"
                                 >
                                     Tarik Semua Saldo
                                 </button>
                             @endif
                         </div>
                         <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-sm font-bold text-zinc-500 pointer-events-none">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-sm font-semibold text-zinc-400 pointer-events-none">
                                 Rp
                             </span>
                             <input 
@@ -116,19 +113,19 @@
                                 min="5000"
                                 step="1000"
                                 placeholder="0"
-                                class="w-full pl-11 pr-4 py-3 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-lg text-zinc-900 dark:text-white font-mono font-bold placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                                class="w-full pl-9 pr-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700/80 rounded-lg text-base text-zinc-900 dark:text-white font-mono font-bold placeholder-zinc-400 focus:outline-none focus:ring-1 focus:ring-rose-500"
                             />
                         </div>
-                        @error('nominal') <span class="text-[11px] text-rose-500 dark:text-rose-400 mt-1 block">{{ $message }}</span> @enderror
+                        @error('nominal') <span class="text-[11px] text-rose-500 mt-1 block">{{ $message }}</span> @enderror
 
                         <!-- Quick Nominal Chips -->
-                        <div class="mt-2.5 flex flex-wrap items-center gap-1.5">
-                            <span class="text-[10px] text-zinc-500 mr-1">Cepat:</span>
+                        <div class="mt-2 flex flex-wrap items-center gap-1">
+                            <span class="text-[10px] text-zinc-400 mr-1">Cepat:</span>
                             @foreach ([50000, 100000, 200000, 500000, 1000000, 2000000] as $chip)
                                 <button 
                                     type="button" 
                                     wire:click="setPresetAmount({{ $chip }})"
-                                    class="px-2.5 py-1 rounded-lg bg-zinc-100 hover:bg-amber-50 hover:text-amber-600 dark:bg-zinc-800 dark:hover:bg-amber-600/30 dark:hover:text-amber-300 text-[11px] font-mono text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700 transition-colors cursor-pointer"
+                                    class="px-2 py-0.5 rounded bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-[11px] font-mono text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700 transition-colors cursor-pointer"
                                 >
                                     {{ number_format($chip / 1000, 0) }}rb
                                 </button>
@@ -138,31 +135,31 @@
 
                     <!-- Step 3: Keterangan -->
                     <div>
-                        <label class="block text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1.5">
+                        <label class="block text-xs font-semibold text-zinc-800 dark:text-zinc-200 mb-1">
                             3. Keterangan / Keperluan Penarikan
                         </label>
                         <input 
                             type="text" 
                             wire:model="keterangan" 
-                            placeholder="Contoh: Tarik tunai keperluan keluarga"
-                            class="w-full px-3.5 py-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-xl text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                            placeholder="Contoh: Tarik tunai simpanan"
+                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700/80 rounded-lg text-xs text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-none focus:ring-1 focus:ring-rose-500"
                         />
                     </div>
 
                     <!-- Submit Button -->
                     <button 
                         type="submit" 
-                        class="w-full py-3.5 px-4 bg-amber-600 hover:bg-amber-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-amber-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99] disabled:opacity-50"
+                        class="w-full py-2.5 px-4 bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs rounded-lg shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                         wire:loading.attr="disabled"
                         @if(!$selectedNasabah || ($nominal && (float)$nominal > (float)$selectedNasabah->saldo)) disabled @endif
                     >
                         <span wire:loading.remove>Proses & Catat Penarikan Tunai</span>
                         <span wire:loading.inline-flex class="items-center justify-center gap-2">
-                            <svg class="animate-spin size-4 shrink-0 text-white" fill="none" viewBox="0 0 24 24">
+                            <svg class="animate-spin size-3.5 shrink-0 text-white" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
-                            <span>Menyimpan transaksi...</span>
+                            <span>Menyimpan...</span>
                         </span>
                     </button>
                 </form>
@@ -170,21 +167,21 @@
         </div>
 
         <!-- Real-time Preview / Summary Card (Right 1 col) -->
-        <div class="lg:col-span-1 space-y-4">
-            <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 shadow-sm space-y-4 transition-colors">
-                <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Ringkasan Kalkulasi Saldo</h3>
+        <div class="lg:col-span-1 space-y-3">
+            <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-xs space-y-3">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400">Ringkasan Saldo</h3>
 
-                <div class="space-y-3 pt-2">
-                    <div class="flex justify-between items-center text-xs">
-                        <span class="text-zinc-500 dark:text-zinc-400">Saldo Rekening Awal:</span>
-                        <span class="font-mono font-semibold text-zinc-800 dark:text-zinc-200">
+                <div class="space-y-2 text-xs">
+                    <div class="flex justify-between items-center">
+                        <span class="text-zinc-500">Saldo Awal:</span>
+                        <span class="font-mono font-medium text-zinc-800 dark:text-zinc-200">
                             {{ $selectedNasabah ? $selectedNasabah->formatted_saldo : 'Rp 0' }}
                         </span>
                     </div>
 
-                    <div class="flex justify-between items-center text-xs">
-                        <span class="text-amber-600 dark:text-amber-400 font-semibold">- Jumlah Ditarik:</span>
-                        <span class="font-mono font-bold text-amber-600 dark:text-amber-400">
+                    <div class="flex justify-between items-center">
+                        <span class="text-rose-600 dark:text-rose-400 font-medium">- Jumlah Ditarik:</span>
+                        <span class="font-mono font-bold text-rose-600 dark:text-rose-400">
                             Rp {{ number_format((float)($nominal ?: 0), 0, ',', '.') }}
                         </span>
                     </div>
@@ -195,9 +192,9 @@
                         $sisa = $saldoVal - $nominalVal;
                     @endphp
 
-                    <div class="pt-3 border-t border-zinc-100 dark:border-zinc-800 flex justify-between items-center">
-                        <span class="text-xs font-bold text-zinc-900 dark:text-white">Sisa Saldo:</span>
-                        <span class="font-mono text-base font-black {{ $sisa < 0 ? 'text-rose-500 dark:text-rose-400' : 'text-zinc-900 dark:text-white' }}">
+                    <div class="pt-2 border-t border-zinc-100 dark:border-zinc-800 flex justify-between items-center">
+                        <span class="font-semibold text-zinc-900 dark:text-white">Sisa Saldo Baru:</span>
+                        <span class="font-mono text-sm font-bold {{ $sisa < 0 ? 'text-rose-600' : 'text-zinc-900 dark:text-white' }}">
                             @if ($selectedNasabah)
                                 Rp {{ number_format($sisa, 0, ',', '.') }}
                             @else
@@ -207,16 +204,16 @@
                     </div>
 
                     @if ($sisa < 0)
-                        <div class="p-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-[11px]">
-                            ⚠️ <strong>Peringatan:</strong> Nominal melebihi total saldo tabungan nasabah.
+                        <div class="p-2 rounded-lg bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-[11px]">
+                            Nominal melebihi total saldo tabungan nasabah.
                         </div>
                     @endif
                 </div>
 
-                <div class="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-[11px] text-zinc-600 dark:text-zinc-400 space-y-1">
-                    <p class="font-semibold text-zinc-800 dark:text-zinc-300">Peringatan Teller:</p>
-                    <p>• Periksa identitas nasabah (KTP/NIK & No HP) sebelum memproses penarikan uang kas.</p>
-                    <p>• Berikan uang tunai beserta struk resmi penarikan tabungan kepada nasabah.</p>
+                <div class="p-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 text-[11px] text-zinc-500 space-y-1">
+                    <p class="font-semibold text-zinc-700 dark:text-zinc-300">Catatan Teller:</p>
+                    <p>&bull; Periksa kecocokan data nasabah sebelum menyerahkan uang kas.</p>
+                    <p>&bull; Serahkan struk resmi beserta uang tunai kepada nasabah.</p>
                 </div>
             </div>
         </div>
@@ -224,109 +221,102 @@
 
     <!-- SUCCESS RECEIPT MODAL -->
     @if ($showSuccessModal && $lastTransaction)
-        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 dark:bg-black/75 backdrop-blur-sm">
-            <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl animate-scale-in text-zinc-900 dark:text-zinc-100">
+        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
+            <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl w-full max-w-sm overflow-hidden shadow-xl text-zinc-900 dark:text-zinc-100">
                 <!-- Receipt Header -->
-                <div class="p-6 bg-gradient-to-b from-amber-50 to-white dark:from-amber-900/50 dark:to-zinc-900 border-b border-zinc-200 dark:border-zinc-800 text-center relative">
-                    <div class="size-12 rounded-2xl bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto mb-2.5 border border-amber-500/30">
-                        <x-heroicon-s-check-circle class="size-7" />
+                <div class="p-5 border-b border-zinc-200 dark:border-zinc-800 text-center">
+                    <div class="size-9 rounded-lg bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center mx-auto mb-2 border border-rose-200 dark:border-rose-800">
+                        <x-heroicon-s-check class="size-5" />
                     </div>
-                    <h3 class="text-lg font-extrabold text-zinc-900 dark:text-white">Penarikan Tunai Sukses!</h3>
-                    <p class="text-xs text-zinc-500 dark:text-zinc-400">Kode Transaksi: <strong class="text-amber-600 dark:text-amber-400 font-mono">{{ $lastTransaction->kode_transaksi }}</strong></p>
+                    <h3 class="text-sm font-bold text-zinc-900 dark:text-white">Penarikan Tunai Berhasil</h3>
+                    <p class="text-xs text-zinc-400 font-mono mt-0.5">{{ $lastTransaction->kode_transaksi }}</p>
                 </div>
 
                 <!-- Receipt Body -->
-                <div class="p-6 space-y-3.5 text-xs">
-                    <div class="text-center pb-2.5 mb-1 border-b border-zinc-100 dark:border-zinc-800">
-                        <h4 class="font-bold text-xs text-zinc-900 dark:text-white uppercase">{{ \App\Models\Setting::get('nama_lembaga', 'TabunganKu Digital') }}</h4>
-                        <p class="text-[10px] text-zinc-500">{{ \App\Models\Setting::get('alamat_lembaga') }} • Telp: {{ \App\Models\Setting::get('telepon_lembaga') }}</p>
+                <div class="p-4 space-y-2.5 text-xs">
+                    <div class="text-center pb-2 border-b border-zinc-100 dark:border-zinc-800">
+                        <h4 class="font-bold text-xs uppercase text-zinc-900 dark:text-white">{{ \App\Models\Setting::get('nama_lembaga', 'TabunganKu Digital') }}</h4>
+                        <p class="text-[10px] text-zinc-400">{{ \App\Models\Setting::get('alamat_lembaga') }} &bull; Telp: {{ \App\Models\Setting::get('telepon_lembaga') }}</p>
                     </div>
 
-                    <div class="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800/80">
-                        <span class="text-zinc-500 dark:text-zinc-400">Waktu:</span>
+                    <div class="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800 text-zinc-500">
+                        <span>Waktu:</span>
                         <span class="text-zinc-800 dark:text-zinc-200 font-mono">{{ $lastTransaction->created_at->format('d/m/Y H:i:s') }}</span>
                     </div>
-                    <div class="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800/80">
-                        <span class="text-zinc-500 dark:text-zinc-400">Nasabah:</span>
-                        <span class="font-bold text-zinc-900 dark:text-white">{{ $lastTransaction->nasabah->nama }} ({{ $lastTransaction->nasabah->nomor_nasabah }})</span>
+                    <div class="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800 text-zinc-500">
+                        <span>Nasabah:</span>
+                        <span class="font-medium text-zinc-900 dark:text-white">{{ $lastTransaction->nasabah->nama }} ({{ $lastTransaction->nasabah->nomor_nasabah }})</span>
                     </div>
-                    <div class="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800/80">
-                        <span class="text-zinc-500 dark:text-zinc-400">Nominal Penarikan:</span>
-                        <span class="font-mono font-bold text-amber-600 dark:text-amber-400 text-sm">{{ $lastTransaction->formatted_nominal }}</span>
+                    <div class="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800 text-zinc-500">
+                        <span>Nominal Ditarik:</span>
+                        <span class="font-mono font-bold text-rose-600 dark:text-rose-400 text-sm">{{ $lastTransaction->formatted_nominal }}</span>
                     </div>
-                    <div class="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800/80">
-                        <span class="text-zinc-500 dark:text-zinc-400">Saldo Sebelumnya:</span>
+                    <div class="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800 text-zinc-500">
+                        <span>Saldo Sebelum:</span>
                         <span class="font-mono text-zinc-700 dark:text-zinc-300">{{ $lastTransaction->formatted_saldo_awal }}</span>
                     </div>
-                    <div class="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800/80">
-                        <span class="text-zinc-500 dark:text-zinc-400">Sisa Saldo Akhir:</span>
+                    <div class="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800 text-zinc-500">
+                        <span>Sisa Saldo:</span>
                         <span class="font-mono font-bold text-zinc-900 dark:text-white text-sm">{{ $lastTransaction->formatted_saldo_akhir }}</span>
                     </div>
-                    <div class="flex justify-between py-1">
-                        <span class="text-zinc-500 dark:text-zinc-400">Petugas / Teller:</span>
+                    <div class="flex justify-between py-1 text-zinc-500">
+                        <span>Petugas:</span>
                         <span class="text-zinc-800 dark:text-zinc-300">{{ Auth::guard('web')->user()->name ?? 'Teller' }}</span>
                     </div>
 
                     <!-- Anti-Counterfeit Verification QR Code -->
-                    <div class="py-2.5 px-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 flex items-center justify-between gap-3">
+                    <div class="p-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 flex items-center justify-between gap-2.5">
                         <div class="space-y-0.5 text-left">
                             <span class="text-[10px] font-bold text-zinc-900 dark:text-white uppercase flex items-center gap-1">
-                                <x-heroicon-s-shield-check class="size-3.5 text-emerald-600 dark:text-emerald-400" />
-                                Struk Resmi Terverifikasi
+                                <x-heroicon-s-shield-check class="size-3 text-emerald-600" />
+                                Struk Terverifikasi
                             </span>
-                            <span class="text-[9px] text-zinc-500 block leading-tight">Scan QR untuk verifikasi keaslian di server pusat</span>
-                            <span class="text-[8px] font-mono text-zinc-400 block break-all mt-0.5">Kode: {{ $lastTransaction->verification_code }}</span>
+                            <span class="text-[9px] text-zinc-400 block leading-tight">Scan QR untuk cek integritas struk</span>
+                            <span class="text-[8px] font-mono text-zinc-400 block break-all">Kode: {{ $lastTransaction->verification_code }}</span>
                         </div>
-                        <img src="{{ $lastTransaction->qr_code_data_uri }}" alt="QR Verifikasi" class="size-14 rounded-lg bg-white p-1 shadow-sm shrink-0 border border-zinc-200">
+                        <img src="{{ $lastTransaction->qr_code_data_uri }}" alt="QR Verifikasi" class="size-12 rounded bg-white p-0.5 shrink-0 border border-zinc-200">
                     </div>
 
                     @if ($waStatusMessage)
-                        <div class="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 text-[11px] flex items-center gap-2">
-                            <x-heroicon-o-chat-bubble-left-right class="size-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+                        <div class="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 text-[11px] flex items-center gap-1.5">
+                            <x-heroicon-o-chat-bubble-left-right class="size-3.5 shrink-0 text-emerald-600" />
                             <span>{{ $waStatusMessage }}</span>
                         </div>
                     @endif
-
-                    <p class="text-[10px] text-center text-zinc-400 dark:text-zinc-500 italic pt-2 border-t border-zinc-100 dark:border-zinc-800">
-                        {{ \App\Models\Setting::get('pesan_struk', 'Simpan struk ini sebagai bukti transaksi resmi.') }}
-                    </p>
                 </div>
 
                 <!-- Actions -->
-                <div class="p-5 bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
-                    <div class="flex items-center gap-2">
+                <div class="p-3 bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-800 flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-1.5">
                         <button 
                             type="button" 
                             onclick="window.print()" 
-                            class="px-3.5 py-2 bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
+                            class="px-2.5 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-medium rounded-lg flex items-center gap-1 cursor-pointer"
                         >
-                            <x-heroicon-o-printer class="size-4" />
-                            <span>Cetak Struk</span>
+                            <x-heroicon-o-printer class="size-3.5" />
+                            <span>Cetak</span>
                         </button>
-
-                        <!-- WhatsApp Action -->
+                        
                         <a 
                             href="{{ $this->directWhatsAppUrl }}" 
                             target="_blank" 
-                            class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow-md shadow-emerald-600/20 cursor-pointer transition-all"
-                            title="Kirim atau buka struk via WhatsApp"
+                            class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium rounded-lg flex items-center gap-1 cursor-pointer shadow-xs"
+                            title="Kirim Struk WhatsApp"
                         >
-                            <x-heroicon-o-chat-bubble-left-right class="size-4" />
-                            <span>Kirim WhatsApp</span>
+                            <x-heroicon-o-chat-bubble-left-right class="size-3.5" />
+                            <span>WhatsApp</span>
                         </a>
                     </div>
 
                     <button 
                         type="button" 
                         wire:click="closeSuccessModal" 
-                        class="px-4 py-2 bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-300 text-xs font-semibold rounded-xl cursor-pointer text-center"
+                        class="px-3 py-1.5 bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-semibold rounded-lg cursor-pointer"
                     >
-                        Selesai / Tutup
+                        Selesai
                     </button>
                 </div>
             </div>
         </div>
     @endif
 </div>
-
-
