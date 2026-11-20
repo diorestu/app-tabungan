@@ -23,7 +23,7 @@ return new class extends Migration
             DB::table('transaksis')
                 ->where('id', $trx->id)
                 ->update([
-                    'verification_code' => strtoupper(substr(hash('sha256', $trx->kode_transaksi . '|' . $trx->id . '|' . $trx->nominal . '|' . Str::random(16)), 0, 24)),
+                    'verification_code' => strtoupper(substr(hash('sha256', $trx->kode_transaksi.'|'.$trx->id.'|'.$trx->nominal.'|'.Str::random(16)), 0, 24)),
                 ]);
         }
     }

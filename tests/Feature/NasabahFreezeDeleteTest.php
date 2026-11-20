@@ -129,13 +129,13 @@ class NasabahFreezeDeleteTest extends TestCase
         // Jawa = 2, Year = 26, Month = 08 -> 226080001 (9 digits)
         $nomorJawa = Nasabah::generateNomorNasabah('2');
         $this->assertEquals(9, strlen($nomorJawa));
-        $this->assertStringStartsWith('2' . date('ym'), $nomorJawa);
+        $this->assertStringStartsWith('2'.date('ym'), $nomorJawa);
         $this->assertStringEndsWith('0001', $nomorJawa);
 
         // Sumatera = 1 -> 126080001
         $nomorSumatera = Nasabah::generateNomorNasabah('1');
         $this->assertEquals(9, strlen($nomorSumatera));
-        $this->assertStringStartsWith('1' . date('ym'), $nomorSumatera);
+        $this->assertStringStartsWith('1'.date('ym'), $nomorSumatera);
 
         // Create nasabah with 9 digits
         $nasabah = Nasabah::create([
@@ -174,7 +174,7 @@ class NasabahFreezeDeleteTest extends TestCase
         $nasabah = Nasabah::where('nama', 'I Wayan Sudirta')->first();
         $this->assertNotNull($nasabah);
         $this->assertEquals(9, strlen($nasabah->nomor_nasabah));
-        $this->assertStringStartsWith('3' . date('ym'), $nasabah->nomor_nasabah);
+        $this->assertStringStartsWith('3'.date('ym'), $nasabah->nomor_nasabah);
         $this->assertEquals('Bali', $nasabah->wilayah_nama);
     }
 }

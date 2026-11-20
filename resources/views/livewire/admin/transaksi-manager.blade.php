@@ -2,8 +2,7 @@
     <!-- Header & Action Bar -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl print:hidden">
         <div>
-            <h1 class="text-lg sm:text-xl font-bold text-zinc-900 dark:text-white tracking-tight">Buku Transaksi Tabungan</h1>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Rekapitulasi lengkap mutasi kas setor & tarik tunai dari semua nasabah</p>
+            <h1 class="text-lg sm:text-xl font-bold text-zinc-900 dark:text-white tracking-tight">Riwayat Transaksi</h1>
         </div>
 
         <div class="flex items-center gap-2">
@@ -21,7 +20,7 @@
                 class="px-3.5 py-2 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-semibold rounded-xl border border-zinc-200 dark:border-zinc-700 transition-colors flex items-center gap-2 cursor-pointer"
             >
                 <x-heroicon-o-printer class="size-4" />
-                <span>Cetak Laporan</span>
+                <span>Cetak</span>
             </button>
         </div>
     </div>
@@ -47,7 +46,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <!-- Search -->
             <div>
-                <label class="block text-[11px] font-medium text-zinc-500 dark:text-zinc-400 mb-1">Cari Transaksi / Nasabah</label>
+                <label class="block text-[11px] font-medium text-zinc-500 dark:text-zinc-400 mb-1">Cari Transaksi</label>
                 <div class="relative">
                     <input 
                         type="text" 
@@ -61,14 +60,14 @@
 
             <!-- Jenis Transaksi -->
             <div>
-                <label class="block text-[11px] font-medium text-zinc-500 dark:text-zinc-400 mb-1">Jenis Mutasi</label>
+                <label class="block text-[11px] font-medium text-zinc-500 dark:text-zinc-400 mb-1">Jenis Transaksi</label>
                 <select 
                     wire:model.live="jenis"
                     class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 transition-all cursor-pointer"
                 >
-                    <option value="">Semua (Setor & Tarik)</option>
-                    <option value="setor">Hanya Setor Tunai (+)</option>
-                    <option value="tarik">Hanya Tarik Tunai (-)</option>
+                    <option value="">Semua</option>
+                    <option value="setor">Setor Tunai</option>
+                    <option value="tarik">Tarik Tunai</option>
                 </select>
             </div>
 
@@ -168,6 +167,11 @@
                                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 print:text-black print:border-none">
                                             SETOR
                                         </span>
+                                        @if ($trx->dompetKas)
+                                            <span class="block text-[10px] font-mono text-zinc-400 dark:text-zinc-500 mt-0.5" title="Dompet Kas {{ $trx->dompetKas->nama }}">
+                                                M: {{ $trx->dompetKas->nomor_rekening }}
+                                            </span>
+                                        @endif
                                     @else
                                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800/60 print:text-black print:border-none">
                                             TARIK
@@ -272,10 +276,16 @@
                         <span class="text-zinc-500">Saldo Akhir:</span>
                         <span class="font-mono font-bold text-emerald-600 dark:text-emerald-400 text-sm tabular-nums">{{ $selectedReceipt->formatted_saldo_akhir }}</span>
                     </div>
-                    <div class="flex justify-between py-1">
+                    <div class="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800/80">
                         <span class="text-zinc-500">Petugas:</span>
                         <span class="text-zinc-700 dark:text-zinc-300">{{ $selectedReceipt->user->name ?? 'Teller' }}</span>
                     </div>
+                    @if ($selectedReceipt->dompetKas)
+                        <div class="flex justify-between py-1">
+                            <span class="text-zinc-500">Dompet Kas:</span>
+                            <span class="font-mono text-zinc-700 dark:text-zinc-300">{{ $selectedReceipt->dompetKas->nama }} ({{ $selectedReceipt->dompetKas->nomor_rekening }})</span>
+                        </div>
+                    @endif
 
                     <!-- Verification QR Code Card -->
                     <div class="py-2.5 px-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 flex items-center justify-between gap-3">

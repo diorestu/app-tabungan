@@ -2,8 +2,7 @@
     <!-- Header Banner -->
     <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-lg sm:text-xl font-bold text-zinc-900 dark:text-white tracking-tight">Audit Trail & Log Aktivitas</h1>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Pencatatan rekam jejak aktivitas sensitif, transaksi, login, dan audit keamanan sistem</p>
+            <h1 class="text-lg sm:text-xl font-bold text-zinc-900 dark:text-white tracking-tight">Audit Log</h1>
         </div>
 
         <button 
@@ -12,7 +11,7 @@
             class="px-3.5 py-2 bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-900 font-semibold text-xs rounded-xl flex items-center gap-2 cursor-pointer self-start sm:self-auto transition-colors"
         >
             <x-heroicon-o-arrow-down-tray class="size-4" />
-            <span>Ekspor Log (CSV)</span>
+            <span>Export CSV</span>
         </button>
     </div>
 
@@ -72,8 +71,8 @@
                     class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 cursor-pointer"
                 >
                     <option value="">Semua Aksi</option>
-                    <option value="login">Login Masuk</option>
-                    <option value="logout">Logout Keluar</option>
+                    <option value="login">Login</option>
+                    <option value="logout">Logout</option>
                     <option value="setor_tunai">Setor Tunai</option>
                     <option value="tarik_tunai">Tarik Tunai</option>
                     <option value="tambah_nasabah">Tambah Nasabah</option>

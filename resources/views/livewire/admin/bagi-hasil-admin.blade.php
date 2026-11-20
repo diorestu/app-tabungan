@@ -2,8 +2,7 @@
     <!-- Header Banner -->
     <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-lg sm:text-xl font-bold text-zinc-900 dark:text-white tracking-tight">Otomasi Biaya Admin & Bagi Hasil</h1>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Pemrosesan batch pemotongan administrasi dan distribusi bagi hasil tabungan</p>
+            <h1 class="text-lg sm:text-xl font-bold text-zinc-900 dark:text-white tracking-tight">Bagi Hasil & Admin</h1>
         </div>
 
         <!-- Navigation Tabs -->
@@ -53,7 +52,6 @@
             <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 space-y-4">
                 <div class="pb-3 border-b border-zinc-100 dark:border-zinc-800">
                     <h3 class="font-bold text-sm text-zinc-900 dark:text-white">Parameter Biaya Administrasi</h3>
-                    <p class="text-[11px] text-zinc-500">Tentukan tarif potongan admin dan batas saldo minimum nasabah</p>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
@@ -129,8 +127,7 @@
             <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-zinc-100 dark:border-zinc-800">
                     <div>
-                        <h3 class="font-bold text-sm text-zinc-900 dark:text-white">Pratinjau Sampling Potongan</h3>
-                        <p class="text-[11px] text-zinc-500">Periksa simulasi sebelum melakukan eksekusi pemotongan saldo massal</p>
+                        <h3 class="font-bold text-sm text-zinc-900 dark:text-white">Pratinjau Potongan</h3>
                     </div>
 
                     <button 
@@ -139,7 +136,7 @@
                         class="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs rounded-xl flex items-center gap-2 cursor-pointer transition-colors self-start sm:self-auto"
                     >
                         <x-heroicon-s-bolt class="size-4" />
-                        <span>Eksekusi Pemotongan Biaya Admin</span>
+                        <span>Eksekusi Biaya Admin</span>
                     </button>
                 </div>
 
@@ -181,8 +178,7 @@
             <!-- Configuration Parameters -->
             <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 space-y-4">
                 <div class="pb-3 border-b border-zinc-100 dark:border-zinc-800">
-                    <h3 class="font-bold text-sm text-zinc-900 dark:text-white">Parameter Bagi Hasil / Bunga Simpanan</h3>
-                    <p class="text-[11px] text-zinc-500">Tentukan persentase bagi hasil dan batas saldo minimum penerima</p>
+                    <h3 class="font-bold text-sm text-zinc-900 dark:text-white">Parameter Bagi Hasil</h3>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
@@ -259,8 +255,7 @@
             <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-zinc-100 dark:border-zinc-800">
                     <div>
-                        <h3 class="font-bold text-sm text-zinc-900 dark:text-white">Pratinjau Penerima Bagi Hasil</h3>
-                        <p class="text-[11px] text-zinc-500">Periksa estimasi penambahan saldo sebelum melakukan eksekusi massal</p>
+                        <h3 class="font-bold text-sm text-zinc-900 dark:text-white">Pratinjau Bagi Hasil</h3>
                     </div>
 
                     <button 
@@ -269,7 +264,7 @@
                         class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded-xl flex items-center gap-2 cursor-pointer transition-colors self-start sm:self-auto"
                     >
                         <x-heroicon-s-sparkles class="size-4" />
-                        <span>Eksekusi Distribusi Bagi Hasil</span>
+                        <span>Eksekusi Bagi Hasil</span>
                     </button>
                 </div>
 

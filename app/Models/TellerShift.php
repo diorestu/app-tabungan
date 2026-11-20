@@ -55,33 +55,34 @@ class TellerShift extends Model
 
     public function getFormattedModalAwalAttribute(): string
     {
-        return 'Rp ' . number_format((float) $this->modal_awal, 0, ',', '.');
+        return 'Rp '.number_format((float) $this->modal_awal, 0, ',', '.');
     }
 
     public function getFormattedTotalSetoranAttribute(): string
     {
-        return 'Rp ' . number_format((float) $this->total_setoran, 0, ',', '.');
+        return 'Rp '.number_format((float) $this->total_setoran, 0, ',', '.');
     }
 
     public function getFormattedTotalPenarikanAttribute(): string
     {
-        return 'Rp ' . number_format((float) $this->total_penarikan, 0, ',', '.');
+        return 'Rp '.number_format((float) $this->total_penarikan, 0, ',', '.');
     }
 
     public function getFormattedSaldoSistemAttribute(): string
     {
-        return 'Rp ' . number_format((float) $this->saldo_sistem, 0, ',', '.');
+        return 'Rp '.number_format((float) $this->saldo_sistem, 0, ',', '.');
     }
 
     public function getFormattedSaldoFisikAttribute(): string
     {
-        return 'Rp ' . number_format((float) $this->saldo_fisik, 0, ',', '.');
+        return 'Rp '.number_format((float) $this->saldo_fisik, 0, ',', '.');
     }
 
     public function getFormattedSelisihAttribute(): string
     {
         $selisih = (float) $this->selisih;
         $sign = $selisih > 0 ? '+ ' : ($selisih < 0 ? '- ' : '');
-        return $sign . 'Rp ' . number_format(abs($selisih), 0, ',', '.');
+
+        return $sign.'Rp '.number_format(abs($selisih), 0, ',', '.');
     }
 }

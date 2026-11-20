@@ -31,6 +31,7 @@ class AuditLog extends Component
     public string $endDate = '';
 
     public ?ActivityLog $selectedLog = null;
+
     public bool $showDetailModal = false;
 
     public function updatingSearch(): void
@@ -84,33 +85,33 @@ class AuditLog extends Component
     {
         $query = ActivityLog::latest();
 
-        if (!empty($this->search)) {
+        if (! empty($this->search)) {
             $query->where(function ($q) {
-                $q->where('user_name', 'like', '%' . $this->search . '%')
-                  ->orWhere('action', 'like', '%' . $this->search . '%')
-                  ->orWhere('description', 'like', '%' . $this->search . '%')
-                  ->orWhere('ip_address', 'like', '%' . $this->search . '%');
+                $q->where('user_name', 'like', '%'.$this->search.'%')
+                    ->orWhere('action', 'like', '%'.$this->search.'%')
+                    ->orWhere('description', 'like', '%'.$this->search.'%')
+                    ->orWhere('ip_address', 'like', '%'.$this->search.'%');
             });
         }
 
-        if (!empty($this->action)) {
+        if (! empty($this->action)) {
             $query->where('action', $this->action);
         }
 
-        if (!empty($this->userType)) {
+        if (! empty($this->userType)) {
             $query->where('user_type', $this->userType);
         }
 
-        if (!empty($this->startDate)) {
+        if (! empty($this->startDate)) {
             $query->whereDate('created_at', '>=', $this->startDate);
         }
 
-        if (!empty($this->endDate)) {
+        if (! empty($this->endDate)) {
             $query->whereDate('created_at', '<=', $this->endDate);
         }
 
         $logs = $query->get();
-        $filename = 'audit-trail-log-' . date('Ymd_His') . '.csv';
+        $filename = 'audit-trail-log-'.date('Ymd_His').'.csv';
 
         return response()->streamDownload(function () use ($logs) {
             $handle = fopen('php://output', 'w');
@@ -143,7 +144,7 @@ class AuditLog extends Component
             fclose($handle);
         }, $filename, [
             'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
         ]);
     }
 
@@ -151,28 +152,28 @@ class AuditLog extends Component
     {
         $query = ActivityLog::latest();
 
-        if (!empty($this->search)) {
+        if (! empty($this->search)) {
             $query->where(function ($q) {
-                $q->where('user_name', 'like', '%' . $this->search . '%')
-                  ->orWhere('action', 'like', '%' . $this->search . '%')
-                  ->orWhere('description', 'like', '%' . $this->search . '%')
-                  ->orWhere('ip_address', 'like', '%' . $this->search . '%');
+                $q->where('user_name', 'like', '%'.$this->search.'%')
+                    ->orWhere('action', 'like', '%'.$this->search.'%')
+                    ->orWhere('description', 'like', '%'.$this->search.'%')
+                    ->orWhere('ip_address', 'like', '%'.$this->search.'%');
             });
         }
 
-        if (!empty($this->action)) {
+        if (! empty($this->action)) {
             $query->where('action', $this->action);
         }
 
-        if (!empty($this->userType)) {
+        if (! empty($this->userType)) {
             $query->where('user_type', $this->userType);
         }
 
-        if (!empty($this->startDate)) {
+        if (! empty($this->startDate)) {
             $query->whereDate('created_at', '>=', $this->startDate);
         }
 
-        if (!empty($this->endDate)) {
+        if (! empty($this->endDate)) {
             $query->whereDate('created_at', '<=', $this->endDate);
         }
 

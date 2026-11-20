@@ -6,12 +6,10 @@ use App\Livewire\Admin\AuditLog;
 use App\Livewire\Admin\NasabahManager;
 use App\Livewire\Admin\SetorTunai;
 use App\Livewire\Admin\TarikTunai;
-use App\Livewire\Public\VerifyTransaksi;
 use App\Models\ActivityLog;
 use App\Models\Nasabah;
 use App\Models\Transaksi;
 use App\Models\User;
-use App\Services\QrCodeService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -21,6 +19,7 @@ class SecurityAndComplianceTest extends TestCase
     use RefreshDatabase;
 
     protected User $admin;
+
     protected Nasabah $nasabah;
 
     protected function setUp(): void
@@ -57,7 +56,7 @@ class SecurityAndComplianceTest extends TestCase
         ]);
 
         $this->assertNotEmpty($trx->verification_code);
-        $this->assertStringContainsString('/v/' . $trx->verification_code, $trx->verification_url);
+        $this->assertStringContainsString('/v/'.$trx->verification_code, $trx->verification_url);
         $this->assertStringStartsWith('data:image/svg+xml;base64,', $trx->qr_code_data_uri);
         $this->assertNotEmpty($trx->digital_signature);
     }
@@ -75,7 +74,7 @@ class SecurityAndComplianceTest extends TestCase
             'keterangan' => 'Setoran validasi',
         ]);
 
-        $response = $this->get('/v/' . $trx->verification_code);
+        $response = $this->get('/v/'.$trx->verification_code);
         $response->assertStatus(200);
         $response->assertSee('TRANSAKSI RESMI TERVERIFIKASI');
         $response->assertSee('STR-20260827-0100');
@@ -83,7 +82,7 @@ class SecurityAndComplianceTest extends TestCase
         $response->assertSee('Digital Signature');
 
         // Also works by searching kode_transaksi
-        $responseByKode = $this->get('/v/' . $trx->kode_transaksi);
+        $responseByKode = $this->get('/v/'.$trx->kode_transaksi);
         $responseByKode->assertStatus(200);
         $responseByKode->assertSee('TRANSAKSI RESMI TERVERIFIKASI');
     }

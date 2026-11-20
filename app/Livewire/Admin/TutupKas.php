@@ -20,22 +20,33 @@ class TutupKas extends Component
 
     // Shift Opening State
     public float|string $modal_awal_input = '';
+
     public string $catatan_buka = '';
 
     // Cash Breakdown for Closing
     public int $p100k = 0;
+
     public int $p50k = 0;
+
     public int $p20k = 0;
+
     public int $p10k = 0;
+
     public int $p5k = 0;
+
     public int $p2k = 0;
+
     public int $p1k = 0;
+
     public float|string $pkoin = 0;
+
     public string $catatan_tutup = '';
 
     // Active Shift & Print Modal
     public ?TellerShift $activeShift = null;
+
     public ?TellerShift $selectedBeritaAcara = null;
+
     public bool $showBeritaAcaraModal = false;
 
     public function mount(): void
@@ -46,7 +57,7 @@ class TutupKas extends Component
     public function loadActiveShift(): void
     {
         $user = Auth::guard('web')->user();
-        if (!$user) {
+        if (! $user) {
             return;
         }
 
@@ -86,12 +97,12 @@ class TutupKas extends Component
 
         ActivityLog::record(
             'buka_kasir',
-            'Membuka sesi kasir harian dengan modal awal Rp ' . number_format($modalAwal, 0, ',', '.'),
+            'Membuka sesi kasir harian dengan modal awal Rp '.number_format($modalAwal, 0, ',', '.'),
             $shift,
             ['modal_awal' => $modalAwal]
         );
 
-        session()->flash('success_shift', 'Sesi kasir berhasil dibuka dengan modal awal Rp ' . number_format($modalAwal, 0, ',', '.'));
+        session()->flash('success_shift', 'Sesi kasir berhasil dibuka dengan modal awal Rp '.number_format($modalAwal, 0, ',', '.'));
         $this->modal_awal_input = '';
         $this->catatan_buka = '';
         $this->loadActiveShift();
@@ -99,7 +110,7 @@ class TutupKas extends Component
 
     public function recalculateLiveShiftStats(): void
     {
-        if (!$this->activeShift) {
+        if (! $this->activeShift) {
             return;
         }
 
@@ -140,7 +151,7 @@ class TutupKas extends Component
 
     public function submitTutupKas(): void
     {
-        if (!$this->activeShift) {
+        if (! $this->activeShift) {
             return;
         }
 
@@ -172,7 +183,7 @@ class TutupKas extends Component
 
         ActivityLog::record(
             'tutup_kasir',
-            'Menutup sesi kasir: Fisik Rp ' . number_format($saldoFisik, 0, ',', '.') . ', Sistem Rp ' . number_format($saldoSistem, 0, ',', '.') . ', Selisih ' . ($selisih >= 0 ? '+' : '') . 'Rp ' . number_format($selisih, 0, ',', '.'),
+            'Menutup sesi kasir: Fisik Rp '.number_format($saldoFisik, 0, ',', '.').', Sistem Rp '.number_format($saldoSistem, 0, ',', '.').', Selisih '.($selisih >= 0 ? '+' : '').'Rp '.number_format($selisih, 0, ',', '.'),
             $this->activeShift,
             [
                 'saldo_sistem' => $saldoSistem,
@@ -205,6 +216,7 @@ class TutupKas extends Component
         $user = Auth::guard('web')->user();
         if ($user->role !== 'admin') {
             session()->flash('error_shift', 'Hanya administrator / supervisor yang berwenang menyetujui tutup kas.');
+
             return;
         }
 
@@ -214,8 +226,8 @@ class TutupKas extends Component
             'supervisor_id' => $user->id,
         ]);
 
-        ActivityLog::record('approve_tutup_kasir', 'Menyetujui berita acara tutup kas #' . $shift->id . ' untuk teller ' . $shift->user->name, $shift);
-        session()->flash('success_shift', 'Berita acara tutup kasir #' . $shift->id . ' berhasil disetujui.');
+        ActivityLog::record('approve_tutup_kasir', 'Menyetujui berita acara tutup kas #'.$shift->id.' untuk teller '.$shift->user->name, $shift);
+        session()->flash('success_shift', 'Berita acara tutup kasir #'.$shift->id.' berhasil disetujui.');
 
         if ($this->selectedBeritaAcara && $this->selectedBeritaAcara->id === $id) {
             $this->selectedBeritaAcara->status = 'disetujui';

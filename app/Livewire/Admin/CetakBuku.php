@@ -17,10 +17,15 @@ class CetakBuku extends Component
     public ?int $selectedNasabahId = null;
 
     public string $search = '';
+
     public int $startLine = 1;
+
     public int $pageNumber = 1;
+
     public int $linesPerPage = 20;
+
     public string $startDate = '';
+
     public string $endDate = '';
 
     public ?Nasabah $selectedNasabah = null;
@@ -49,10 +54,10 @@ class CetakBuku extends Component
         $settings = Setting::getAllSettings();
         $nasabahs = [];
 
-        if (!empty($this->search)) {
-            $nasabahs = Nasabah::where('nama', 'like', '%' . $this->search . '%')
-                ->orWhere('nomor_nasabah', 'like', '%' . $this->search . '%')
-                ->orWhere('no_hp', 'like', '%' . $this->search . '%')
+        if (! empty($this->search)) {
+            $nasabahs = Nasabah::where('nama', 'like', '%'.$this->search.'%')
+                ->orWhere('nomor_nasabah', 'like', '%'.$this->search.'%')
+                ->orWhere('no_hp', 'like', '%'.$this->search.'%')
                 ->take(6)
                 ->get();
         }
@@ -61,11 +66,11 @@ class CetakBuku extends Component
         if ($this->selectedNasabah) {
             $query = $this->selectedNasabah->transaksis()->with('user')->oldest();
 
-            if (!empty($this->startDate)) {
+            if (! empty($this->startDate)) {
                 $query->whereDate('created_at', '>=', $this->startDate);
             }
 
-            if (!empty($this->endDate)) {
+            if (! empty($this->endDate)) {
                 $query->whereDate('created_at', '<=', $this->endDate);
             }
 

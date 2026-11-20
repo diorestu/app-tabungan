@@ -22,6 +22,7 @@ class Login extends Component
     public string $no_hp = '';
 
     public bool $remember = true;
+
     public ?string $errorMessage = null;
 
     public function mount(): void
@@ -36,7 +37,7 @@ class Login extends Component
      */
     protected function throttleKey(): string
     {
-        return Str::transliterate('login:nasabah:' . Str::lower(trim($this->nomor_nasabah)) . '|' . request()->ip());
+        return Str::transliterate('login:nasabah:'.Str::lower(trim($this->nomor_nasabah)).'|'.request()->ip());
     }
 
     public function login(): void
@@ -49,6 +50,7 @@ class Login extends Component
             $seconds = RateLimiter::availableIn($this->throttleKey());
             $this->errorMessage = "Terlalu banyak percobaan login yang gagal. Akun diamankan sementara, silakan coba lagi dalam {$seconds} detik.";
             $this->addError('nomor_nasabah', $this->errorMessage);
+
             return;
         }
 
@@ -60,15 +62,16 @@ class Login extends Component
         $nasabah = Nasabah::where('nomor_nasabah', $nomorNasabah)
             ->where(function ($query) use ($noHp) {
                 $query->where('no_hp', $noHp)
-                      ->orWhere('no_hp', preg_replace('/^0/', '62', $noHp))
-                      ->orWhere('no_hp', preg_replace('/^\+?62/', '0', $noHp));
+                    ->orWhere('no_hp', preg_replace('/^0/', '62', $noHp))
+                    ->orWhere('no_hp', preg_replace('/^\+?62/', '0', $noHp));
             })
             ->first();
 
-        if (!$nasabah) {
+        if (! $nasabah) {
             RateLimiter::hit($this->throttleKey(), 60);
             $this->errorMessage = 'ID Nasabah atau Nomor Handphone tidak sesuai dengan data kami.';
             $this->addError('nomor_nasabah', $this->errorMessage);
+
             return;
         }
 
@@ -76,6 +79,7 @@ class Login extends Component
             RateLimiter::hit($this->throttleKey(), 60);
             $this->errorMessage = 'Akun tabungan Anda sedang DIBEKUKAN / DIBLOKIR sementara. Silakan hubungi customer service / petugas teller untuk pembukaan blokir.';
             $this->addError('nomor_nasabah', $this->errorMessage);
+
             return;
         }
 
@@ -83,6 +87,7 @@ class Login extends Component
             RateLimiter::hit($this->throttleKey(), 60);
             $this->errorMessage = 'Akun tabungan Anda berstatus non-aktif. Silakan hubungi customer service / teller.';
             $this->addError('nomor_nasabah', $this->errorMessage);
+
             return;
         }
 
@@ -92,7 +97,7 @@ class Login extends Component
         Auth::guard('nasabah')->login($nasabah, $this->remember);
         session()->regenerate();
 
-        session()->flash('success', 'Selamat datang kembali, ' . $nasabah->nama . '!');
+        session()->flash('success', 'Selamat datang kembali, '.$nasabah->nama.'!');
         $this->redirectRoute('nasabah.dashboard', navigate: true);
     }
 

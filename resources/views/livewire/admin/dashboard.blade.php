@@ -1,9 +1,8 @@
-<div class="space-y-5">
+<div class="space-y-4 sm:space-y-5">
     <!-- Header Banner -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 sm:p-5 rounded-xl shadow-xs">
         <div>
-            <h1 class="text-base sm:text-lg font-bold text-zinc-900 dark:text-white tracking-tight">Dashboard Tabungan</h1>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400">Ringkasan keuangan dan aktivitas mutasi tabungan nasabah hari ini</p>
+            <h1 class="text-base sm:text-lg font-bold text-zinc-900 dark:text-white tracking-tight">Dashboard</h1>
         </div>
 
         <!-- Quick CTA buttons -->
@@ -30,124 +29,119 @@
         <!-- Total Dana Kas Tabungan -->
         <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-xs">
             <div class="flex items-center justify-between text-zinc-400">
-                <span class="text-xs text-zinc-500 dark:text-zinc-400">Total Kas Tabungan</span>
+                <span class="text-xs text-zinc-500 dark:text-zinc-400 font-medium">Total Kas Tabungan</span>
                 <x-heroicon-o-banknotes class="size-4" />
             </div>
             <div class="mt-2">
                 <h3 class="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-white tabular-nums tracking-tight">
                     Rp {{ number_format($totalKas, 0, ',', '.') }}
                 </h3>
-                <span class="text-[11px] text-zinc-400 block mt-0.5">Saldo keseluruhan nasabah</span>
             </div>
         </div>
 
         <!-- Total Nasabah -->
         <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-xs">
             <div class="flex items-center justify-between text-zinc-400">
-                <span class="text-xs text-zinc-500 dark:text-zinc-400">Jumlah Nasabah</span>
+                <span class="text-xs text-zinc-500 dark:text-zinc-400 font-medium">Jumlah Nasabah</span>
                 <x-heroicon-o-users class="size-4" />
             </div>
-            <div class="mt-2">
+            <div class="mt-2 flex items-baseline justify-between">
                 <h3 class="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-white tabular-nums tracking-tight">
                     {{ $totalNasabah }} <span class="text-xs font-normal text-zinc-400">Orang</span>
                 </h3>
-                <span class="text-[11px] text-emerald-600 dark:text-emerald-400 block mt-0.5 font-medium">{{ $totalNasabahAktif }} nasabah aktif</span>
+                <span class="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">{{ $totalNasabahAktif }} aktif</span>
             </div>
         </div>
 
         <!-- Setoran Hari Ini -->
         <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-xs">
             <div class="flex items-center justify-between text-zinc-400">
-                <span class="text-xs text-zinc-500 dark:text-zinc-400">Setoran Hari Ini</span>
+                <span class="text-xs text-zinc-500 dark:text-zinc-400 font-medium">Setoran Hari Ini</span>
                 <x-heroicon-o-arrow-down-tray class="size-4 text-emerald-500" />
             </div>
             <div class="mt-2">
                 <h3 class="text-xl sm:text-2xl font-bold text-emerald-600 dark:text-emerald-400 tabular-nums tracking-tight">
                     Rp {{ number_format($setorHariIni, 0, ',', '.') }}
                 </h3>
-                <span class="text-[11px] text-zinc-400 block mt-0.5">Total setor: Rp {{ number_format($totalSetorAll, 0, ',', '.') }}</span>
             </div>
         </div>
 
         <!-- Penarikan Hari Ini -->
         <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-xs">
             <div class="flex items-center justify-between text-zinc-400">
-                <span class="text-xs text-zinc-500 dark:text-zinc-400">Penarikan Hari Ini</span>
+                <span class="text-xs text-zinc-500 dark:text-zinc-400 font-medium">Penarikan Hari Ini</span>
                 <x-heroicon-o-arrow-up-tray class="size-4 text-rose-500" />
             </div>
             <div class="mt-2">
                 <h3 class="text-xl sm:text-2xl font-bold text-rose-600 dark:text-rose-400 tabular-nums tracking-tight">
                     Rp {{ number_format($tarikHariIni, 0, ',', '.') }}
                 </h3>
-                <span class="text-[11px] text-zinc-400 block mt-0.5">Total tarik: Rp {{ number_format($totalTarikAll, 0, ',', '.') }}</span>
             </div>
         </div>
     </div>
 
     <!-- Quick Navigation Cards Grid -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
         <a 
             href="{{ route('admin.nasabah') }}" 
-            class="p-3.5 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 shadow-xs transition-colors flex items-center gap-3 group"
+            class="p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 shadow-xs transition-colors flex items-center gap-2.5 group"
         >
-            <div class="size-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 group-hover:text-emerald-600 flex items-center justify-center transition-colors">
-                <x-heroicon-o-users class="size-4" />
+            <div class="size-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 group-hover:text-emerald-600 flex items-center justify-center transition-colors">
+                <x-heroicon-o-users class="size-3.5" />
             </div>
-            <div>
-                <span class="text-xs font-semibold text-zinc-900 dark:text-white block">Data Nasabah</span>
-                <span class="text-[10px] text-zinc-400">Buku nasabah</span>
-            </div>
+            <span class="text-xs font-semibold text-zinc-900 dark:text-white">Data Nasabah</span>
         </a>
 
         <a 
             href="{{ route('admin.setor') }}" 
-            class="p-3.5 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 shadow-xs transition-colors flex items-center gap-3 group"
+            class="p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 shadow-xs transition-colors flex items-center gap-2.5 group"
         >
-            <div class="size-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 group-hover:text-emerald-600 flex items-center justify-center transition-colors">
-                <x-heroicon-o-arrow-down-tray class="size-4" />
+            <div class="size-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 group-hover:text-emerald-600 flex items-center justify-center transition-colors">
+                <x-heroicon-o-arrow-down-tray class="size-3.5" />
             </div>
-            <div>
-                <span class="text-xs font-semibold text-zinc-900 dark:text-white block">Setor Tunai</span>
-                <span class="text-[10px] text-zinc-400">Pencatatan deposit</span>
-            </div>
+            <span class="text-xs font-semibold text-zinc-900 dark:text-white">Setor Tunai</span>
         </a>
 
         <a 
             href="{{ route('admin.tarik') }}" 
-            class="p-3.5 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 shadow-xs transition-colors flex items-center gap-3 group"
+            class="p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 shadow-xs transition-colors flex items-center gap-2.5 group"
         >
-            <div class="size-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 group-hover:text-emerald-600 flex items-center justify-center transition-colors">
-                <x-heroicon-o-arrow-up-tray class="size-4" />
+            <div class="size-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 group-hover:text-emerald-600 flex items-center justify-center transition-colors">
+                <x-heroicon-o-arrow-up-tray class="size-3.5" />
             </div>
-            <div>
-                <span class="text-xs font-semibold text-zinc-900 dark:text-white block">Tarik Tunai</span>
-                <span class="text-[10px] text-zinc-400">Penarikan kas</span>
+            <span class="text-xs font-semibold text-zinc-900 dark:text-white">Tarik Tunai</span>
+        </a>
+
+        <a 
+            href="{{ route('admin.dompet-kas') }}" 
+            class="p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 shadow-xs transition-colors flex items-center justify-between group"
+        >
+            <div class="flex items-center gap-2.5">
+                <div class="size-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 group-hover:text-emerald-600 flex items-center justify-center transition-colors">
+                    <x-heroicon-o-wallet class="size-3.5" />
+                </div>
+                <span class="text-xs font-semibold text-zinc-900 dark:text-white">Dompet Kas</span>
             </div>
+            <span class="text-[11px] text-zinc-400 font-mono">Rp {{ number_format($totalSaldoDompet, 0, ',', '.') }}</span>
         </a>
 
         <a 
             href="{{ route('admin.transaksi') }}" 
-            class="p-3.5 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 shadow-xs transition-colors flex items-center gap-3 group"
+            class="p-3 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 shadow-xs transition-colors flex items-center gap-2.5 group"
         >
-            <div class="size-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 group-hover:text-emerald-600 flex items-center justify-center transition-colors">
-                <x-heroicon-o-document-text class="size-4" />
+            <div class="size-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 group-hover:text-emerald-600 flex items-center justify-center transition-colors">
+                <x-heroicon-o-document-text class="size-3.5" />
             </div>
-            <div>
-                <span class="text-xs font-semibold text-zinc-900 dark:text-white block">Buku Transaksi</span>
-                <span class="text-[10px] text-zinc-400">Rekapitulasi mutasi</span>
-            </div>
+            <span class="text-xs font-semibold text-zinc-900 dark:text-white">Riwayat Transaksi</span>
         </a>
     </div>
 
     <!-- Two-column Content: Recent Transactions (left 2/3) + Top Savers (right 1/3) -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5">
         <!-- Recent Transactions -->
         <div class="lg:col-span-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 sm:p-5 shadow-xs">
             <div class="flex items-center justify-between mb-3.5">
-                <div>
-                    <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-white">Transaksi Terbaru</h2>
-                    <p class="text-[11px] text-zinc-400">Mutasi setor & tarik terakhir tercatat</p>
-                </div>
+                <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-white">Transaksi Terbaru</h2>
                 <a href="{{ route('admin.transaksi') }}" class="text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-0.5">
                     <span>Semua Transaksi</span>
                     <x-heroicon-s-chevron-right class="size-3" />
@@ -156,7 +150,7 @@
 
             @if ($recentTransactions->isEmpty())
                 <div class="text-center py-10 text-zinc-400 dark:text-zinc-500 text-xs">
-                    Belum ada transaksi tabungan yang tercatat.
+                    Belum ada transaksi yang tercatat.
                 </div>
             @else
                 <div class="overflow-x-auto">
@@ -207,41 +201,31 @@
         </div>
 
         <!-- Top Savers -->
-        <div class="lg:col-span-1 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 sm:p-5 shadow-xs flex flex-col justify-between">
-            <div>
-                <div class="flex items-center justify-between mb-3.5">
-                    <div>
-                        <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-white">Saldo Terbesar</h2>
-                        <p class="text-[11px] text-zinc-400">Nasabah saldo tabungan tertinggi</p>
-                    </div>
-                    <a href="{{ route('admin.nasabah') }}" class="text-xs text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200">
-                        Lihat Semua
-                    </a>
-                </div>
-
-                <div class="space-y-2">
-                    @foreach ($topNasabahs as $index => $item)
-                        <div class="p-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 flex items-center justify-between">
-                            <div class="flex items-center gap-2.5">
-                                <span class="size-5 rounded-md bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 flex items-center justify-center text-[10px] font-bold font-mono">
-                                    {{ $index + 1 }}
-                                </span>
-                                <div>
-                                    <p class="text-xs font-semibold text-zinc-900 dark:text-white">{{ $item->nama }}</p>
-                                    <p class="text-[10px] font-mono text-zinc-400">{{ $item->nomor_nasabah }}</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-xs font-bold font-mono text-emerald-600 dark:text-emerald-400">{{ $item->formatted_saldo }}</span>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
+        <div class="lg:col-span-1 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 sm:p-5 shadow-xs">
+            <div class="flex items-center justify-between mb-3.5">
+                <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-white">Saldo Terbesar</h2>
+                <a href="{{ route('admin.nasabah') }}" class="text-xs text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200">
+                    Lihat Semua
+                </a>
             </div>
 
-            <!-- Fast Customer ID Lookup tip -->
-            <div class="mt-5 pt-3 border-t border-zinc-100 dark:border-zinc-800 text-[11px] text-zinc-400">
-                <span class="font-medium text-zinc-600 dark:text-zinc-300">Tips Teller:</span> Nasabah dapat login mandiri cukup dengan <strong>ID Nasabah</strong> & <strong>Nomor HP</strong>.
+            <div class="space-y-2">
+                @foreach ($topNasabahs as $index => $item)
+                    <div class="p-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 flex items-center justify-between">
+                        <div class="flex items-center gap-2.5">
+                            <span class="size-5 rounded-md bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 flex items-center justify-center text-[10px] font-bold font-mono">
+                                {{ $index + 1 }}
+                            </span>
+                            <div>
+                                <p class="text-xs font-semibold text-zinc-900 dark:text-white">{{ $item->nama }}</p>
+                                <p class="text-[10px] font-mono text-zinc-400">{{ $item->nomor_nasabah }}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs font-bold font-mono text-emerald-600 dark:text-emerald-400">{{ $item->formatted_saldo }}</span>
+                        </div>
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>

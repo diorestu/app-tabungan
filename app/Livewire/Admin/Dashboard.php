@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\DompetKas;
 use App\Models\Nasabah;
 use App\Models\Transaksi;
 use Livewire\Attributes\Layout;
@@ -38,6 +39,9 @@ class Dashboard extends Component
             ->take(5)
             ->get();
 
+        $dompetKasList = DompetKas::where('status', 'aktif')->get();
+        $totalSaldoDompet = (float) DompetKas::sum('saldo');
+
         return view('livewire.admin.dashboard', [
             'totalKas' => $totalKas,
             'totalNasabah' => $totalNasabah,
@@ -48,6 +52,8 @@ class Dashboard extends Component
             'totalTarikAll' => $totalTarikAll,
             'recentTransactions' => $recentTransactions,
             'topNasabahs' => $topNasabahs,
+            'dompetKasList' => $dompetKasList,
+            'totalSaldoDompet' => $totalSaldoDompet,
         ]);
     }
 }

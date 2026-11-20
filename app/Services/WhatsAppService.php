@@ -17,9 +17,9 @@ class WhatsAppService
         $phone = preg_replace('/[^\d]/', '', $phone);
 
         if (str_starts_with($phone, '0')) {
-            $phone = '62' . substr($phone, 1);
+            $phone = '62'.substr($phone, 1);
         } elseif (str_starts_with($phone, '8')) {
-            $phone = '628' . substr($phone, 1);
+            $phone = '628'.substr($phone, 1);
         }
 
         return $phone;
@@ -54,12 +54,12 @@ class WhatsAppService
             '{nomor_nasabah}' => $nasabah?->nomor_nasabah ?? '-',
             '{no_hp}' => $nasabah?->no_hp ?? '-',
             '{jenis_transaksi}' => strtoupper($transaksi->jenis_transaksi),
-            '{nominal}' => 'Rp ' . number_format($transaksi->nominal, 0, ',', '.'),
-            '{saldo_awal}' => 'Rp ' . number_format($transaksi->saldo_awal, 0, ',', '.'),
-            '{saldo_akhir}' => 'Rp ' . number_format($transaksi->saldo_akhir, 0, ',', '.'),
+            '{nominal}' => 'Rp '.number_format($transaksi->nominal, 0, ',', '.'),
+            '{saldo_awal}' => 'Rp '.number_format($transaksi->saldo_awal, 0, ',', '.'),
+            '{saldo_akhir}' => 'Rp '.number_format($transaksi->saldo_akhir, 0, ',', '.'),
             '{kode_transaksi}' => $transaksi->kode_transaksi,
             '{tanggal}' => $transaksi->created_at->translatedFormat('d F Y'),
-            '{waktu}' => $transaksi->created_at->format('H:i') . ' WIB',
+            '{waktu}' => $transaksi->created_at->format('H:i').' WIB',
             '{teller}' => $teller?->name ?? 'Petugas Teller',
             '{keterangan}' => $transaksi->keterangan ?: '-',
             '{nama_lembaga}' => $namaLembaga,
@@ -79,7 +79,7 @@ class WhatsAppService
         $phone = self::formatPhoneNumber($transaksi->nasabah?->no_hp ?? '');
         $message = self::buildTransactionMessage($transaksi);
 
-        return 'https://wa.me/' . $phone . '?text=' . rawurlencode($message);
+        return 'https://wa.me/'.$phone.'?text='.rawurlencode($message);
     }
 
     /**
@@ -90,7 +90,7 @@ class WhatsAppService
         $settings = Setting::getAllSettings();
         $enabled = ($settings['wa_gateway_enabled'] ?? '0') === '1';
 
-        if (!$enabled) {
+        if (! $enabled) {
             return [
                 'success' => false,
                 'message' => 'WhatsApp Gateway sedang nonaktif di pengaturan.',
@@ -136,6 +136,7 @@ class WhatsAppService
                 case 'mock':
                 default:
                     Log::info("WhatsApp Gateway [Mock Driver] Sent to {$phone}:\n{$message}");
+
                     return [
                         'success' => true,
                         'provider' => 'mock',
@@ -143,10 +144,11 @@ class WhatsAppService
                     ];
             }
         } catch (\Throwable $e) {
-            Log::error('WhatsApp Gateway Exception: ' . $e->getMessage());
+            Log::error('WhatsApp Gateway Exception: '.$e->getMessage());
+
             return [
                 'success' => false,
-                'message' => 'Gagal mengirim pesan WhatsApp: ' . $e->getMessage(),
+                'message' => 'Gagal mengirim pesan WhatsApp: '.$e->getMessage(),
             ];
         }
     }
@@ -180,7 +182,7 @@ class WhatsAppService
         return [
             'success' => false,
             'provider' => 'fonnte',
-            'message' => 'Fonnte Error: ' . ($response->json('reason') ?? $response->body()),
+            'message' => 'Fonnte Error: '.($response->json('reason') ?? $response->body()),
         ];
     }
 
@@ -193,11 +195,11 @@ class WhatsAppService
             return ['success' => false, 'message' => 'API Token Wablas belum diisi di Pengaturan.'];
         }
 
-        $baseUrl = !empty($endpoint) ? rtrim($endpoint, '/') : 'https://phone.wablas.com';
+        $baseUrl = ! empty($endpoint) ? rtrim($endpoint, '/') : 'https://phone.wablas.com';
 
         $response = Http::withHeaders([
             'Authorization' => $token,
-        ])->timeout(15)->post($baseUrl . '/api/send-message', [
+        ])->timeout(15)->post($baseUrl.'/api/send-message', [
             'phone' => $phone,
             'message' => $message,
         ]);
@@ -214,7 +216,7 @@ class WhatsAppService
         return [
             'success' => false,
             'provider' => 'wablas',
-            'message' => 'Wablas Error: ' . ($response->json('message') ?? $response->body()),
+            'message' => 'Wablas Error: '.($response->json('message') ?? $response->body()),
         ];
     }
 
@@ -228,8 +230,8 @@ class WhatsAppService
         }
 
         $request = Http::timeout(15);
-        if (!empty($token)) {
-            $request = $request->withHeaders(['Authorization' => 'Bearer ' . $token]);
+        if (! empty($token)) {
+            $request = $request->withHeaders(['Authorization' => 'Bearer '.$token]);
         }
 
         $response = $request->post($endpoint, [
@@ -250,7 +252,7 @@ class WhatsAppService
         return [
             'success' => false,
             'provider' => 'custom',
-            'message' => 'Webhook Error (HTTP ' . $response->status() . '): ' . $response->body(),
+            'message' => 'Webhook Error (HTTP '.$response->status().'): '.$response->body(),
         ];
     }
 }

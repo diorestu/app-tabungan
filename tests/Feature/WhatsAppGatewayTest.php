@@ -19,6 +19,7 @@ class WhatsAppGatewayTest extends TestCase
     use RefreshDatabase;
 
     protected User $admin;
+
     protected Nasabah $nasabah;
 
     protected function setUp(): void

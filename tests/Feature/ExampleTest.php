@@ -2,12 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Livewire\Admin\NasabahManager;
 use App\Livewire\Admin\SetorTunai;
 use App\Livewire\Admin\TarikTunai;
 use App\Livewire\Nasabah\Login as NasabahLogin;
 use App\Models\Nasabah;
-use App\Models\Transaksi;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
@@ -160,4 +158,3 @@ class ExampleTest extends TestCase
         $this->assertEquals(100000, $nasabah->saldo);
     }
 }
-

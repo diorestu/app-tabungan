@@ -2,8 +2,7 @@
     <!-- Header Banner -->
     <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-lg sm:text-xl font-bold text-zinc-900 dark:text-white tracking-tight">Pengaturan & Manajemen Sistem</h1>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Konfigurasi profil lembaga, akun petugas teller, WhatsApp gateway, dan keamanan akun</p>
+            <h1 class="text-lg sm:text-xl font-bold text-zinc-900 dark:text-white tracking-tight">Pengaturan</h1>
         </div>
         
         <!-- Navigation Tabs -->
@@ -14,7 +13,7 @@
                 class="px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap {{ $activeTab === 'lembaga' ? 'bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white shadow-xs' : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}"
             >
                 <x-heroicon-o-building-office-2 class="size-3.5" />
-                <span>Profil Lembaga</span>
+                <span>Lembaga</span>
             </button>
             <button 
                 type="button" 
@@ -22,7 +21,7 @@
                 class="px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap {{ $activeTab === 'petugas' ? 'bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white shadow-xs' : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}"
             >
                 <x-heroicon-o-users class="size-3.5" />
-                <span>Petugas & Teller</span>
+                <span>Petugas</span>
             </button>
             <button 
                 type="button" 
@@ -30,7 +29,7 @@
                 class="px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap {{ $activeTab === 'wa' ? 'bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white shadow-xs' : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}"
             >
                 <x-heroicon-o-chat-bubble-left-right class="size-3.5" />
-                <span>WhatsApp Gateway</span>
+                <span>WhatsApp</span>
             </button>
             <button 
                 type="button" 
@@ -38,7 +37,7 @@
                 class="px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap {{ $activeTab === 'keamanan' ? 'bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white shadow-xs' : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}"
             >
                 <x-heroicon-o-key class="size-3.5" />
-                <span>Akun & Password</span>
+                <span>Keamanan</span>
             </button>
         </div>
     </div>
@@ -50,8 +49,7 @@
             <div class="lg:col-span-2 space-y-6">
                 <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 sm:p-6 space-y-4">
                     <div class="pb-3 border-b border-zinc-100 dark:border-zinc-800">
-                        <h2 class="text-sm font-bold text-zinc-900 dark:text-white">Profil Lembaga / Instansi</h2>
-                        <p class="text-[11px] text-zinc-500">Informasi ini dicantumkan pada header struk dan laporan mutasi kas</p>
+                        <h2 class="text-sm font-bold text-zinc-900 dark:text-white">Profil Lembaga</h2>
                     </div>
 
                     @if (session('success_institution'))

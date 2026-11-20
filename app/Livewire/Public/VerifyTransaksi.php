@@ -13,7 +13,9 @@ use Livewire\Component;
 class VerifyTransaksi extends Component
 {
     public string $code = '';
+
     public ?Transaksi $transaksi = null;
+
     public bool $isValid = false;
 
     public function mount(string $code): void

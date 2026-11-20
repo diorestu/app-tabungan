@@ -20,19 +20,27 @@ class BagiHasilAdmin extends Component
 
     // Admin Fee Properties
     public float|string $admin_fee_amount = 5000;
+
     public float|string $admin_min_balance = 50000;
+
     public string $admin_fee_period = '';
+
     public array $admin_fee_simulation = [];
 
     // Bagi Hasil / Profit Share Properties
     public float|string $bagi_hasil_rate = 0.5; // in %
+
     public float|string $bagi_hasil_min_balance = 100000;
+
     public string $bagi_hasil_period = '';
+
     public array $bagi_hasil_simulation = [];
 
     // Confirmation & Result State
     public bool $showConfirmAdminModal = false;
+
     public bool $showConfirmBagiHasilModal = false;
+
     public ?array $lastExecutionResult = null;
 
     public function mount(): void
@@ -132,6 +140,7 @@ class BagiHasilAdmin extends Component
         if ($user->role !== 'admin') {
             session()->flash('error_batch', 'Hanya administrator yang berwenang mengeksekusi pemotongan biaya admin massal.');
             $this->closeConfirmAdminModal();
+
             return;
         }
 
@@ -160,7 +169,7 @@ class BagiHasilAdmin extends Component
                     'nominal' => $fee,
                     'saldo_awal' => $saldoAwal,
                     'saldo_akhir' => $saldoAkhir,
-                    'keterangan' => 'Biaya administrasi bulanan periode ' . $period,
+                    'keterangan' => 'Biaya administrasi bulanan periode '.$period,
                 ]);
 
                 $nasabah->update(['saldo' => $saldoAkhir]);
@@ -176,7 +185,7 @@ class BagiHasilAdmin extends Component
 
         ActivityLog::record(
             'batch_biaya_admin',
-            'Eksekusi pemotongan biaya admin bulanan periode ' . $period . ': ' . $processedCount . ' nasabah, total Rp ' . number_format($totalDeducted, 0, ',', '.'),
+            'Eksekusi pemotongan biaya admin bulanan periode '.$period.': '.$processedCount.' nasabah, total Rp '.number_format($totalDeducted, 0, ',', '.'),
             null,
             [
                 'period' => $period,
@@ -194,7 +203,7 @@ class BagiHasilAdmin extends Component
         ];
 
         $this->closeConfirmAdminModal();
-        session()->flash('success_batch', 'Pemotongan biaya admin bulanan berhasil dieksekusi untuk ' . $processedCount . ' nasabah.');
+        session()->flash('success_batch', 'Pemotongan biaya admin bulanan berhasil dieksekusi untuk '.$processedCount.' nasabah.');
         $this->simulateAdminFee();
     }
 
@@ -215,6 +224,7 @@ class BagiHasilAdmin extends Component
         if ($user->role !== 'admin') {
             session()->flash('error_batch', 'Hanya administrator yang berwenang mengeksekusi bagi hasil massal.');
             $this->closeConfirmBagiHasilModal();
+
             return;
         }
 
@@ -249,7 +259,7 @@ class BagiHasilAdmin extends Component
                     'nominal' => $bonus,
                     'saldo_awal' => $saldoAwal,
                     'saldo_akhir' => $saldoAkhir,
-                    'keterangan' => 'Bagi hasil / bunga simpanan periode ' . $period . ' (' . $ratePercent . '%)',
+                    'keterangan' => 'Bagi hasil / bunga simpanan periode '.$period.' ('.$ratePercent.'%)',
                 ]);
 
                 $nasabah->update(['saldo' => $saldoAkhir]);
@@ -265,7 +275,7 @@ class BagiHasilAdmin extends Component
 
         ActivityLog::record(
             'batch_bagi_hasil',
-            'Eksekusi pembagian bagi hasil simpanan periode ' . $period . ' (' . $ratePercent . '%): ' . $processedCount . ' nasabah, total Rp ' . number_format($totalDistributed, 0, ',', '.'),
+            'Eksekusi pembagian bagi hasil simpanan periode '.$period.' ('.$ratePercent.'%): '.$processedCount.' nasabah, total Rp '.number_format($totalDistributed, 0, ',', '.'),
             null,
             [
                 'period' => $period,
@@ -283,7 +293,7 @@ class BagiHasilAdmin extends Component
         ];
 
         $this->closeConfirmBagiHasilModal();
-        session()->flash('success_batch', 'Pembagian bagi hasil berhasil dieksekusi untuk ' . $processedCount . ' nasabah (Total Rp ' . number_format($totalDistributed, 0, ',', '.') . ').');
+        session()->flash('success_batch', 'Pembagian bagi hasil berhasil dieksekusi untuk '.$processedCount.' nasabah (Total Rp '.number_format($totalDistributed, 0, ',', '.').').');
         $this->simulateBagiHasil();
     }
 

@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Transaksi;
+use App\Services\WhatsAppService;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
@@ -28,7 +29,9 @@ class TransaksiManager extends Component
     public string $endDate = '';
 
     public ?Transaksi $selectedReceipt = null;
+
     public bool $showReceiptModal = false;
+
     public ?string $waStatusMessage = null;
 
     public function updatingSearch(): void
@@ -62,19 +65,19 @@ class TransaksiManager extends Component
 
     public function openReceipt(int $id): void
     {
-        $this->selectedReceipt = Transaksi::with(['nasabah', 'user'])->findOrFail($id);
+        $this->selectedReceipt = Transaksi::with(['nasabah', 'user', 'dompetKas'])->findOrFail($id);
         $this->waStatusMessage = null;
         $this->showReceiptModal = true;
     }
 
     public function sendWhatsAppReceipt(int $id): void
     {
-        $trx = Transaksi::with(['nasabah', 'user'])->findOrFail($id);
-        $waService = app(\App\Services\WhatsAppService::class);
+        $trx = Transaksi::with(['nasabah', 'user', 'dompetKas'])->findOrFail($id);
+        $waService = app(WhatsAppService::class);
         $res = $waService->sendTransactionReceipt($trx);
 
         $this->waStatusMessage = $res['message'] ?? 'Status tidak diketahui';
-        session()->flash('success_wa_' . $id, $res['message'] ?? 'Pesan diproses');
+        session()->flash('success_wa_'.$id, $res['message'] ?? 'Pesan diproses');
     }
 
     public function closeReceipt(): void
@@ -86,38 +89,38 @@ class TransaksiManager extends Component
 
     public function exportCsv()
     {
-        $query = Transaksi::with(['nasabah', 'user']);
+        $query = Transaksi::with(['nasabah', 'user', 'dompetKas']);
 
-        if (!empty($this->search)) {
+        if (! empty($this->search)) {
             $query->where(function ($q) {
-                $q->where('kode_transaksi', 'like', '%' . $this->search . '%')
-                  ->orWhere('keterangan', 'like', '%' . $this->search . '%')
-                  ->orWhereHas('nasabah', function ($nq) {
-                      $nq->where('nama', 'like', '%' . $this->search . '%')
-                         ->orWhere('nomor_nasabah', 'like', '%' . $this->search . '%')
-                         ->orWhere('no_hp', 'like', '%' . $this->search . '%');
-                  });
+                $q->where('kode_transaksi', 'like', '%'.$this->search.'%')
+                    ->orWhere('keterangan', 'like', '%'.$this->search.'%')
+                    ->orWhereHas('nasabah', function ($nq) {
+                        $nq->where('nama', 'like', '%'.$this->search.'%')
+                            ->orWhere('nomor_nasabah', 'like', '%'.$this->search.'%')
+                            ->orWhere('no_hp', 'like', '%'.$this->search.'%');
+                    });
             });
         }
 
-        if (!empty($this->jenis)) {
+        if (! empty($this->jenis)) {
             $query->where('jenis_transaksi', $this->jenis);
         }
 
-        if (!empty($this->startDate)) {
+        if (! empty($this->startDate)) {
             $query->whereDate('created_at', '>=', $this->startDate);
         }
 
-        if (!empty($this->endDate)) {
+        if (! empty($this->endDate)) {
             $query->whereDate('created_at', '<=', $this->endDate);
         }
 
         $transaksis = $query->latest()->get();
-        $filename = 'laporan-transaksi-tabungan-' . date('Ymd_His') . '.csv';
+        $filename = 'laporan-transaksi-tabungan-'.date('Ymd_His').'.csv';
 
         return response()->streamDownload(function () use ($transaksis) {
             $handle = fopen('php://output', 'w');
-            
+
             // UTF-8 BOM for Excel compatibility
             fwrite($handle, "\xEF\xBB\xBF");
 
@@ -147,9 +150,9 @@ class TransaksiManager extends Component
                     $trx->nasabah?->nama ?? '-',
                     $trx->nasabah?->no_hp ?? '-',
                     strtoupper($trx->jenis_transaksi),
-                    number_format((float)$trx->nominal, 0, ',', '.'),
-                    number_format((float)$trx->saldo_awal, 0, ',', '.'),
-                    number_format((float)$trx->saldo_akhir, 0, ',', '.'),
+                    number_format((float) $trx->nominal, 0, ',', '.'),
+                    number_format((float) $trx->saldo_awal, 0, ',', '.'),
+                    number_format((float) $trx->saldo_akhir, 0, ',', '.'),
                     $trx->user?->name ?? 'Sistem',
                     $trx->keterangan ?? '-',
                 ]);
@@ -158,35 +161,35 @@ class TransaksiManager extends Component
             fclose($handle);
         }, $filename, [
             'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
         ]);
     }
 
     public function render()
     {
-        $query = Transaksi::with(['nasabah', 'user']);
+        $query = Transaksi::with(['nasabah', 'user', 'dompetKas']);
 
-        if (!empty($this->search)) {
+        if (! empty($this->search)) {
             $query->where(function ($q) {
-                $q->where('kode_transaksi', 'like', '%' . $this->search . '%')
-                  ->orWhere('keterangan', 'like', '%' . $this->search . '%')
-                  ->orWhereHas('nasabah', function ($nq) {
-                      $nq->where('nama', 'like', '%' . $this->search . '%')
-                         ->orWhere('nomor_nasabah', 'like', '%' . $this->search . '%')
-                         ->orWhere('no_hp', 'like', '%' . $this->search . '%');
-                  });
+                $q->where('kode_transaksi', 'like', '%'.$this->search.'%')
+                    ->orWhere('keterangan', 'like', '%'.$this->search.'%')
+                    ->orWhereHas('nasabah', function ($nq) {
+                        $nq->where('nama', 'like', '%'.$this->search.'%')
+                            ->orWhere('nomor_nasabah', 'like', '%'.$this->search.'%')
+                            ->orWhere('no_hp', 'like', '%'.$this->search.'%');
+                    });
             });
         }
 
-        if (!empty($this->jenis)) {
+        if (! empty($this->jenis)) {
             $query->where('jenis_transaksi', $this->jenis);
         }
 
-        if (!empty($this->startDate)) {
+        if (! empty($this->startDate)) {
             $query->whereDate('created_at', '>=', $this->startDate);
         }
 
-        if (!empty($this->endDate)) {
+        if (! empty($this->endDate)) {
             $query->whereDate('created_at', '<=', $this->endDate);
         }
 

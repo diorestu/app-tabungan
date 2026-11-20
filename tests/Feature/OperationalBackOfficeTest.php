@@ -18,7 +18,9 @@ class OperationalBackOfficeTest extends TestCase
     use RefreshDatabase;
 
     protected User $admin;
+
     protected Nasabah $nasabah1;
+
     protected Nasabah $nasabah2;
 
     protected function setUp(): void
@@ -173,6 +175,19 @@ class OperationalBackOfficeTest extends TestCase
             'jenis_transaksi' => 'setor',
             'nominal' => 10000,
             'saldo_akhir' => 1010000,
+        ]);
+    }
+
+    public function test_admin_manifest_returns_valid_pwa_json(): void
+    {
+        $response = $this->get('/admin/manifest.json');
+
+        $response->assertStatus(200);
+        $response->assertHeader('Content-Type', 'application/manifest+json; charset=UTF-8');
+        $response->assertJson([
+            'short_name' => 'TabunganKu',
+            'start_url' => '/admin/dashboard',
+            'display' => 'standalone',
         ]);
     }
 }

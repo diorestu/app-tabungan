@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\DompetKas;
+use App\Models\Nasabah;
+use App\Models\Transaksi;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -21,6 +24,15 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Administrator Tabungan',
                 'password' => bcrypt('password'),
                 'role' => 'admin',
+                'status' => 'aktif',
+            ]
+        );
+
+        $dompetMandiri = DompetKas::firstOrCreate(
+            ['nomor_rekening' => '140-00-1234567-8'],
+            [
+                'nama' => 'Mandiri',
+                'saldo' => 0,
                 'status' => 'aktif',
             ]
         );
@@ -62,7 +74,7 @@ class DatabaseSeeder extends Seeder
                         'keterangan' => 'Penarikan untuk keperluan darurat',
                         'created_at' => now()->subDays(5),
                     ],
-                ]
+                ],
             ],
             [
                 'nomor_nasabah' => 'NAS-2026-0002',
@@ -91,7 +103,7 @@ class DatabaseSeeder extends Seeder
                         'keterangan' => 'Setoran hasil usaha',
                         'created_at' => now()->subDays(7),
                     ],
-                ]
+                ],
             ],
             [
                 'nomor_nasabah' => 'NAS-2026-0003',
@@ -120,7 +132,7 @@ class DatabaseSeeder extends Seeder
                         'keterangan' => 'Tarik tunai via teller',
                         'created_at' => now()->subDays(3),
                     ],
-                ]
+                ],
             ],
         ];
 
@@ -128,12 +140,16 @@ class DatabaseSeeder extends Seeder
             $transaksis = $nData['transaksis'];
             unset($nData['transaksis']);
 
-            $nasabah = \App\Models\Nasabah::create($nData);
+            $nasabah = Nasabah::create($nData);
 
             foreach ($transaksis as $tData) {
                 $tData['nasabah_id'] = $nasabah->id;
                 $tData['user_id'] = $admin->id;
-                \App\Models\Transaksi::create($tData);
+                if ($tData['jenis_transaksi'] === 'setor') {
+                    $tData['dompet_kas_id'] = $dompetMandiri->id;
+                    $dompetMandiri->increment('saldo', $tData['nominal']);
+                }
+                Transaksi::create($tData);
             }
         }
     }

@@ -21,6 +21,7 @@ class Login extends Component
     public string $password = '';
 
     public bool $remember = false;
+
     public ?string $errorMessage = null;
 
     public function mount(): void
@@ -35,7 +36,7 @@ class Login extends Component
      */
     protected function throttleKey(): string
     {
-        return Str::transliterate('login:admin:' . Str::lower(trim($this->email)) . '|' . request()->ip());
+        return Str::transliterate('login:admin:'.Str::lower(trim($this->email)).'|'.request()->ip());
     }
 
     public function login(): void
@@ -48,15 +49,17 @@ class Login extends Component
             $seconds = RateLimiter::availableIn($this->throttleKey());
             $this->errorMessage = "Terlalu banyak percobaan login yang gagal. Akun diamankan sementara, silakan coba lagi dalam {$seconds} detik.";
             $this->addError('email', $this->errorMessage);
+
             return;
         }
 
         $email = trim($this->email);
 
-        if (!Auth::guard('web')->attempt(['email' => $email, 'password' => $this->password], $this->remember)) {
+        if (! Auth::guard('web')->attempt(['email' => $email, 'password' => $this->password], $this->remember)) {
             RateLimiter::hit($this->throttleKey(), 60);
             $this->errorMessage = 'Email atau password petugas tidak sesuai.';
             $this->addError('email', $this->errorMessage);
+
             return;
         }
 
@@ -66,6 +69,7 @@ class Login extends Component
             Auth::guard('web')->logout();
             $this->errorMessage = 'Akun petugas Anda telah dinonaktifkan oleh administrator. Silakan hubungi admin utama.';
             $this->addError('email', $this->errorMessage);
+
             return;
         }
 

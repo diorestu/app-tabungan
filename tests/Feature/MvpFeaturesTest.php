@@ -6,12 +6,16 @@ use App\Livewire\Admin\NasabahManager;
 use App\Livewire\Admin\Pengaturan;
 use App\Livewire\Admin\TransaksiManager;
 use App\Livewire\Auth\Login as AdminLogin;
+use App\Livewire\Nasabah\Login;
+use App\Livewire\Nasabah\Mutasi;
 use App\Models\Nasabah;
 use App\Models\Setting;
 use App\Models\Transaksi;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 use Livewire\Livewire;
 use Tests\TestCase;
 
@@ -234,7 +238,7 @@ class MvpFeaturesTest extends TestCase
 
         $this->actingAs($nasabah, 'nasabah');
 
-        $response = Livewire::test(\App\Livewire\Nasabah\Mutasi::class)
+        $response = Livewire::test(Mutasi::class)
             ->call('exportCsv');
 
         $response->assertFileDownloaded();
@@ -281,11 +285,11 @@ class MvpFeaturesTest extends TestCase
 
     public function test_nasabah_login_rate_limiting_after_repeated_failures(): void
     {
-        \Illuminate\Support\Facades\RateLimiter::clear(
-            \Illuminate\Support\Str::transliterate('login:nasabah:999999999|127.0.0.1')
+        RateLimiter::clear(
+            Str::transliterate('login:nasabah:999999999|127.0.0.1')
         );
 
-        $component = Livewire::test(\App\Livewire\Nasabah\Login::class)
+        $component = Livewire::test(Login::class)
             ->set('nomor_nasabah', '999999999')
             ->set('no_hp', '081299999999');
 
@@ -301,11 +305,11 @@ class MvpFeaturesTest extends TestCase
 
     public function test_admin_login_rate_limiting_after_repeated_failures(): void
     {
-        \Illuminate\Support\Facades\RateLimiter::clear(
-            \Illuminate\Support\Str::transliterate('login:admin:wrong@admin.test|127.0.0.1')
+        RateLimiter::clear(
+            Str::transliterate('login:admin:wrong@admin.test|127.0.0.1')
         );
 
-        $component = Livewire::test(\App\Livewire\Auth\Login::class)
+        $component = Livewire::test(AdminLogin::class)
             ->set('email', 'wrong@admin.test')
             ->set('password', 'wrongpassword');
 

@@ -16,13 +16,14 @@ class EnsureNasabahIsAuthenticated
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::guard('nasabah')->check()) {
+        if (! Auth::guard('nasabah')->check()) {
             return redirect()->route('nasabah.login')->with('error', 'Silakan login dengan ID Nasabah dan Nomor HP terlebih dahulu.');
         }
 
         $nasabah = Auth::guard('nasabah')->user();
         if ($nasabah->status !== 'aktif') {
             Auth::guard('nasabah')->logout();
+
             return redirect()->route('nasabah.login')->with('error', 'Akun nasabah Anda berstatus non-aktif. Silakan hubungi petugas.');
         }
 

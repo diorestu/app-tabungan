@@ -2,8 +2,12 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\ActivityLog;
+use App\Models\DompetKas;
 use App\Models\Nasabah;
+use App\Models\Setting;
 use App\Models\Transaksi;
+use App\Services\WhatsAppService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
@@ -19,7 +23,10 @@ class SetorTunai extends Component
     #[Url]
     public ?int $nasabah_id = null;
 
+    public ?int $dompet_kas_id = null;
+
     public string $nasabahSearch = '';
+
     public ?Nasabah $selectedNasabah = null;
 
     #[Validate('required|numeric|min:5000', message: 'Nominal setoran minimal Rp 5.000')]
@@ -28,10 +35,13 @@ class SetorTunai extends Component
     public string $keterangan = 'Setor tunai tabungan';
 
     public ?Transaksi $lastTransaction = null;
+
     public bool $showSuccessModal = false;
 
     public function mount(): void
     {
+        $this->dompet_kas_id = DompetKas::where('status', 'aktif')->value('id');
+
         if ($this->nasabah_id) {
             $this->selectNasabah($this->nasabah_id);
         }
@@ -42,17 +52,19 @@ class SetorTunai extends Component
         $nasabah = Nasabah::find($id);
         if ($nasabah && $nasabah->status === 'dibekukan') {
             $this->addError('nasabah_id', 'Rekening nasabah ini sedang DIBEKUKAN. Buka blokir terlebih dahulu di menu Data Nasabah untuk dapat menyetor.');
+
             return;
         }
         if ($nasabah && $nasabah->status !== 'aktif') {
             $this->addError('nasabah_id', 'Rekening nasabah ini berstatus non-aktif.');
+
             return;
         }
 
         $this->selectedNasabah = $nasabah;
         if ($this->selectedNasabah) {
             $this->nasabah_id = $this->selectedNasabah->id;
-            $this->nasabahSearch = $this->selectedNasabah->nomor_nasabah . ' - ' . $this->selectedNasabah->nama;
+            $this->nasabahSearch = $this->selectedNasabah->nomor_nasabah.' - '.$this->selectedNasabah->nama;
         }
     }
 
@@ -76,10 +88,22 @@ class SetorTunai extends Component
 
     public function processSetor(): void
     {
-        if (!$this->selectedNasabah) {
+        if (! $this->selectedNasabah) {
             $this->addError('nasabah_id', 'Silakan pilih nasabah terlebih dahulu.');
+
             return;
         }
+
+        if (! $this->dompet_kas_id) {
+            $this->dompet_kas_id = DompetKas::where('status', 'aktif')->value('id');
+        }
+
+        $this->validate([
+            'dompet_kas_id' => 'required|exists:dompet_kas,id',
+        ], [
+            'dompet_kas_id.required' => 'Silakan pilih dompet kas penampung.',
+            'dompet_kas_id.exists' => 'Dompet kas yang dipilih tidak valid.',
+        ]);
 
         $this->validate();
 
@@ -89,12 +113,14 @@ class SetorTunai extends Component
             $nasabah = Nasabah::lockForUpdate()->find($this->selectedNasabah->id);
             $saldoAwal = (float) $nasabah->saldo;
             $saldoAkhir = $saldoAwal + $nominalFloat;
+            $dompet = DompetKas::lockForUpdate()->find($this->dompet_kas_id);
 
             // Create Transaction record
             $this->lastTransaction = Transaksi::create([
                 'kode_transaksi' => Transaksi::generateKodeTransaksi('setor'),
                 'nasabah_id' => $nasabah->id,
                 'user_id' => Auth::guard('web')->id(),
+                'dompet_kas_id' => $dompet?->id,
                 'jenis_transaksi' => 'setor',
                 'nominal' => $nominalFloat,
                 'saldo_awal' => $saldoAwal,
@@ -106,30 +132,36 @@ class SetorTunai extends Component
             $nasabah->update(['saldo' => $saldoAkhir]);
             $this->selectedNasabah = $nasabah;
 
+            // Increment Dompet Kas Saldo
+            if ($dompet) {
+                $dompet->increment('saldo', $nominalFloat);
+            }
+
             // Audit Trail Log
-            \App\Models\ActivityLog::record(
+            ActivityLog::record(
                 'setor_tunai',
-                'Setoran tunai ' . $this->lastTransaction->formatted_nominal . ' untuk nasabah ' . $nasabah->nama . ' (' . $nasabah->nomor_nasabah . ')',
+                'Setoran tunai '.$this->lastTransaction->formatted_nominal.' untuk nasabah '.$nasabah->nama.' ('.$nasabah->nomor_nasabah.') ke dompet '.($dompet ? $dompet->nama.' '.$dompet->nomor_rekening : '-'),
                 $this->lastTransaction,
                 [
                     'nominal' => $nominalFloat,
                     'saldo_awal' => $saldoAwal,
                     'saldo_akhir' => $saldoAkhir,
                     'kode_transaksi' => $this->lastTransaction->kode_transaksi,
+                    'dompet_kas_id' => $dompet?->id,
                 ]
             );
         });
 
         // WhatsApp Gateway Dispatch
         $this->waStatusMessage = null;
-        $waService = app(\App\Services\WhatsAppService::class);
-        $settings = \App\Models\Setting::getAllSettings();
+        $waService = app(WhatsAppService::class);
+        $settings = Setting::getAllSettings();
         if (($settings['wa_gateway_enabled'] ?? '0') === '1' && ($settings['wa_auto_send'] ?? '1') === '1') {
             $res = $waService->sendTransactionReceipt($this->lastTransaction);
             if ($res['success'] ?? false) {
                 $this->waStatusMessage = 'Struk berhasil terkirim via WhatsApp.';
             } else {
-                $this->waStatusMessage = 'Catatan WA: ' . ($res['message'] ?? 'Gateway nonaktif');
+                $this->waStatusMessage = 'Catatan WA: '.($res['message'] ?? 'Gateway nonaktif');
             }
         }
 
@@ -142,22 +174,22 @@ class SetorTunai extends Component
 
     public function sendWhatsAppReceipt(): void
     {
-        if (!$this->lastTransaction) {
+        if (! $this->lastTransaction) {
             return;
         }
 
-        $waService = app(\App\Services\WhatsAppService::class);
+        $waService = app(WhatsAppService::class);
         $res = $waService->sendTransactionReceipt($this->lastTransaction);
         $this->waStatusMessage = $res['message'] ?? 'Status tidak diketahui';
     }
 
     public function getDirectWhatsAppUrlProperty(): string
     {
-        if (!$this->lastTransaction) {
+        if (! $this->lastTransaction) {
             return '#';
         }
 
-        return \App\Services\WhatsAppService::getDirectWhatsAppUrl($this->lastTransaction);
+        return WhatsAppService::getDirectWhatsAppUrl($this->lastTransaction);
     }
 
     public function closeSuccessModal(): void
@@ -170,12 +202,12 @@ class SetorTunai extends Component
     {
         $searchResults = collect();
 
-        if (strlen($this->nasabahSearch) >= 2 && !$this->selectedNasabah) {
+        if (strlen($this->nasabahSearch) >= 2 && ! $this->selectedNasabah) {
             $searchResults = Nasabah::where('status', 'aktif')
                 ->where(function ($q) {
-                    $q->where('nama', 'like', '%' . $this->nasabahSearch . '%')
-                      ->orWhere('nomor_nasabah', 'like', '%' . $this->nasabahSearch . '%')
-                      ->orWhere('no_hp', 'like', '%' . $this->nasabahSearch . '%');
+                    $q->where('nama', 'like', '%'.$this->nasabahSearch.'%')
+                        ->orWhere('nomor_nasabah', 'like', '%'.$this->nasabahSearch.'%')
+                        ->orWhere('no_hp', 'like', '%'.$this->nasabahSearch.'%');
                 })
                 ->take(6)
                 ->get();
@@ -183,6 +215,7 @@ class SetorTunai extends Component
 
         return view('livewire.admin.setor-tunai', [
             'searchResults' => $searchResults,
+            'dompetKasList' => DompetKas::where('status', 'aktif')->get(),
         ]);
     }
 }

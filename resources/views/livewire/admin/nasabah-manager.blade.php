@@ -2,8 +2,7 @@
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl">
         <div>
-            <h1 class="text-lg sm:text-xl font-bold text-zinc-900 dark:text-white tracking-tight">Data Nasabah Tabungan</h1>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Kelola rekening nasabah, status akun, dan pencetakan buku tabungan</p>
+            <h1 class="text-lg sm:text-xl font-bold text-zinc-900 dark:text-white tracking-tight">Data Nasabah</h1>
         </div>
 
         <button 
@@ -12,7 +11,7 @@
             class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-xl transition-colors cursor-pointer shrink-0"
         >
             <x-heroicon-s-plus class="size-4" />
-            <span>Registrasi Nasabah Baru</span>
+            <span>Tambah Nasabah</span>
         </button>
     </div>
 
@@ -34,9 +33,9 @@
                 class="w-full sm:w-44 px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 transition-all cursor-pointer"
             >
                 <option value="">Semua Status</option>
-                <option value="aktif">Status Aktif</option>
-                <option value="dibekukan">Status Dibekukan</option>
-                <option value="nonaktif">Status Non-Aktif</option>
+                <option value="aktif">Aktif</option>
+                <option value="dibekukan">Dibekukan</option>
+                <option value="nonaktif">Non-Aktif</option>
             </select>
         </div>
     </div>
@@ -213,8 +212,7 @@
             <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-xl text-zinc-900 dark:text-zinc-100">
                 <div class="px-6 py-4 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
                     <div>
-                        <h3 class="text-sm font-bold text-zinc-900 dark:text-white">Registrasi Nasabah Baru</h3>
-                        <p class="text-xs text-zinc-500 dark:text-zinc-400">Penomoran otomatis 9 digit standar perbankan</p>
+                        <h3 class="text-sm font-bold text-zinc-900 dark:text-white">Tambah Nasabah</h3>
                     </div>
                     <button type="button" wire:click="closeCreateModal" class="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 p-1 rounded-lg cursor-pointer">
                         <x-heroicon-o-x-mark class="size-5" />
@@ -226,7 +224,7 @@
                     <div class="space-y-3">
                         <div>
                             <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
-                                Wilayah / Lokasi Pendaftaran <span class="text-emerald-500">*</span>
+                                Wilayah <span class="text-emerald-500">*</span>
                             </label>
                             <select 
                                 wire:model.live="wilayah_code" 
@@ -248,7 +246,7 @@
                             <div>
                                 <span class="text-[10px] text-zinc-400 uppercase tracking-wider block font-semibold">Nomor Rekening Otomatis</span>
                                 <span class="text-[11px] text-zinc-500">
-                                    {{ \App\Models\Nasabah::WILAYAH[$wilayah_code] ?? 'Jawa' }} (Kode {{ $wilayah_code }}) • Periode {{ date('y/m') }}
+                                    {{ \App\Models\Nasabah::WILAYAH[$wilayah_code] ?? 'Jawa' }} (Kode {{ $wilayah_code }})
                                 </span>
                             </div>
                             <span class="text-sm font-bold font-mono text-emerald-600 dark:text-emerald-400">
@@ -274,7 +272,7 @@
                     <!-- No Handphone -->
                     <div>
                         <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
-                            Nomor Handphone (Untuk Login Portal) <span class="text-emerald-500">*</span>
+                            Nomor Handphone <span class="text-emerald-500">*</span>
                         </label>
                         <input 
                             type="tel" 
@@ -288,7 +286,7 @@
                     <!-- NIK -->
                     <div>
                         <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
-                            NIK (Nomor Induk Kependudukan - Opsional)
+                            NIK (Opsional)
                         </label>
                         <input 
                             type="text" 
@@ -302,32 +300,48 @@
                     <!-- Alamat -->
                     <div>
                         <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
-                            Alamat Domisili
+                            Alamat
                         </label>
                         <textarea 
                             wire:model="alamat" 
                             rows="2"
-                            placeholder="Alamat lengkap nasabah..."
+                            placeholder="Alamat nasabah..."
                             class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20"
                         ></textarea>
                         @error('alamat') <span class="text-[11px] text-rose-500 mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
-                    <!-- Setoran Awal -->
-                    <div>
-                        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
-                            Setoran Awal (Rp - Opsional)
-                        </label>
-                        <input 
-                            type="number" 
-                            wire:model="setoran_awal" 
-                            min="0"
-                            step="1000"
-                            placeholder="0"
-                            class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white font-mono placeholder-zinc-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20"
-                        />
-                        <span class="text-[11px] text-zinc-400 mt-1 block">Otomatis dicatat sebagai transaksi setoran awal jika diisi</span>
-                        @error('setoran_awal') <span class="text-[11px] text-rose-500 mt-1 block">{{ $message }}</span> @enderror
+                    <!-- Setoran Awal & Dompet Kas -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                                Setoran Awal (Rp)
+                            </label>
+                            <input 
+                                type="number" 
+                                wire:model.live="setoran_awal" 
+                                min="0"
+                                step="1000"
+                                placeholder="0"
+                                class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white font-mono placeholder-zinc-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20"
+                            />
+                            @error('setoran_awal') <span class="text-[11px] text-rose-500 mt-1 block">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                                Dompet Kas
+                            </label>
+                            <select 
+                                wire:model="dompet_kas_id"
+                                class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20"
+                            >
+                                @foreach ($dompetKasList as $dk)
+                                    <option value="{{ $dk->id }}">{{ $dk->nama }} - {{ $dk->nomor_rekening }}</option>
+                                @endforeach
+                            </select>
+                            @error('dompet_kas_id') <span class="text-[11px] text-rose-500 mt-1 block">{{ $message }}</span> @enderror
+                        </div>
                     </div>
 
                     <div class="pt-4 border-t border-zinc-200 dark:border-zinc-800 flex items-center justify-end gap-2">
@@ -379,7 +393,7 @@
 
                     <div>
                         <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
-                            Nomor Handphone (Untuk Login) <span class="text-emerald-500">*</span>
+                            Nomor Handphone <span class="text-emerald-500">*</span>
                         </label>
                         <input 
                             type="tel" 
@@ -391,7 +405,7 @@
 
                     <div>
                         <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
-                            Nomor Induk Kependudukan (NIK)
+                            NIK
                         </label>
                         <input 
                             type="text" 
@@ -403,7 +417,7 @@
 
                     <div>
                         <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
-                            Alamat Domisili
+                            Alamat
                         </label>
                         <textarea 
                             wire:model="alamat" 
@@ -421,8 +435,8 @@
                             wire:model="status" 
                             class="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 cursor-pointer"
                         >
-                            <option value="aktif">Aktif (Bisa Transaksi & Login)</option>
-                            <option value="dibekukan">Dibekukan (Blokir Sementara)</option>
+                            <option value="aktif">Aktif</option>
+                            <option value="dibekukan">Dibekukan</option>
                             <option value="nonaktif">Non-Aktif</option>
                         </select>
                     </div>
@@ -705,7 +719,7 @@
                             <x-heroicon-o-book-open class="size-5" />
                         </div>
                         <div>
-                            <h3 class="text-sm font-bold text-zinc-900 dark:text-white">Buku Tabungan & Rekening Koran</h3>
+                            <h3 class="text-sm font-bold text-zinc-900 dark:text-white">Buku Tabungan</h3>
                             <p class="text-xs text-zinc-500">{{ $bukuNasabah->nama }} • <span class="font-mono">{{ $bukuNasabah->nomor_nasabah }}</span></p>
                         </div>
                     </div>

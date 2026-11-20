@@ -3,7 +3,6 @@
     <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 print:hidden">
         <div>
             <h1 class="text-lg sm:text-xl font-bold text-zinc-900 dark:text-white tracking-tight">Cetak Buku Tabungan</h1>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Pencetakan mutasi langsung ke halaman buku tabungan fisik</p>
         </div>
 
         @if ($selectedNasabah)
@@ -13,7 +12,7 @@
                 class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded-xl flex items-center gap-2 cursor-pointer transition-colors"
             >
                 <x-heroicon-o-printer class="size-4" />
-                <span>Cetak Buku Tabungan</span>
+                <span>Cetak Buku</span>
             </button>
         @endif
     </div>
@@ -24,7 +23,7 @@
             <!-- Nasabah Selector / Search -->
             <div class="lg:col-span-2 space-y-1.5">
                 <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-                    Cari & Pilih Nasabah <span class="text-emerald-500">*</span>
+                    Pilih Nasabah <span class="text-emerald-500">*</span>
                 </label>
                 @if ($selectedNasabah)
                     <div class="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
@@ -73,7 +72,7 @@
             <!-- Start Line Index (For continuing print) -->
             <div class="space-y-1.5">
                 <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-                    Mulai Baris ke- <span class="text-zinc-400 text-[10px]">(Offset)</span>
+                    Mulai Baris
                 </label>
                 <input 
                     type="number" 
@@ -87,7 +86,7 @@
             <!-- Page Number -->
             <div class="space-y-1.5">
                 <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-                    Halaman Buku ke-
+                    Halaman ke-
                 </label>
                 <input 
                     type="number" 

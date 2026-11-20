@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ThemeTest extends TestCase
@@ -16,13 +16,13 @@ class ThemeTest extends TestCase
     public function test_can_save_light_theme_to_session(): void
     {
         $response = $this->postJson(route('theme.update'), [
-            'theme' => 'light'
+            'theme' => 'light',
         ]);
 
         $response->assertOk()
             ->assertJson([
                 'status' => 'success',
-                'theme' => 'light'
+                'theme' => 'light',
             ]);
 
         $this->assertEquals('light', session('theme'));
@@ -31,13 +31,13 @@ class ThemeTest extends TestCase
     public function test_can_save_dark_theme_to_session(): void
     {
         $response = $this->postJson(route('theme.update'), [
-            'theme' => 'dark'
+            'theme' => 'dark',
         ]);
 
         $response->assertOk()
             ->assertJson([
                 'status' => 'success',
-                'theme' => 'dark'
+                'theme' => 'dark',
             ]);
 
         $this->assertEquals('dark', session('theme'));
@@ -52,11 +52,9 @@ class ThemeTest extends TestCase
 
     public function test_admin_dashboard_renders_without_dark_class_when_light_in_session(): void
     {
-        $admin = \App\Models\User::factory()->create();
+        $admin = User::factory()->create();
         $response = $this->actingAs($admin)->withSession(['theme' => 'light'])->get(route('admin.dashboard'));
         $response->assertOk();
         $this->assertStringNotContainsString('class="dark"', $response->getContent());
     }
 }
-
-

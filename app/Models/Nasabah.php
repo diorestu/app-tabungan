@@ -39,7 +39,7 @@ class Nasabah extends Authenticatable
 
     public function getFormattedSaldoAttribute(): string
     {
-        return 'Rp ' . number_format((float) $this->saldo, 0, ',', '.');
+        return 'Rp '.number_format((float) $this->saldo, 0, ',', '.');
     }
 
     public function getTotalSetoranAttribute(): float
@@ -66,13 +66,14 @@ class Nasabah extends Authenticatable
     public function getWilayahNamaAttribute(): string
     {
         $code = substr($this->nomor_nasabah, 0, 1);
+
         return self::WILAYAH[$code] ?? 'Lainnya';
     }
 
     public static function generateNomorNasabah(string $wilayah = '2'): string
     {
         // Pastikan kode wilayah valid (1-8), default Jawa (2)
-        if (!array_key_exists($wilayah, self::WILAYAH)) {
+        if (! array_key_exists($wilayah, self::WILAYAH)) {
             $wilayah = '2';
         }
 
@@ -80,22 +81,21 @@ class Nasabah extends Authenticatable
         $month = date('m'); // 2 digit bulan aktif (MM) -> e.g. '08'
 
         // Prefix 5 digit: {A}{BCDE} = 1 digit wilayah + 2 digit tahun + 2 digit bulan
-        $prefix = $wilayah . $year . $month;
+        $prefix = $wilayah.$year.$month;
 
         // Cari nomor urut terakhir pada prefix yang sama
-        $last = self::where('nomor_nasabah', 'LIKE', $prefix . '%')
+        $last = self::where('nomor_nasabah', 'LIKE', $prefix.'%')
             ->orderBy('nomor_nasabah', 'desc')
             ->first();
 
-        if (!$last) {
+        if (! $last) {
             // 5 digit prefix + 4 digit urutan = 9 digit total (contoh: 226080001)
-            return $prefix . '0001';
+            return $prefix.'0001';
         }
 
         $lastNumber = (int) substr($last->nomor_nasabah, -4);
         $nextNumber = str_pad((string) ($lastNumber + 1), 4, '0', STR_PAD_LEFT);
 
-        return $prefix . $nextNumber;
+        return $prefix.$nextNumber;
     }
 }
-

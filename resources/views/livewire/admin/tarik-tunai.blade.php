@@ -2,8 +2,7 @@
     <!-- Header -->
     <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 sm:p-5 rounded-xl flex items-center justify-between shadow-xs">
         <div>
-            <h1 class="text-base sm:text-lg font-bold text-zinc-900 dark:text-white tracking-tight">Pencatatan Penarikan Tabungan</h1>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400">Verifikasi identitas nasabah dan cek saldo sebelum menyerahkan uang tunai</p>
+            <h1 class="text-base sm:text-lg font-bold text-zinc-900 dark:text-white tracking-tight">Tarik Tunai</h1>
         </div>
 
         <a 
@@ -23,7 +22,7 @@
                     <!-- Step 1: Select Nasabah -->
                     <div>
                         <label class="block text-xs font-semibold text-zinc-800 dark:text-zinc-200 mb-1">
-                            1. Rekening Nasabah Penarik <span class="text-rose-500">*</span>
+                            Pilih Nasabah <span class="text-rose-500">*</span>
                         </label>
 
                         @if ($selectedNasabah)
@@ -54,7 +53,7 @@
                                 <input 
                                     type="text" 
                                     wire:model.live.debounce.250ms="nasabahSearch" 
-                                    placeholder="Ketik nama, ID nasabah, atau No. HP..."
+                                    placeholder="Cari nama, ID nasabah, atau No. HP..."
                                     class="w-full pl-8 pr-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700/80 rounded-lg text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-rose-500"
                                     autofocus
                                 />
@@ -91,7 +90,7 @@
                     <div>
                         <div class="flex items-center justify-between mb-1">
                             <label class="block text-xs font-semibold text-zinc-800 dark:text-zinc-200">
-                                2. Nominal Uang Ditarik (Rp) <span class="text-rose-500">*</span>
+                                Nominal Tarik (Rp) <span class="text-rose-500">*</span>
                             </label>
                             @if ($selectedNasabah && (float)$selectedNasabah->saldo > 0)
                                 <button 
@@ -136,7 +135,7 @@
                     <!-- Step 3: Keterangan -->
                     <div>
                         <label class="block text-xs font-semibold text-zinc-800 dark:text-zinc-200 mb-1">
-                            3. Keterangan / Keperluan Penarikan
+                            Keterangan (Opsional)
                         </label>
                         <input 
                             type="text" 
@@ -153,7 +152,7 @@
                         wire:loading.attr="disabled"
                         @if(!$selectedNasabah || ($nominal && (float)$nominal > (float)$selectedNasabah->saldo)) disabled @endif
                     >
-                        <span wire:loading.remove>Proses & Catat Penarikan Tunai</span>
+                        <span wire:loading.remove>Simpan Penarikan</span>
                         <span wire:loading.inline-flex class="items-center justify-center gap-2">
                             <svg class="animate-spin size-3.5 shrink-0 text-white" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -208,12 +207,6 @@
                             Nominal melebihi total saldo tabungan nasabah.
                         </div>
                     @endif
-                </div>
-
-                <div class="p-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 text-[11px] text-zinc-500 space-y-1">
-                    <p class="font-semibold text-zinc-700 dark:text-zinc-300">Catatan Teller:</p>
-                    <p>&bull; Periksa kecocokan data nasabah sebelum menyerahkan uang kas.</p>
-                    <p>&bull; Serahkan struk resmi beserta uang tunai kepada nasabah.</p>
                 </div>
             </div>
         </div>

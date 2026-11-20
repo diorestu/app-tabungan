@@ -60,7 +60,7 @@ class ActivityLog extends Model
             $userId = $currentUser->id;
         } elseif ($currentNasabah) {
             $userType = 'nasabah';
-            $userName = $currentNasabah->nama . ' (' . $currentNasabah->nomor_nasabah . ')';
+            $userName = $currentNasabah->nama.' ('.$currentNasabah->nomor_nasabah.')';
         }
 
         return self::create([
@@ -71,7 +71,7 @@ class ActivityLog extends Model
             'description' => $description,
             'subject_type' => $subject ? get_class($subject) : null,
             'subject_id' => $subject ? $subject->getKey() : null,
-            'properties' => !empty($properties) ? $properties : null,
+            'properties' => ! empty($properties) ? $properties : null,
             'ip_address' => request()->ip() ?? '127.0.0.1',
             'user_agent' => substr(request()->userAgent() ?? 'N/A', 0, 250),
             'created_at' => now(),

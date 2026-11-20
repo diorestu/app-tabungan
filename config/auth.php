@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Nasabah;
 use App\Models\User;
 
 return [
@@ -72,7 +73,7 @@ return [
         ],
         'nasabahs' => [
             'driver' => 'eloquent',
-            'model' => \App\Models\Nasabah::class,
+            'model' => Nasabah::class,
         ],
     ],
 

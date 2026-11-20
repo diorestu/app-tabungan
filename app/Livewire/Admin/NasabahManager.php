@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\ActivityLog;
+use App\Models\DompetKas;
 use App\Models\Nasabah;
 use App\Models\Setting;
 use App\Models\Transaksi;
@@ -27,9 +29,13 @@ class NasabahManager extends Component
 
     // Modal Create / Edit / Delete / Buku Tabungan states
     public bool $showCreateModal = false;
+
     public bool $showEditModal = false;
+
     public bool $showDetailModal = false;
+
     public bool $showDeleteModal = false;
+
     public bool $showBukuTabunganModal = false;
 
     // Delete state
@@ -37,19 +43,31 @@ class NasabahManager extends Component
 
     // Buku Tabungan / Statement State
     public ?Nasabah $bukuNasabah = null;
+
     public string $bukuStartDate = '';
+
     public string $bukuEndDate = '';
 
     // Form fields for create/edit
     public ?int $selectedNasabahId = null;
+
     public string $wilayah_code = '2';
+
     public string $nomor_nasabah = '';
+
     public string $nama = '';
+
     public string $no_hp = '';
+
     public string $nik = '';
+
     public string $alamat = '';
+
     public string $status = 'aktif';
+
     public float|string $setoran_awal = 0;
+
+    public ?int $dompet_kas_id = null;
 
     // Detail view object
     public ?Nasabah $detailNasabah = null;
@@ -76,6 +94,7 @@ class NasabahManager extends Component
         $this->resetForm();
         $this->wilayah_code = '2';
         $this->nomor_nasabah = Nasabah::generateNomorNasabah($this->wilayah_code);
+        $this->dompet_kas_id = DompetKas::where('status', 'aktif')->value('id');
         $this->showCreateModal = true;
     }
 
@@ -136,17 +155,17 @@ class NasabahManager extends Component
 
     public function exportBukuCsv()
     {
-        if (!$this->bukuNasabah) {
+        if (! $this->bukuNasabah) {
             return;
         }
 
         $query = $this->bukuNasabah->transaksis()->oldest();
 
-        if (!empty($this->bukuStartDate)) {
+        if (! empty($this->bukuStartDate)) {
             $query->whereDate('created_at', '>=', $this->bukuStartDate);
         }
 
-        if (!empty($this->bukuEndDate)) {
+        if (! empty($this->bukuEndDate)) {
             $query->whereDate('created_at', '<=', $this->bukuEndDate);
         }
 
@@ -160,34 +179,34 @@ class NasabahManager extends Component
 
         $periode = 'Semua Transaksi';
         if ($this->bukuStartDate && $this->bukuEndDate) {
-            $periode = date('d/m/Y', strtotime($this->bukuStartDate)) . ' s/d ' . date('d/m/Y', strtotime($this->bukuEndDate));
+            $periode = date('d/m/Y', strtotime($this->bukuStartDate)).' s/d '.date('d/m/Y', strtotime($this->bukuEndDate));
         } elseif ($this->bukuStartDate) {
-            $periode = 'Mulai ' . date('d/m/Y', strtotime($this->bukuStartDate));
+            $periode = 'Mulai '.date('d/m/Y', strtotime($this->bukuStartDate));
         } elseif ($this->bukuEndDate) {
-            $periode = 'Hingga ' . date('d/m/Y', strtotime($this->bukuEndDate));
+            $periode = 'Hingga '.date('d/m/Y', strtotime($this->bukuEndDate));
         }
 
-        $filename = 'rekening_koran_' . $this->bukuNasabah->nomor_nasabah . '_' . date('Ymd_His') . '.csv';
+        $filename = 'rekening_koran_'.$this->bukuNasabah->nomor_nasabah.'_'.date('Ymd_His').'.csv';
 
         return response()->streamDownload(function () use ($transaksis, $namaLembaga, $alamatLembaga, $teleponLembaga, $periode, $totalSetor, $totalTarik) {
             $handle = fopen('php://output', 'w');
-            fprintf($handle, chr(0xEF) . chr(0xBB) . chr(0xBF)); // UTF-8 BOM
+            fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF)); // UTF-8 BOM
 
             // Header Lembaga & Dokumen
             fputcsv($handle, [$namaLembaga]);
-            fputcsv($handle, [$alamatLembaga . ' | Telp: ' . $teleponLembaga]);
+            fputcsv($handle, [$alamatLembaga.' | Telp: '.$teleponLembaga]);
             fputcsv($handle, ['REKENING KORAN / LAPORAN MUTASI TABUNGAN (FORMAT AKUNTANSI)']);
             fputcsv($handle, []);
 
             // Identity Header
-            fputcsv($handle, ['Nomor Rekening', ': ' . $this->bukuNasabah->nomor_nasabah]);
-            fputcsv($handle, ['Nama Nasabah', ': ' . $this->bukuNasabah->nama]);
-            fputcsv($handle, ['No. Handphone', ': ' . $this->bukuNasabah->no_hp]);
-            fputcsv($handle, ['Periode Mutasi', ': ' . $periode]);
+            fputcsv($handle, ['Nomor Rekening', ': '.$this->bukuNasabah->nomor_nasabah]);
+            fputcsv($handle, ['Nama Nasabah', ': '.$this->bukuNasabah->nama]);
+            fputcsv($handle, ['No. Handphone', ': '.$this->bukuNasabah->no_hp]);
+            fputcsv($handle, ['Periode Mutasi', ': '.$periode]);
             fputcsv($handle, ['Mata Uang', ': IDR (Rupiah)']);
-            fputcsv($handle, ['Total Kredit (Setor)', ': Rp ' . number_format($totalSetor, 0, ',', '.')]);
-            fputcsv($handle, ['Total Debit (Tarik)', ': Rp ' . number_format($totalTarik, 0, ',', '.')]);
-            fputcsv($handle, ['Saldo Tabungan', ': Rp ' . number_format((float)$this->bukuNasabah->saldo, 0, ',', '.')]);
+            fputcsv($handle, ['Total Kredit (Setor)', ': Rp '.number_format($totalSetor, 0, ',', '.')]);
+            fputcsv($handle, ['Total Debit (Tarik)', ': Rp '.number_format($totalTarik, 0, ',', '.')]);
+            fputcsv($handle, ['Saldo Tabungan', ': Rp '.number_format((float) $this->bukuNasabah->saldo, 0, ',', '.')]);
             fputcsv($handle, []);
 
             // Column Header
@@ -209,9 +228,9 @@ class NasabahManager extends Component
                     $trx->created_at->format('d/m/Y H:i:s'),
                     $trx->kode_transaksi,
                     $trx->keterangan ?: ($trx->jenis_transaksi === 'setor' ? 'Setor Tunai' : 'Penarikan Tunai'),
-                    $trx->jenis_transaksi === 'tarik' ? number_format((float)$trx->nominal, 0, ',', '.') : '0',
-                    $trx->jenis_transaksi === 'setor' ? number_format((float)$trx->nominal, 0, ',', '.') : '0',
-                    number_format((float)$trx->saldo_akhir, 0, ',', '.'),
+                    $trx->jenis_transaksi === 'tarik' ? number_format((float) $trx->nominal, 0, ',', '.') : '0',
+                    $trx->jenis_transaksi === 'setor' ? number_format((float) $trx->nominal, 0, ',', '.') : '0',
+                    number_format((float) $trx->saldo_akhir, 0, ',', '.'),
                     $trx->user?->name ?? 'Teller',
                 ]);
             }
@@ -225,14 +244,14 @@ class NasabahManager extends Component
                 'TOTAL MUTASI',
                 number_format($totalTarik, 0, ',', '.'),
                 number_format($totalSetor, 0, ',', '.'),
-                number_format((float)$this->bukuNasabah->saldo, 0, ',', '.'),
+                number_format((float) $this->bukuNasabah->saldo, 0, ',', '.'),
                 '',
             ]);
 
             fclose($handle);
         }, $filename, [
             'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
         ]);
     }
 
@@ -250,7 +269,7 @@ class NasabahManager extends Component
 
     public function confirmDelete(): void
     {
-        if (!$this->deleteNasabah) {
+        if (! $this->deleteNasabah) {
             return;
         }
 
@@ -258,9 +277,9 @@ class NasabahManager extends Component
         $nasabahNomor = $this->deleteNasabah->nomor_nasabah;
         $this->deleteNasabah->delete();
 
-        \App\Models\ActivityLog::record('hapus_nasabah', 'Menghapus data nasabah: ' . $nasabahName . ' (' . $nasabahNomor . ')');
+        ActivityLog::record('hapus_nasabah', 'Menghapus data nasabah: '.$nasabahName.' ('.$nasabahNomor.')');
 
-        session()->flash('success', 'Nasabah "' . $nasabahName . '" beserta riwayat transaksinya telah berhasil dihapus.');
+        session()->flash('success', 'Nasabah "'.$nasabahName.'" beserta riwayat transaksinya telah berhasil dihapus.');
         $this->closeDeleteModal();
         if ($this->showDetailModal && $this->detailNasabah?->id === $this->deleteNasabah?->id) {
             $this->closeDetailModal();
@@ -269,7 +288,7 @@ class NasabahManager extends Component
 
     public function setStatus(int $id, string $status): void
     {
-        if (!in_array($status, ['aktif', 'dibekukan', 'nonaktif'], true)) {
+        if (! in_array($status, ['aktif', 'dibekukan', 'nonaktif'], true)) {
             return;
         }
 
@@ -282,9 +301,9 @@ class NasabahManager extends Component
             'nonaktif' => 'dinonaktifkan',
         };
 
-        \App\Models\ActivityLog::record('status_nasabah', 'Mengubah status rekening nasabah ' . $nasabah->nama . ' (' . $nasabah->nomor_nasabah . ') menjadi: ' . $status, $nasabah);
+        ActivityLog::record('status_nasabah', 'Mengubah status rekening nasabah '.$nasabah->nama.' ('.$nasabah->nomor_nasabah.') menjadi: '.$status, $nasabah);
 
-        session()->flash('success', 'Status rekening nasabah ' . $nasabah->nama . ' berhasil ' . $statusLabel . '.');
+        session()->flash('success', 'Status rekening nasabah '.$nasabah->nama.' berhasil '.$statusLabel.'.');
 
         if ($this->detailNasabah && $this->detailNasabah->id === $id) {
             $this->detailNasabah->status = $status;
@@ -329,27 +348,40 @@ class NasabahManager extends Component
             ]);
 
             if ($initialAmount > 0) {
+                $dompet = null;
+                if ($this->dompet_kas_id) {
+                    $dompet = DompetKas::lockForUpdate()->find($this->dompet_kas_id);
+                }
+                if (! $dompet) {
+                    $dompet = DompetKas::where('status', 'aktif')->lockForUpdate()->first();
+                }
+
                 Transaksi::create([
                     'kode_transaksi' => Transaksi::generateKodeTransaksi('setor'),
                     'nasabah_id' => $nasabah->id,
                     'user_id' => Auth::guard('web')->id(),
+                    'dompet_kas_id' => $dompet?->id,
                     'jenis_transaksi' => 'setor',
                     'nominal' => $initialAmount,
                     'saldo_awal' => 0,
                     'saldo_akhir' => $initialAmount,
                     'keterangan' => 'Setoran awal pembukaan rekening',
                 ]);
+
+                if ($dompet) {
+                    $dompet->increment('saldo', $initialAmount);
+                }
             }
 
-            \App\Models\ActivityLog::record(
+            ActivityLog::record(
                 'tambah_nasabah',
-                'Mendaftarkan nasabah baru: ' . $nasabah->nama . ' (' . $nasabah->nomor_nasabah . ') dengan setoran awal Rp ' . number_format($initialAmount, 0, ',', '.'),
+                'Mendaftarkan nasabah baru: '.$nasabah->nama.' ('.$nasabah->nomor_nasabah.') dengan setoran awal Rp '.number_format($initialAmount, 0, ',', '.'),
                 $nasabah,
                 ['setoran_awal' => $initialAmount]
             );
         });
 
-        session()->flash('success', 'Nasabah baru "' . $this->nama . '" berhasil didaftarkan dengan Nomor Rekening: ' . $generatedNomor);
+        session()->flash('success', 'Nasabah baru "'.$this->nama.'" berhasil didaftarkan dengan Nomor Rekening: '.$generatedNomor);
         $this->closeCreateModal();
     }
 
@@ -372,9 +404,9 @@ class NasabahManager extends Component
             'status' => $this->status,
         ]);
 
-        \App\Models\ActivityLog::record('edit_nasabah', 'Memperbarui data profil nasabah: ' . $nasabah->nama . ' (' . $nasabah->nomor_nasabah . ')', $nasabah);
+        ActivityLog::record('edit_nasabah', 'Memperbarui data profil nasabah: '.$nasabah->nama.' ('.$nasabah->nomor_nasabah.')', $nasabah);
 
-        session()->flash('success', 'Data nasabah "' . $nasabah->nama . '" berhasil diperbarui.');
+        session()->flash('success', 'Data nasabah "'.$nasabah->nama.'" berhasil diperbarui.');
         $this->closeEditModal();
     }
 
@@ -396,6 +428,7 @@ class NasabahManager extends Component
         $this->alamat = '';
         $this->status = 'aktif';
         $this->setoran_awal = 0;
+        $this->dompet_kas_id = null;
         $this->resetValidation();
     }
 
@@ -403,16 +436,16 @@ class NasabahManager extends Component
     {
         $query = Nasabah::query();
 
-        if (!empty($this->search)) {
+        if (! empty($this->search)) {
             $query->where(function ($q) {
-                $q->where('nama', 'like', '%' . $this->search . '%')
-                  ->orWhere('nomor_nasabah', 'like', '%' . $this->search . '%')
-                  ->orWhere('no_hp', 'like', '%' . $this->search . '%')
-                  ->orWhere('nik', 'like', '%' . $this->search . '%');
+                $q->where('nama', 'like', '%'.$this->search.'%')
+                    ->orWhere('nomor_nasabah', 'like', '%'.$this->search.'%')
+                    ->orWhere('no_hp', 'like', '%'.$this->search.'%')
+                    ->orWhere('nik', 'like', '%'.$this->search.'%');
             });
         }
 
-        if (!empty($this->statusFilter)) {
+        if (! empty($this->statusFilter)) {
             $query->where('status', $this->statusFilter);
         }
 
@@ -420,6 +453,7 @@ class NasabahManager extends Component
 
         return view('livewire.admin.nasabah-manager', [
             'nasabahs' => $nasabahs,
+            'dompetKasList' => DompetKas::where('status', 'aktif')->get(),
         ]);
     }
 }

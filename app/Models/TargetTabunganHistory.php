@@ -41,6 +41,6 @@ class TargetTabunganHistory extends Model
 
     public function getFormattedNominalAttribute(): string
     {
-        return 'Rp ' . number_format((float) $this->nominal, 0, ',', '.');
+        return 'Rp '.number_format((float) $this->nominal, 0, ',', '.');
     }
 }

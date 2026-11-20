@@ -37,22 +37,22 @@ class Mutasi extends Component
 
         $query = Transaksi::where('nasabah_id', $nasabah->id);
 
-        if (!empty($this->search)) {
+        if (! empty($this->search)) {
             $query->where(function ($q) {
-                $q->where('kode_transaksi', 'like', '%' . $this->search . '%')
-                  ->orWhere('keterangan', 'like', '%' . $this->search . '%');
+                $q->where('kode_transaksi', 'like', '%'.$this->search.'%')
+                    ->orWhere('keterangan', 'like', '%'.$this->search.'%');
             });
         }
 
-        if (!empty($this->jenis)) {
+        if (! empty($this->jenis)) {
             $query->where('jenis_transaksi', $this->jenis);
         }
 
-        if (!empty($this->startDate)) {
+        if (! empty($this->startDate)) {
             $query->whereDate('created_at', '>=', $this->startDate);
         }
 
-        if (!empty($this->endDate)) {
+        if (! empty($this->endDate)) {
             $query->whereDate('created_at', '<=', $this->endDate);
         }
 
@@ -66,36 +66,36 @@ class Mutasi extends Component
 
         $periode = 'Semua Transaksi';
         if ($this->startDate && $this->endDate) {
-            $periode = date('d/m/Y', strtotime($this->startDate)) . ' s/d ' . date('d/m/Y', strtotime($this->endDate));
+            $periode = date('d/m/Y', strtotime($this->startDate)).' s/d '.date('d/m/Y', strtotime($this->endDate));
         } elseif ($this->startDate) {
-            $periode = 'Mulai ' . date('d/m/Y', strtotime($this->startDate));
+            $periode = 'Mulai '.date('d/m/Y', strtotime($this->startDate));
         } elseif ($this->endDate) {
-            $periode = 'Hingga ' . date('d/m/Y', strtotime($this->endDate));
+            $periode = 'Hingga '.date('d/m/Y', strtotime($this->endDate));
         }
 
-        $filename = 'rekening_koran_' . $nasabah->nomor_nasabah . '_' . date('Ymd_His') . '.csv';
+        $filename = 'rekening_koran_'.$nasabah->nomor_nasabah.'_'.date('Ymd_His').'.csv';
 
         return response()->streamDownload(function () use ($nasabah, $transaksis, $namaLembaga, $alamatLembaga, $teleponLembaga, $periode, $totalSetor, $totalTarik) {
             $handle = fopen('php://output', 'w');
-            
+
             // UTF-8 BOM for Excel compatibility
-            fprintf($handle, chr(0xEF) . chr(0xBB) . chr(0xBF));
+            fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF));
 
             // Header Lembaga & Dokumen
             fputcsv($handle, [$namaLembaga]);
-            fputcsv($handle, [$alamatLembaga . ' | Telp: ' . $teleponLembaga]);
+            fputcsv($handle, [$alamatLembaga.' | Telp: '.$teleponLembaga]);
             fputcsv($handle, ['REKENING KORAN / LAPORAN MUTASI TABUNGAN (FORMAT AKUNTANSI)']);
             fputcsv($handle, []);
 
             // Data Nasabah & Rekening
-            fputcsv($handle, ['Nomor Rekening', ': ' . $nasabah->nomor_nasabah]);
-            fputcsv($handle, ['Nama Nasabah', ': ' . $nasabah->nama]);
-            fputcsv($handle, ['Periode Mutasi', ': ' . $periode]);
+            fputcsv($handle, ['Nomor Rekening', ': '.$nasabah->nomor_nasabah]);
+            fputcsv($handle, ['Nama Nasabah', ': '.$nasabah->nama]);
+            fputcsv($handle, ['Periode Mutasi', ': '.$periode]);
             fputcsv($handle, ['Mata Uang', ': IDR (Rupiah)']);
-            fputcsv($handle, ['Waktu Unduh', ': ' . now()->format('d/m/Y H:i:s') . ' WIB']);
-            fputcsv($handle, ['Total Kredit (Setor)', ': Rp ' . number_format($totalSetor, 0, ',', '.')]);
-            fputcsv($handle, ['Total Debit (Tarik)', ': Rp ' . number_format($totalTarik, 0, ',', '.')]);
-            fputcsv($handle, ['Saldo Akhir', ': Rp ' . number_format((float)$nasabah->saldo, 0, ',', '.')]);
+            fputcsv($handle, ['Waktu Unduh', ': '.now()->format('d/m/Y H:i:s').' WIB']);
+            fputcsv($handle, ['Total Kredit (Setor)', ': Rp '.number_format($totalSetor, 0, ',', '.')]);
+            fputcsv($handle, ['Total Debit (Tarik)', ': Rp '.number_format($totalTarik, 0, ',', '.')]);
+            fputcsv($handle, ['Saldo Akhir', ': Rp '.number_format((float) $nasabah->saldo, 0, ',', '.')]);
             fputcsv($handle, []);
 
             // Tabel Mutasi Akuntansi
@@ -116,9 +116,9 @@ class Mutasi extends Component
                     $trx->created_at->format('d/m/Y H:i:s'),
                     $trx->kode_transaksi,
                     $trx->keterangan ?: ($trx->jenis_transaksi === 'setor' ? 'Setor Tunai' : 'Penarikan Tunai'),
-                    $trx->jenis_transaksi === 'tarik' ? number_format((float)$trx->nominal, 0, ',', '.') : '0',
-                    $trx->jenis_transaksi === 'setor' ? number_format((float)$trx->nominal, 0, ',', '.') : '0',
-                    number_format((float)$trx->saldo_akhir, 0, ',', '.'),
+                    $trx->jenis_transaksi === 'tarik' ? number_format((float) $trx->nominal, 0, ',', '.') : '0',
+                    $trx->jenis_transaksi === 'setor' ? number_format((float) $trx->nominal, 0, ',', '.') : '0',
+                    number_format((float) $trx->saldo_akhir, 0, ',', '.'),
                 ]);
             }
 
@@ -131,13 +131,13 @@ class Mutasi extends Component
                 'TOTAL MUTASI',
                 number_format($totalTarik, 0, ',', '.'),
                 number_format($totalSetor, 0, ',', '.'),
-                number_format((float)$nasabah->saldo, 0, ',', '.'),
+                number_format((float) $nasabah->saldo, 0, ',', '.'),
             ]);
 
             fclose($handle);
         }, $filename, [
             'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
         ]);
     }
 
@@ -177,22 +177,22 @@ class Mutasi extends Component
 
         $query = Transaksi::where('nasabah_id', $nasabah->id);
 
-        if (!empty($this->search)) {
+        if (! empty($this->search)) {
             $query->where(function ($q) {
-                $q->where('kode_transaksi', 'like', '%' . $this->search . '%')
-                  ->orWhere('keterangan', 'like', '%' . $this->search . '%');
+                $q->where('kode_transaksi', 'like', '%'.$this->search.'%')
+                    ->orWhere('keterangan', 'like', '%'.$this->search.'%');
             });
         }
 
-        if (!empty($this->jenis)) {
+        if (! empty($this->jenis)) {
             $query->where('jenis_transaksi', $this->jenis);
         }
 
-        if (!empty($this->startDate)) {
+        if (! empty($this->startDate)) {
             $query->whereDate('created_at', '>=', $this->startDate);
         }
 
-        if (!empty($this->endDate)) {
+        if (! empty($this->endDate)) {
             $query->whereDate('created_at', '<=', $this->endDate);
         }
 

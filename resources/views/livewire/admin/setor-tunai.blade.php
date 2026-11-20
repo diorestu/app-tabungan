@@ -2,8 +2,7 @@
     <!-- Header -->
     <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 sm:p-5 rounded-xl flex items-center justify-between shadow-xs">
         <div>
-            <h1 class="text-base sm:text-lg font-bold text-zinc-900 dark:text-white tracking-tight">Pencatatan Setoran Tabungan</h1>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400">Pilih rekening nasabah dan catat nominal uang tunai yang disetorkan</p>
+            <h1 class="text-base sm:text-lg font-bold text-zinc-900 dark:text-white tracking-tight">Setor Tunai</h1>
         </div>
 
         <a 
@@ -23,7 +22,7 @@
                     <!-- Step 1: Select Nasabah -->
                     <div>
                         <label class="block text-xs font-semibold text-zinc-800 dark:text-zinc-200 mb-1">
-                            1. Rekening Nasabah <span class="text-emerald-500">*</span>
+                            Pilih Nasabah <span class="text-emerald-500">*</span>
                         </label>
 
                         @if ($selectedNasabah)
@@ -54,7 +53,7 @@
                                 <input 
                                     type="text" 
                                     wire:model.live.debounce.250ms="nasabahSearch" 
-                                    placeholder="Ketik nama, ID nasabah, atau No. HP..."
+                                    placeholder="Cari nama, ID nasabah, atau No. HP..."
                                     class="w-full pl-8 pr-3 py-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700/80 rounded-lg text-xs text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                                     autofocus
                                 />
@@ -90,7 +89,7 @@
                     <!-- Step 2: Nominal Setoran -->
                     <div>
                         <label class="block text-xs font-semibold text-zinc-800 dark:text-zinc-200 mb-1">
-                            2. Nominal Uang Setoran (Rp) <span class="text-emerald-500">*</span>
+                            Nominal Setor (Rp) <span class="text-emerald-500">*</span>
                         </label>
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-sm font-semibold text-zinc-400 pointer-events-none">
@@ -122,10 +121,55 @@
                         </div>
                     </div>
 
-                    <!-- Step 3: Keterangan -->
+                    <!-- Step 3: Dompet Kas Penampung -->
                     <div>
                         <label class="block text-xs font-semibold text-zinc-800 dark:text-zinc-200 mb-1">
-                            3. Keterangan / Berita Setoran
+                            Dompet Kas <span class="text-emerald-500">*</span>
+                        </label>
+                        @if ($dompetKasList->count() > 1)
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                @foreach ($dompetKasList as $dk)
+                                    <label class="relative flex items-center p-2.5 rounded-lg border cursor-pointer transition-colors {{ $dompet_kas_id == $dk->id ? 'bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-500 text-emerald-900 dark:text-emerald-200' : 'bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900' }}">
+                                        <input type="radio" wire:model.live="dompet_kas_id" value="{{ $dk->id }}" class="sr-only">
+                                        <div class="size-6 rounded bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 flex items-center justify-center font-bold text-[10px] mr-2 shrink-0">
+                                            M
+                                        </div>
+                                        <div class="min-w-0 flex-1 text-xs">
+                                            <div class="font-bold flex items-center justify-between">
+                                                <span>{{ $dk->nama }}</span>
+                                                <span class="font-mono text-[10px] font-normal text-zinc-400">{{ $dk->formatted_saldo }}</span>
+                                            </div>
+                                            <div class="font-mono text-[11px] text-zinc-500 dark:text-zinc-400 truncate">{{ $dk->nomor_rekening }}</div>
+                                        </div>
+                                    </label>
+                                @endforeach
+                            </div>
+                        @elseif ($dompetKasList->isNotEmpty())
+                            @php $singleDk = $dompetKasList->first(); @endphp
+                            <div class="p-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs">
+                                <div class="flex items-center gap-2">
+                                    <div class="size-7 rounded bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 flex items-center justify-center font-bold text-xs shrink-0">
+                                        M
+                                    </div>
+                                    <div>
+                                        <span class="font-bold text-zinc-900 dark:text-white">{{ $singleDk->nama }}</span>
+                                        <span class="font-mono text-zinc-500 text-[11px] ml-1">({{ $singleDk->nomor_rekening }})</span>
+                                    </div>
+                                </div>
+                                <span class="font-mono text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">{{ $singleDk->formatted_saldo }}</span>
+                            </div>
+                        @else
+                            <div class="p-2.5 rounded-lg bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs">
+                                Belum ada dompet kas aktif. Silakan tambahkan di menu Dompet Kas.
+                            </div>
+                        @endif
+                        @error('dompet_kas_id') <span class="text-[11px] text-rose-500 mt-1 block">{{ $message }}</span> @enderror
+                    </div>
+
+                    <!-- Step 4: Keterangan -->
+                    <div>
+                        <label class="block text-xs font-semibold text-zinc-800 dark:text-zinc-200 mb-1">
+                            Keterangan (Opsional)
                         </label>
                         <input 
                             type="text" 
@@ -142,7 +186,7 @@
                         wire:loading.attr="disabled"
                         @if(!$selectedNasabah) disabled @endif
                     >
-                        <span wire:loading.remove>Proses & Catat Setoran</span>
+                        <span wire:loading.remove>Simpan Setoran</span>
                         <span wire:loading.inline-flex class="items-center justify-center gap-2">
                             <svg class="animate-spin size-3.5 shrink-0 text-white" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -185,12 +229,15 @@
                             @endif
                         </span>
                     </div>
-                </div>
 
-                <div class="p-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 text-[11px] text-zinc-500 space-y-1">
-                    <p class="font-semibold text-zinc-700 dark:text-zinc-300">Catatan Teller:</p>
-                    <p>&bull; Pastikan uang tunai fisik telah dihitung sebelum konfirmasi simpan.</p>
-                    <p>&bull; Struk resmi QR verifikasi otomatis tersedia setelah disimpan.</p>
+                    @if ($dompet_kas_id && ($selectedDk = $dompetKasList->firstWhere('id', $dompet_kas_id)))
+                        <div class="pt-2 border-t border-zinc-100 dark:border-zinc-800 flex justify-between items-center text-[11px]">
+                            <span class="text-zinc-500">Dompet Kas:</span>
+                            <span class="font-mono font-medium text-emerald-600 dark:text-emerald-400">
+                                {{ $selectedDk->nama }} ({{ $selectedDk->nomor_rekening }})
+                            </span>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -236,9 +283,15 @@
                         <span>Saldo Akhir:</span>
                         <span class="font-mono font-bold text-zinc-900 dark:text-white text-sm">{{ $lastTransaction->formatted_saldo_akhir }}</span>
                     </div>
-                    <div class="flex justify-between py-1 text-zinc-500">
+                    <div class="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800 text-zinc-500">
                         <span>Petugas:</span>
                         <span class="text-zinc-800 dark:text-zinc-300">{{ Auth::guard('web')->user()->name ?? 'Teller' }}</span>
+                    </div>
+                    <div class="flex justify-between py-1 text-zinc-500">
+                        <span>Dompet Kas:</span>
+                        <span class="font-mono text-zinc-800 dark:text-zinc-200">
+                            {{ $lastTransaction->dompetKas ? $lastTransaction->dompetKas->nama . ' (' . $lastTransaction->dompetKas->nomor_rekening . ')' : 'Mandiri' }}
+                        </span>
                     </div>
 
                     <!-- Anti-Counterfeit Verification QR Code -->

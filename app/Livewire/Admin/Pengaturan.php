@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use App\Models\Setting;
 use App\Models\User;
+use App\Services\WhatsAppService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
@@ -20,48 +21,75 @@ class Pengaturan extends Component
 
     // Institution Settings
     public string $nama_lembaga = '';
+
     public string $slogan_lembaga = '';
+
     public string $alamat_lembaga = '';
+
     public string $telepon_lembaga = '';
+
     public string $pesan_struk = '';
 
     // WhatsApp Gateway Settings
     public bool $wa_gateway_enabled = false;
+
     public string $wa_provider = 'mock'; // 'mock', 'fonnte', 'wablas', 'custom'
+
     public string $wa_api_token = '';
+
     public string $wa_sender_number = '';
+
     public string $wa_endpoint_url = '';
+
     public bool $wa_auto_send = true;
+
     public string $wa_template_setor = '';
+
     public string $wa_template_tarik = '';
 
     // WhatsApp Test Message Modal
     public bool $showTestWaModal = false;
+
     public string $test_wa_phone = '';
+
     public string $test_wa_message = '';
+
     public ?string $test_wa_result = null;
+
     public bool $test_wa_success = false;
 
     // Admin Profile & Password Change
     public string $admin_name = '';
+
     public string $admin_email = '';
+
     public string $current_password = '';
+
     public string $new_password = '';
+
     public string $new_password_confirmation = '';
 
     // Petugas Management State
     public bool $showCreatePetugasModal = false;
+
     public bool $showEditPetugasModal = false;
+
     public bool $showDeletePetugasModal = false;
 
     public ?int $selectedPetugasId = null;
+
     public ?User $deletePetugas = null;
 
     public string $petugas_name = '';
+
     public string $petugas_email = '';
+
     public string $petugas_role = 'teller';
+
     public string $petugas_status = 'aktif';
+
     public string $petugas_password = '';
+
     public string $petugas_password_confirmation = '';
 
     public function mount(): void
@@ -146,7 +174,7 @@ class Pengaturan extends Component
     public function openTestWaModal(): void
     {
         $this->test_wa_phone = $this->telepon_lembaga ?: '081298765432';
-        $this->test_wa_message = "🔔 *UJI COBA WHATSAPP GATEWAY*\n\nSistem notifikasi *TabunganKu* berhasil terhubung dengan gateway.\nPesan uji coba ini dikirim pada " . now()->translatedFormat('d F Y H:i:s') . ' WIB.';
+        $this->test_wa_message = "🔔 *UJI COBA WHATSAPP GATEWAY*\n\nSistem notifikasi *TabunganKu* berhasil terhubung dengan gateway.\nPesan uji coba ini dikirim pada ".now()->translatedFormat('d F Y H:i:s').' WIB.';
         $this->test_wa_result = null;
         $this->showTestWaModal = true;
     }
@@ -157,7 +185,7 @@ class Pengaturan extends Component
         $this->test_wa_result = null;
     }
 
-    public function sendTestWhatsApp(\App\Services\WhatsAppService $waService): void
+    public function sendTestWhatsApp(WhatsAppService $waService): void
     {
         $this->validate([
             'test_wa_phone' => 'required|min:8|max:20',
@@ -178,7 +206,7 @@ class Pengaturan extends Component
 
         $this->validate([
             'admin_name' => 'required|min:3|max:100',
-            'admin_email' => 'required|email|unique:users,email,' . $user->id,
+            'admin_email' => 'required|email|unique:users,email,'.$user->id,
         ]);
 
         $user->update([
@@ -251,7 +279,7 @@ class Pengaturan extends Component
             'password' => Hash::make($this->petugas_password),
         ]);
 
-        session()->flash('success_petugas', 'Petugas baru "' . $this->petugas_name . '" berhasil ditambahkan.');
+        session()->flash('success_petugas', 'Petugas baru "'.$this->petugas_name.'" berhasil ditambahkan.');
         $this->closeCreatePetugasModal();
     }
 
@@ -280,12 +308,12 @@ class Pengaturan extends Component
 
         $rules = [
             'petugas_name' => 'required|min:3|max:100',
-            'petugas_email' => 'required|email|unique:users,email,' . $user->id,
+            'petugas_email' => 'required|email|unique:users,email,'.$user->id,
             'petugas_role' => 'required|in:admin,teller',
             'petugas_status' => 'required|in:aktif,nonaktif',
         ];
 
-        if (!empty($this->petugas_password)) {
+        if (! empty($this->petugas_password)) {
             $rules['petugas_password'] = ['confirmed', Password::min(6)];
         }
 
@@ -303,13 +331,13 @@ class Pengaturan extends Component
             'status' => $this->petugas_status,
         ];
 
-        if (!empty($this->petugas_password)) {
+        if (! empty($this->petugas_password)) {
             $updateData['password'] = Hash::make($this->petugas_password);
         }
 
         $user->update($updateData);
 
-        session()->flash('success_petugas', 'Data petugas "' . $user->name . '" berhasil diperbarui.');
+        session()->flash('success_petugas', 'Data petugas "'.$user->name.'" berhasil diperbarui.');
         $this->closeEditPetugasModal();
     }
 
@@ -318,6 +346,7 @@ class Pengaturan extends Component
         $currentUserId = Auth::guard('web')->id();
         if ($id === $currentUserId) {
             session()->flash('error_petugas', 'Anda tidak dapat menonaktifkan akun yang sedang digunakan saat ini.');
+
             return;
         }
 
@@ -325,7 +354,7 @@ class Pengaturan extends Component
         $newStatus = $user->status === 'aktif' ? 'nonaktif' : 'aktif';
         $user->update(['status' => $newStatus]);
 
-        session()->flash('success_petugas', 'Status akun ' . $user->name . ' diubah menjadi ' . $newStatus . '.');
+        session()->flash('success_petugas', 'Status akun '.$user->name.' diubah menjadi '.$newStatus.'.');
     }
 
     public function openDeletePetugasModal(int $id): void
@@ -333,6 +362,7 @@ class Pengaturan extends Component
         $currentUserId = Auth::guard('web')->id();
         if ($id === $currentUserId) {
             session()->flash('error_petugas', 'Anda tidak dapat menghapus akun yang sedang Anda gunakan.');
+
             return;
         }
 
@@ -348,20 +378,21 @@ class Pengaturan extends Component
 
     public function confirmDeletePetugas(): void
     {
-        if (!$this->deletePetugas) {
+        if (! $this->deletePetugas) {
             return;
         }
 
         if ($this->deletePetugas->id === Auth::guard('web')->id()) {
             session()->flash('error_petugas', 'Anda tidak dapat menghapus akun Anda sendiri.');
             $this->closeDeletePetugasModal();
+
             return;
         }
 
         $name = $this->deletePetugas->name;
         $this->deletePetugas->delete();
 
-        session()->flash('success_petugas', 'Akun petugas "' . $name . '" telah berhasil dihapus.');
+        session()->flash('success_petugas', 'Akun petugas "'.$name.'" telah berhasil dihapus.');
         $this->closeDeletePetugasModal();
     }
 

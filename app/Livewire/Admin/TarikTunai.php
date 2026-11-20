@@ -2,8 +2,11 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\ActivityLog;
 use App\Models\Nasabah;
+use App\Models\Setting;
 use App\Models\Transaksi;
+use App\Services\WhatsAppService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
@@ -20,6 +23,7 @@ class TarikTunai extends Component
     public ?int $nasabah_id = null;
 
     public string $nasabahSearch = '';
+
     public ?Nasabah $selectedNasabah = null;
 
     #[Validate('required|numeric|min:5000', message: 'Nominal penarikan minimal Rp 5.000')]
@@ -28,6 +32,7 @@ class TarikTunai extends Component
     public string $keterangan = 'Tarik tunai tabungan';
 
     public ?Transaksi $lastTransaction = null;
+
     public bool $showSuccessModal = false;
 
     public function mount(): void
@@ -42,17 +47,19 @@ class TarikTunai extends Component
         $nasabah = Nasabah::find($id);
         if ($nasabah && $nasabah->status === 'dibekukan') {
             $this->addError('nasabah_id', 'Rekening nasabah ini sedang DIBEKUKAN. Buka blokir terlebih dahulu di menu Data Nasabah untuk dapat menarik saldo.');
+
             return;
         }
         if ($nasabah && $nasabah->status !== 'aktif') {
             $this->addError('nasabah_id', 'Rekening nasabah ini berstatus non-aktif.');
+
             return;
         }
 
         $this->selectedNasabah = $nasabah;
         if ($this->selectedNasabah) {
             $this->nasabah_id = $this->selectedNasabah->id;
-            $this->nasabahSearch = $this->selectedNasabah->nomor_nasabah . ' - ' . $this->selectedNasabah->nama;
+            $this->nasabahSearch = $this->selectedNasabah->nomor_nasabah.' - '.$this->selectedNasabah->nama;
         }
     }
 
@@ -77,8 +84,9 @@ class TarikTunai extends Component
 
     public function processTarik(): void
     {
-        if (!$this->selectedNasabah) {
+        if (! $this->selectedNasabah) {
             $this->addError('nasabah_id', 'Silakan pilih nasabah terlebih dahulu.');
+
             return;
         }
 
@@ -87,7 +95,8 @@ class TarikTunai extends Component
         $nominalFloat = (float) $this->nominal;
 
         if ($nominalFloat > (float) $this->selectedNasabah->saldo) {
-            $this->addError('nominal', 'Saldo tidak mencukupi. Saldo saat ini: ' . $this->selectedNasabah->formatted_saldo);
+            $this->addError('nominal', 'Saldo tidak mencukupi. Saldo saat ini: '.$this->selectedNasabah->formatted_saldo);
+
             return;
         }
 
@@ -118,9 +127,9 @@ class TarikTunai extends Component
             $this->selectedNasabah = $nasabah;
 
             // Audit Trail Log
-            \App\Models\ActivityLog::record(
+            ActivityLog::record(
                 'tarik_tunai',
-                'Penarikan tunai ' . $this->lastTransaction->formatted_nominal . ' dari nasabah ' . $nasabah->nama . ' (' . $nasabah->nomor_nasabah . ')',
+                'Penarikan tunai '.$this->lastTransaction->formatted_nominal.' dari nasabah '.$nasabah->nama.' ('.$nasabah->nomor_nasabah.')',
                 $this->lastTransaction,
                 [
                     'nominal' => $nominalFloat,
@@ -133,14 +142,14 @@ class TarikTunai extends Component
 
         // WhatsApp Gateway Dispatch
         $this->waStatusMessage = null;
-        $waService = app(\App\Services\WhatsAppService::class);
-        $settings = \App\Models\Setting::getAllSettings();
+        $waService = app(WhatsAppService::class);
+        $settings = Setting::getAllSettings();
         if (($settings['wa_gateway_enabled'] ?? '0') === '1' && ($settings['wa_auto_send'] ?? '1') === '1') {
             $res = $waService->sendTransactionReceipt($this->lastTransaction);
             if ($res['success'] ?? false) {
                 $this->waStatusMessage = 'Struk berhasil terkirim via WhatsApp.';
             } else {
-                $this->waStatusMessage = 'Catatan WA: ' . ($res['message'] ?? 'Gateway nonaktif');
+                $this->waStatusMessage = 'Catatan WA: '.($res['message'] ?? 'Gateway nonaktif');
             }
         }
 
@@ -153,22 +162,22 @@ class TarikTunai extends Component
 
     public function sendWhatsAppReceipt(): void
     {
-        if (!$this->lastTransaction) {
+        if (! $this->lastTransaction) {
             return;
         }
 
-        $waService = app(\App\Services\WhatsAppService::class);
+        $waService = app(WhatsAppService::class);
         $res = $waService->sendTransactionReceipt($this->lastTransaction);
         $this->waStatusMessage = $res['message'] ?? 'Status tidak diketahui';
     }
 
     public function getDirectWhatsAppUrlProperty(): string
     {
-        if (!$this->lastTransaction) {
+        if (! $this->lastTransaction) {
             return '#';
         }
 
-        return \App\Services\WhatsAppService::getDirectWhatsAppUrl($this->lastTransaction);
+        return WhatsAppService::getDirectWhatsAppUrl($this->lastTransaction);
     }
 
     public function closeSuccessModal(): void
@@ -181,12 +190,12 @@ class TarikTunai extends Component
     {
         $searchResults = collect();
 
-        if (strlen($this->nasabahSearch) >= 2 && !$this->selectedNasabah) {
+        if (strlen($this->nasabahSearch) >= 2 && ! $this->selectedNasabah) {
             $searchResults = Nasabah::where('status', 'aktif')
                 ->where(function ($q) {
-                    $q->where('nama', 'like', '%' . $this->nasabahSearch . '%')
-                      ->orWhere('nomor_nasabah', 'like', '%' . $this->nasabahSearch . '%')
-                      ->orWhere('no_hp', 'like', '%' . $this->nasabahSearch . '%');
+                    $q->where('nama', 'like', '%'.$this->nasabahSearch.'%')
+                        ->orWhere('nomor_nasabah', 'like', '%'.$this->nasabahSearch.'%')
+                        ->orWhere('no_hp', 'like', '%'.$this->nasabahSearch.'%');
                 })
                 ->take(6)
                 ->get();

@@ -2,14 +2,13 @@
     <!-- Header Banner -->
     <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-lg sm:text-xl font-bold text-zinc-900 dark:text-white tracking-tight">Tutup Kas & Rekonsiliasi Kasir</h1>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Penghitungan fisik kas harian, verifikasi selisih, dan berita acara tutup kas</p>
+            <h1 class="text-lg sm:text-xl font-bold text-zinc-900 dark:text-white tracking-tight">Tutup Kas</h1>
         </div>
 
         @if ($activeShift)
             <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-emerald-700 dark:text-emerald-300 text-xs font-semibold self-start sm:self-auto">
                 <span class="size-2 rounded-full bg-emerald-500"></span>
-                <span>Sesi Kasir AKTIF • Buka {{ $activeShift->opened_at->format('H:i') }} WIB</span>
+                <span>Sesi Kasir Aktif • {{ $activeShift->opened_at->format('H:i') }}</span>
             </div>
         @endif
     </div>
@@ -36,8 +35,7 @@
             </div>
 
             <div>
-                <h2 class="text-base font-bold text-zinc-900 dark:text-white">Buka Sesi Kasir Harian</h2>
-                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Masukkan modal awal uang tunai di laci sebelum memulai pelayanan transaksi</p>
+                <h2 class="text-base font-bold text-zinc-900 dark:text-white">Buka Sesi Kasir</h2>
             </div>
 
             <form wire:submit="openShift" class="space-y-4 text-left text-xs">
@@ -59,7 +57,7 @@
 
                 <div>
                     <label class="block font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
-                        Catatan Sesi Kasir (Opsional)
+                        Catatan (Opsional)
                     </label>
                     <input 
                         type="text" 
@@ -74,7 +72,7 @@
                     class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded-xl transition-colors flex items-center justify-center gap-2 cursor-pointer pt-2"
                 >
                     <x-heroicon-s-check class="size-4" />
-                    <span>Mulai & Buka Sesi Kasir</span>
+                    <span>Buka Sesi Kasir</span>
                 </button>
             </form>
         </div>
@@ -84,26 +82,26 @@
             <!-- 4 Metrics Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4">
-                    <span class="text-[11px] text-zinc-500 font-medium block">Modal Awal Kas</span>
+                    <span class="text-[11px] text-zinc-500 font-medium block">Modal Awal</span>
                     <span class="text-base font-bold font-mono text-zinc-800 dark:text-zinc-200 mt-1 block tabular-nums">{{ $activeShift->formatted_modal_awal }}</span>
                 </div>
 
                 <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4">
                     <span class="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium block">
-                        Total Setoran (Kas Masuk)
+                        Total Setor
                     </span>
                     <span class="text-base font-bold font-mono text-emerald-600 dark:text-emerald-400 mt-1 block tabular-nums">+ {{ $activeShift->formatted_total_setoran }}</span>
                 </div>
 
                 <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4">
                     <span class="text-[11px] text-rose-600 dark:text-rose-400 font-medium block">
-                        Total Penarikan (Kas Keluar)
+                        Total Tarik
                     </span>
                     <span class="text-base font-bold font-mono text-rose-600 dark:text-rose-400 mt-1 block tabular-nums">- {{ $activeShift->formatted_total_penarikan }}</span>
                 </div>
 
                 <div class="bg-zinc-900 dark:bg-zinc-800 text-white rounded-2xl p-4 border border-zinc-800 dark:border-zinc-700">
-                    <span class="text-[11px] text-zinc-400 font-medium block">Saldo Kas Sistem</span>
+                    <span class="text-[11px] text-zinc-400 font-medium block">Saldo Sistem</span>
                     <span class="text-lg font-bold font-mono text-emerald-400 mt-1 block tabular-nums">{{ $activeShift->formatted_saldo_sistem }}</span>
                 </div>
             </div>
@@ -114,8 +112,7 @@
                 <div class="lg:col-span-7 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 space-y-4">
                     <div class="flex items-center justify-between pb-3 border-b border-zinc-100 dark:border-zinc-800">
                         <div>
-                            <h3 class="font-bold text-sm text-zinc-900 dark:text-white">Hitung Fisik Uang di Laci</h3>
-                            <p class="text-[11px] text-zinc-500">Masukkan jumlah lembar atau keping pecahan uang</p>
+                            <h3 class="font-bold text-sm text-zinc-900 dark:text-white">Hitung Fisik Laci</h3>
                         </div>
                         <span class="text-xs font-mono font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">
                             Total Fisik: Rp {{ number_format($liveFisik, 0, ',', '.') }}
@@ -208,17 +205,16 @@
                 <div class="lg:col-span-5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 space-y-4 flex flex-col justify-between">
                     <div class="space-y-4">
                         <div class="pb-3 border-b border-zinc-100 dark:border-zinc-800">
-                            <h3 class="font-bold text-sm text-zinc-900 dark:text-white">Hasil Rekonsiliasi Kasir</h3>
-                            <p class="text-[11px] text-zinc-500">Perbandingan saldo fisik vs pembukuan sistem</p>
+                            <h3 class="font-bold text-sm text-zinc-900 dark:text-white">Hasil Rekonsiliasi</h3>
                         </div>
 
                         <div class="space-y-2 text-xs">
                             <div class="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800">
-                                <span class="text-zinc-500">Saldo Pembukuan Sistem:</span>
+                                <span class="text-zinc-500">Saldo Sistem:</span>
                                 <span class="font-mono font-semibold text-zinc-900 dark:text-white tabular-nums">Rp {{ number_format($liveSistem, 0, ',', '.') }}</span>
                             </div>
                             <div class="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800">
-                                <span class="text-zinc-500">Saldo Fisik Uang di Laci:</span>
+                                <span class="text-zinc-500">Saldo Fisik:</span>
                                 <span class="font-mono font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">Rp {{ number_format($liveFisik, 0, ',', '.') }}</span>
                             </div>
                             <div class="flex justify-between py-1.5 border-b border-zinc-100 dark:border-zinc-800 items-center">
@@ -231,7 +227,7 @@
 
                         <div>
                             <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
-                                Catatan Tutup Kas (Opsional)
+                                Catatan (Opsional)
                             </label>
                             <textarea 
                                 wire:model="catatan_tutup" 
@@ -257,8 +253,7 @@
     <!-- SHIFT HISTORY & RECONCILIATION AUDIT LOG -->
     <div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden">
         <div class="p-5 border-b border-zinc-200 dark:border-zinc-800">
-            <h3 class="font-bold text-sm text-zinc-900 dark:text-white">Riwayat Rekonsiliasi & Tutup Kas</h3>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Arsip serah terima kasir harian per shift kerja</p>
+            <h3 class="font-bold text-sm text-zinc-900 dark:text-white">Riwayat Tutup Kas</h3>
         </div>
 
         @if ($historyShifts->isEmpty())
